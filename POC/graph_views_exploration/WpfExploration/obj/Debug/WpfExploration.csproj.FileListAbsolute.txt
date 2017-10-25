@@ -1,0 +1,14 @@
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\bin\Debug\WpfExploration.exe.config
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\bin\Debug\WpfExploration.exe
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\bin\Debug\WpfExploration.pdb
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration.csprojResolveAssemblyReference.cache
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\MainWindow.g.cs
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\App.g.cs
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration_MarkupCompile.cache
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration_MarkupCompile.lref
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\MainWindow.baml
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration.g.resources
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration.Properties.Resources.resources
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration.csproj.GenerateResource.Cache
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration.exe
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\WpfExploration\obj\Debug\WpfExploration.pdb

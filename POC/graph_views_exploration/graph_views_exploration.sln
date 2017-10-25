@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "graph_views_exploration", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "graph_views_exploration.Tests", "graph_views_exploration.Tests\graph_views_exploration.Tests.csproj", "{5593A4DE-2FDE-41CC-A26C-BD2E3AEB5546}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfExploration", "WpfExploration\WpfExploration.csproj", "{D0ECA2CA-497E-4540-B9AF-B9D6587C6D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "socket_server", "sockets\socket_server.csproj", "{DB973B7E-4306-4F22-9679-412196810522}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{5593A4DE-2FDE-41CC-A26C-BD2E3AEB5546}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5593A4DE-2FDE-41CC-A26C-BD2E3AEB5546}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5593A4DE-2FDE-41CC-A26C-BD2E3AEB5546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0ECA2CA-497E-4540-B9AF-B9D6587C6D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0ECA2CA-497E-4540-B9AF-B9D6587C6D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0ECA2CA-497E-4540-B9AF-B9D6587C6D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0ECA2CA-497E-4540-B9AF-B9D6587C6D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB973B7E-4306-4F22-9679-412196810522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB973B7E-4306-4F22-9679-412196810522}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB973B7E-4306-4F22-9679-412196810522}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB973B7E-4306-4F22-9679-412196810522}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
