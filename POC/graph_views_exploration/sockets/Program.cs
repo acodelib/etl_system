@@ -6,160 +6,161 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Net.NetworkInformation;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace sockets
 {
     class Program
     {
+        static Socket listenerSocket;
+        static List<string> clients;
+
         static void Main(string[] args) {
+            Console.WriteLine("This mac address: {0}", Program.getMACAddress());
+            Console.WriteLine("This IP address : {0}", Program.getIp4Address());
+            
+            
+            Console.WriteLine("Starting Server...");
+            listenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            clients = new List<string>();
+
+            
+            IPEndPoint ip = new IPEndPoint(IPAddress.Parse(Program.getIp4Address()), 6969);
+            listenerSocket.Bind(ip);
+
+            Thread listenThread = new Thread(Program.ListenThread);            
+            listenThread.Start();
+            Console.WriteLine("Success... Listening IP: " + getIp4Address() + ":6969");
+            Console.ReadLine();
+
         }
-    }
-}
 
+        
+        static void ListenThread() {
+            while(true) {
+                listenerSocket.Listen(0);
+                Program.handleMessage(listenerSocket.Accept());
+            }
+        }
 
-public class StateObject
-{
-    // Client  socket.  
-    public Socket workSocket = null;
-    // Size of receive buffer.  
-    public const int BufferSize = 1024;
-    // Receive buffer.  
-    public byte[] buffer = new byte[BufferSize];
-    // Received data string.  
-    public StringBuilder sb = new StringBuilder();
-}
+        static void handleMessage(Socket client_socket) {
+            Thread clientThread = new Thread(Program.decodeMessage);
+            clientThread.Start(client_socket);
+        }
 
-public class AsynchronousSocketListener
-{
-    // Thread signal.  
-    public static ManualResetEvent allDone = new ManualResetEvent(false);
-
-    public AsynchronousSocketListener() {
-    }
-
-    public static void StartListening() {
-        // Data buffer for incoming data.  
-        byte[] bytes = new Byte[1024];
-
-        // Establish the local endpoint for the socket.  
-        // The DNS name of the computer  
-        // running the listener is "host.contoso.com".  
-        IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-        IPAddress ipAddress = ipHostInfo.AddressList[0];
-        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
-
-        // Create a TCP/IP socket.  
-        Socket listener = new Socket(AddressFamily.InterNetwork,
-            SocketType.Stream, ProtocolType.Tcp);
-
-        // Bind the socket to the local endpoint and listen for incoming connections.  
-        try {
-            listener.Bind(localEndPoint);
-            listener.Listen(100);
-
-            while (true) {
-                // Set the event to nonsignaled state.  
-                allDone.Reset();
-
-                // Start an asynchronous socket to listen for connections.  
-                Console.WriteLine("Waiting for a connection...");
-                listener.BeginAccept(
-                    new AsyncCallback(AcceptCallback),
-                    listener);
-
-                // Wait until a connection is made before continuing.  
-                allDone.WaitOne();
+        static void decodeMessage(object incoming_socket) {
+            Socket client_socket = (Socket)incoming_socket;
+            byte[] Buffer;
+            int readBytes;
+            StringBuilder str_message = new StringBuilder();
+            while (1 == 1) {
+                try {
+                    Buffer = new byte[client_socket.SendBufferSize];
+                    readBytes = client_socket.Receive(Buffer);
+                    if (readBytes > 0) {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        MemoryStream ms = new MemoryStream(Buffer);
+                        str_message.Append(Encoding.ASCII.GetString(Buffer,0,readBytes));
+                        string content = str_message.ToString();
+                        Console.WriteLine("Received Message: " + content);
+                        //c.clientSocket.Send(p.toBytes());
+                    }
+                }
+                catch (SocketException ex) {
+                    
+                    Console.WriteLine("Client Disconnected.");
+                }
             }
 
         }
-        catch (Exception e) {
-            Console.WriteLine(e.ToString());
-        }
 
-        Console.WriteLine("\nPress ENTER to continue...");
-        Console.Read();
+        /*
+        public static void Data_IN(object cSocket) {
+            Socket clientSocket = (Socket)cSocket;
 
-    }
+            byte[] Buffer;
+            int readBytes;
 
-    public static void AcceptCallback(IAsyncResult ar) {
-        // Signal the main thread to continue.  
-        allDone.Set();
+            for (;;) {
+                try {
+                    Buffer = new byte[clientSocket.SendBufferSize];
+                    readBytes = clientSocket.Receive(Buffer); //  https://www.youtube.com/watch?v=X66hFZG5p3A
 
-        // Get the socket that handles the client request.  
-        Socket listener = (Socket)ar.AsyncState;
-        Socket handler = listener.EndAccept(ar);
-
-        // Create the state object.  
-        StateObject state = new StateObject();
-        state.workSocket = handler;
-        handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-            new AsyncCallback(ReadCallback), state);
-    }
-
-    public static void ReadCallback(IAsyncResult ar) {
-        String content = String.Empty;
-
-        // Retrieve the state object and the handler socket  
-        // from the asynchronous state object.  
-        StateObject state = (StateObject)ar.AsyncState;
-        Socket handler = state.workSocket;
-
-        // Read data from the client socket.   
-        int bytesRead = handler.EndReceive(ar);
-
-        if (bytesRead > 0) {
-            // There  might be more data, so store the data received so far.  
-            state.sb.Append(Encoding.ASCII.GetString(
-                state.buffer, 0, bytesRead));
-
-            // Check for end-of-file tag. If it is not there, read   
-            // more data.  
-            content = state.sb.ToString();
-            if (content.IndexOf("<EOF>") > -1) {
-                // All the data has been read from the   
-                // client. Display it on the console.  
-                Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
-                    content.Length, content);
-                // Echo the data back to the client.  
-                Send(handler, content);
-            }
-            else {
-                // Not all data received. Get more.  
-                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), state);
+                    if (readBytes > 0) {
+                        Packet p = new Packet(Buffer);
+                        dataManager(p);
+                    }
+                }
+                catch (SocketException ex) {
+                    Console.WriteLine("Client Disconnected.");
+                }
             }
         }
-    }
 
-    private static void Send(Socket handler, String data) {
-        // Convert the string data to byte data using ASCII encoding.  
-        byte[] byteData = Encoding.ASCII.GetBytes(data);
-
-        // Begin sending the data to the remote device.  
-        handler.BeginSend(byteData, 0, byteData.Length, 0,
-            new AsyncCallback(SendCallback), handler);
-    }
-
-    private static void SendCallback(IAsyncResult ar) {
-        try {
-            // Retrieve the socket from the state object.  
-            Socket handler = (Socket)ar.AsyncState;
-
-            // Complete sending the data to the remote device.  
-            int bytesSent = handler.EndSend(ar);
-            Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-
-            handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
-
+        public static void dataManager(Packet p) {
+            switch (p.packetType) {
+                case PacketType.chat:
+                    foreach (ClientData c in _clients) {
+                        c.clientSocket.Send(p.toBytes());
+                    }
+                    break;
+            }
         }
-        catch (Exception e) {
-            Console.WriteLine(e.ToString());
-        }
-    }
 
-    public static int Main(String[] args) {
-        StartListening();
-        return 0;
+        class ClientData
+        {
+            public Socket clientSocket;
+            public Thread clientThread;
+            public string id;
+
+            public ClientData() {
+                id = Guid.NewGuid().ToString();
+                clientThread = new Thread(Server.Data_IN);
+                clientThread.Start(clientSocket);
+                sendRegistrationPacket();
+            }
+
+            public ClientData(Socket clientSocket) {
+                this.clientSocket = clientSocket;
+                id = Guid.NewGuid().ToString();
+                clientThread = new Thread(Server.Data_IN);
+                clientThread.Start(clientSocket);
+                sendRegistrationPacket();
+            }
+
+            public void sendRegistrationPacket() {
+                Packet p = new Packet(PacketType.Registration, "server");
+                p.Gdata.Add(id);
+                clientSocket.Send(p.toBytes());
+
+
+            }
+        }
+
+     */
+        public static string getIp4Address() {
+            IPAddress[] ips = Dns.GetHostAddresses(Dns.GetHostName());
+            foreach (IPAddress i in ips) {
+                if (i.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+                    return i.ToString();
+                }
+            }
+            return "127.0.0.1";
+        }
+
+        public static string getMACAddress() {
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+            String sMacAddress = string.Empty;
+            foreach (NetworkInterface adapter in nics) {
+                if (sMacAddress == String.Empty)// only return MAC Address from first card  
+                {
+                    //IPInterfaceProperties properties = adapter.GetIPProperties(); Line is not required
+                    sMacAddress = adapter.GetPhysicalAddress().ToString();
+                }
+            }
+            return sMacAddress;
+        }
     }
 }

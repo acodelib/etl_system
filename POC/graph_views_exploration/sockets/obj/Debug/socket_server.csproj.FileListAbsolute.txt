@@ -1,0 +1,6 @@
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\sockets\obj\Debug\socket_server.csprojResolveAssemblyReference.cache
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\sockets\bin\Debug\sockets.exe.config
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\sockets\bin\Debug\sockets.exe
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\sockets\bin\Debug\sockets.pdb
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\sockets\obj\Debug\sockets.exe
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\sockets\obj\Debug\sockets.pdb

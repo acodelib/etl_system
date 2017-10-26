@@ -1,0 +1,5 @@
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\Client\bin\Debug\Client.exe.config
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\Client\bin\Debug\Client.exe
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\Client\bin\Debug\Client.pdb
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\Client\obj\Debug\Client.exe
+C:\awwk\Pers\pers_dev\p_ETL\POC\graph_views_exploration\Client\obj\Debug\Client.pdb
