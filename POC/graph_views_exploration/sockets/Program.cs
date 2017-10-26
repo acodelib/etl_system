@@ -68,9 +68,9 @@ namespace sockets
                         //c.clientSocket.Send(p.toBytes());
                     }
                 }
-                catch (SocketException ex) {
-                    
+                catch (SocketException ex) {                    
                     Console.WriteLine("Client Disconnected.");
+                    break;
                 }
             }
 
