@@ -65,7 +65,9 @@ namespace sockets
                         str_message.Append(Encoding.ASCII.GetString(Buffer,0,readBytes));
                         string content = str_message.ToString();
                         Console.WriteLine("Received Message: " + content);
-                        //c.clientSocket.Send(p.toBytes());
+
+                        //reply
+                        client_socket.Send(Encoding.ASCII.GetBytes("Receivend your message;"));
                     }
                 }
                 catch (SocketException ex) {                    

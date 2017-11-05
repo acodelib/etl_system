@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "socket_server", "sockets\so
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{A5A233F2-3EF6-4A70-8BEC-34F398F516DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tstWindowsFormsApplication1", "tstWindowsFormsApplication1\tstWindowsFormsApplication1.csproj", "{37C68944-E5CA-49B2-A8CB-8A0755F95896}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A5A233F2-3EF6-4A70-8BEC-34F398F516DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5A233F2-3EF6-4A70-8BEC-34F398F516DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5A233F2-3EF6-4A70-8BEC-34F398F516DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37C68944-E5CA-49B2-A8CB-8A0755F95896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C68944-E5CA-49B2-A8CB-8A0755F95896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C68944-E5CA-49B2-A8CB-8A0755F95896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C68944-E5CA-49B2-A8CB-8A0755F95896}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
