@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ETL_System")]
+[assembly: AssemblyTitle("UnitTest_ETLSystem")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ETL_System")]
+[assembly: AssemblyProduct("UnitTest_ETLSystem")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fd1ace1f-0536-4736-850b-a9eaee253251")]
+[assembly: Guid("dc00d26d-8108-4b68-be7d-af06ab1535b3")]
 
 // Version information for an assembly consists of the following four values:
 //

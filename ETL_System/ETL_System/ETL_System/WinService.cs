@@ -7,7 +7,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-
+using ETL_System;
 
 namespace ETL_System
 {
@@ -17,7 +17,16 @@ namespace ETL_System
             InitializeComponent();
         }
 
+
+        public void runInDebug() {
+            this.OnStart(null);
+        }
+
         protected override void OnStart(string[] args) {
+
+            SystemManager etl_system_manager = new SystemManager();
+
+            etl_system_manager.startSystem();            
         }
 
         protected override void OnStop() {

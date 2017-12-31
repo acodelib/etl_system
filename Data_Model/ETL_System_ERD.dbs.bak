@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="ETL_System" id="Project_47a7f56" template="Default" database="SqlServer" >
+	<comment><![CDATA[DIT DT249
+ODP
+BA Ord IT&IS 
+Andrei Gurguta]]></comment>
+	<schema name="ETL_System" schemaname="ETL_System" >
+		<table name="DependencyTypes" >
+			<column name="dependency_type_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="description" type="varchar" length="512" jt="12" />
+			<index name="Pk_Dependency_Types_dependency_type_id" unique="PRIMARY_KEY" >
+				<column name="dependency_type_id" />
+			</index>
+		</table>
+		<table name="JobChanges" >
+			<column name="sys_change_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="job_id" type="int" jt="4" />
+			<column name="user_id" type="int" jt="4" />
+			<column name="change_timestamp" type="timestamp" jt="93" />
+			<index name="Pk_JobChanges_sys_change_id" unique="PRIMARY_KEY" >
+				<column name="sys_change_id" />
+			</index>
+			<fk name="Fk_JobChanges_Jobs" virtual="y" to_schema="ETL_System" to_table="Jobs" >
+				<fk_column name="job_id" pk="job_id" />
+			</fk>
+			<fk name="Fk_JobChanges_User" virtual="y" to_schema="ETL_System" to_table="User" >
+				<fk_column name="user_id" pk="user_id" />
+			</fk>
+		</table>
+		<table name="JobDependency" >
+			<column name="job_dependency_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="job_id" type="int" jt="4" />
+			<column name="depending_job_id" type="int" jt="4" />
+			<column name="dependency_type_id" type="int" jt="4" />
+			<index name="Pk_Job_Dependency_job_dependency_id" unique="PRIMARY_KEY" >
+				<column name="job_dependency_id" />
+			</index>
+			<fk name="Fk_JobDependency_Jobs" virtual="y" to_schema="ETL_System" to_table="Jobs" >
+				<fk_column name="job_id" pk="job_id" />
+			</fk>
+			<fk name="Fk_JobDependency_DependencyTypes" virtual="y" to_schema="ETL_System" to_table="DependencyTypes" >
+				<fk_column name="dependency_type_id" pk="dependency_type_id" />
+			</fk>
+		</table>
+		<table name="JobInstances" >
+			<column name="job_instance_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="job_id" type="int" jt="4" />
+			<column name="result" type="varchar" length="128" jt="12" />
+			<column name="start_timestamp" type="timestamp" jt="93" />
+			<column name="end_timestamp" type="timestamp" jt="93" />
+			<column name="from_increment_timestamp" type="timestamp" jt="93" />
+			<column name="to_increment_timestamp" type="timestamp" jt="93" />
+			<column name="job_execution_path" type="varchar" length="2048" jt="12" />
+			<column name="worker" type="int" jt="4" />
+			<column name="started_by" type="int" jt="4" />
+			<index name="Pk_JobInstances_job_instance_id" unique="PRIMARY_KEY" >
+				<column name="job_instance_id" />
+			</index>
+			<fk name="Fk_JobInstances_Jobs" virtual="y" to_schema="ETL_System" to_table="Jobs" >
+				<fk_column name="job_id" pk="job_id" />
+			</fk>
+		</table>
+		<table name="JobSchedules" >
+			<column name="job_schedule_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="job_id" type="int" jt="4" />
+			<column name="schedule_type_id" type="int" jt="4" />
+			<index name="Pk_Job_Schedules_job_schedule_id" unique="PRIMARY_KEY" >
+				<column name="job_schedule_id" />
+			</index>
+			<fk name="Fk_JobSchedules_Jobs" virtual="y" to_schema="ETL_System" to_table="Jobs" >
+				<fk_column name="job_id" pk="job_id" />
+			</fk>
+			<fk name="Fk_JobSchedules_ScheduleTypes" virtual="y" to_schema="ETL_System" to_table="ScheduleTypes" >
+				<fk_column name="schedule_type_id" pk="schedule_type_id" />
+			</fk>
+		</table>
+		<table name="JobTypes" >
+			<column name="job_type_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="type_name" type="varchar" length="100" jt="12" />
+			<column name="type_description" type="varchar" length="512" jt="12" />
+			<index name="Pk_JobTypes_job_type_id" unique="PRIMARY_KEY" >
+				<column name="job_type_id" />
+			</index>
+		</table>
+		<table name="Jobs" >
+			<column name="job_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="last_instance_id" type="int" jt="4" />
+			<column name="job_type_id" type="int" jt="4" />
+			<column name="sys_change_id" type="int" jt="4" />
+			<column name="last_instance_timestamp" type="timestamp" jt="93" />
+			<column name="name" type="varchar" length="250" jt="12" />
+			<column name="execution_path" type="varchar" length="2408" jt="12" />
+			<column name="max_try_count" type="int" jt="4" />
+			<column name="is_failed" type="int" jt="4" />
+			<column name="delay_seconds" type="int" jt="4" />
+			<column name="latency_alert_seconds" type="int" jt="4" />
+			<index name="Pk_Jobs_job_id" unique="PRIMARY_KEY" >
+				<column name="job_id" />
+			</index>
+			<fk name="Fk_Jobs_JobTypes" virtual="y" to_schema="ETL_System" to_table="JobTypes" >
+				<fk_column name="job_type_id" pk="job_type_id" />
+			</fk>
+		</table>
+		<table name="Roles" >
+			<column name="role_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="description" type="varchar" length="256" jt="12" />
+			<index name="Pk_Roles_role_id" unique="PRIMARY_KEY" >
+				<column name="role_id" />
+			</index>
+		</table>
+		<table name="ScheduleTypes" >
+			<column name="schedule_type_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="timestamp_anchor" type="timestamp" jt="93" />
+			<column name="frequency_seconds" type="bigint" jt="-5" />
+			<column name="execution_window_seconds" type="int" jt="4" />
+			<index name="Pk_Schedules_schedule_id" unique="PRIMARY_KEY" >
+				<column name="schedule_type_id" />
+			</index>
+		</table>
+		<table name="User" >
+			<column name="user_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="login" type="varchar" length="256" jt="12" />
+			<column name="password" type="varchar" length="64" jt="12" />
+			<column name="last_conn_timestamp" type="timestamp" jt="93" />
+			<column name="is_active" type="bit" jt="-7" />
+			<index name="Pk_User_user_id" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+			</index>
+		</table>
+		<table name="UserRoles" >
+			<column name="user_role_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="user_id" type="int" jt="4" />
+			<column name="role_id" type="int" jt="4" />
+			<index name="Pk_UserRoles_user_role_id" unique="PRIMARY_KEY" >
+				<column name="user_role_id" />
+			</index>
+			<fk name="Fk_UserRoles_User" virtual="y" to_schema="ETL_System" to_table="User" >
+				<fk_column name="user_id" pk="user_id" />
+			</fk>
+			<fk name="Fk_UserRoles_Roles" virtual="y" to_schema="ETL_System" to_table="Roles" >
+				<fk_column name="role_id" pk="role_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout_135c844" show_relation="columns" >
+		<entity schema="ETL_System" name="JobTypes" color="c1d8ee" x="60" y="60" />
+		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
+		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
+		<entity schema="ETL_System" name="JobDependency" color="c1d8ee" x="330" y="45" />
+		<entity schema="ETL_System" name="DependencyTypes" color="c1d8ee" x="630" y="60" />
+		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="615" y="225" />
+		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
+		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="330" y="510" />
+		<entity schema="ETL_System" name="User" color="c1d8ee" x="600" y="510" />
+		<entity schema="ETL_System" name="Roles" color="c1d8ee" x="645" y="690" />
+		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="360" y="690" />
+	</layout>
+</project>

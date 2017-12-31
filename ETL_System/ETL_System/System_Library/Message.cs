@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETL_System.JobsSystem
+namespace ETL_System.Library
 {
-    public class QueueController {
+    public class Message {
+    }
+
+    public enum msg_type {
 
     }
 }
+

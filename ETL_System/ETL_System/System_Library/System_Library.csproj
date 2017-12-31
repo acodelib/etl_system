@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NetMessage.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

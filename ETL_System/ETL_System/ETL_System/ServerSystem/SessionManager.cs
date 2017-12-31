@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace ETL_System
 {
-    class SessionManager
-    {
+    class SessionManager    {
     }
 }

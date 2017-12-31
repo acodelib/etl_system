@@ -9,38 +9,36 @@ using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.Collections.Concurrent;
 
-namespace ETL_System.ServerComms
+namespace ETL_System
 {
     
 
-    public class MsgHandler {
+    public class CommsManager {
 
         Socket listener_socket;
 
-        public MsgHandler(ref ConcurrentDictionary<string,string> clients_table) {
+        public CommsManager(ref ConcurrentDictionary<string,string> clients_table) {
             Console.WriteLine("ETL Server Starting...");
             listener_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint ip = new IPEndPoint(IPAddress.Parse(this.getIp4Address()), 6969);
+            IPEndPoint ip = new IPEndPoint(IPAddress.Parse(this.getIp4Address()), 6868);
             this.listener_socket.Bind(ip);
 
             Thread ListenThread = new Thread(this.listenToClients);
 
             ListenThread.Start();
-            Console.WriteLine("Sterted Successfully. Server is awaiting connections on IP: " + getIp4Address() + ":6969");
-            
+            Console.WriteLine("Server is awaiting connections on IP: " + getIp4Address() + ":6868");            
 
         }    
         
         private void listenToClients() {
             while (true) {
-                Console.WriteLine("started");
+                
                 this.listener_socket.Listen(0);
                 handleMessageFromClient(listener_socket.Accept());
             }
         }
 
-        private void handleMessageFromClient(Socket client_socket) {
-            Console.WriteLine("incoming");
+        private void handleMessageFromClient(Socket client_socket) {            
             Thread individual_client_thread = new Thread(this.decodeNetMessage);
             individual_client_thread.Start(client_socket);
         }
@@ -61,7 +59,11 @@ namespace ETL_System.ServerComms
                         Console.WriteLine("Received Message: " + content);
 
                         //reply
-                        client_socket.Send(Encoding.ASCII.GetBytes("Receivend your message;"));
+                        client_socket.Send(Encoding.ASCII.GetBytes("Receivend your message: " + content));
+                        str_message = null;
+                        content = null;
+                        Buffer = null;
+                        break;
                     }
                 }
                 catch (SocketException ex) {
@@ -71,9 +73,7 @@ namespace ETL_System.ServerComms
             }
 
         }
-
-
-
+        
         public string getIp4Address() {
             IPAddress[] ips = Dns.GetHostAddresses(Dns.GetHostName());
             foreach (IPAddress i in ips) {

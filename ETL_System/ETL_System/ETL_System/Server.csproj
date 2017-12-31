@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,11 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataLayer\CoreDB.cs" />
+    <Compile Include="DataLayer\SystemSharedData.cs" />
     <Compile Include="JobsSystem\QueueController.cs" />
     <Compile Include="JobsSystem\WorkersController.cs" />
-    <Compile Include="MsgHandler.cs" />
-    <Compile Include="NotificationsManager.cs" />
-    <Compile Include="SessionManager.cs" />
+    <Compile Include="ServerSystem\CommsManager.cs" />
+    <Compile Include="JobsSystem\NotificationsManager.cs" />
+    <Compile Include="ServerSystem\LogManager.cs" />
+    <Compile Include="ServerSystem\SessionManager.cs" />
+    <Compile Include="ServerSystem\SystemManager.cs" />
     <Compile Include="WinService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -66,6 +71,9 @@
       <Project>{bb91853a-3027-4ebb-adac-f7f2d1dd2d4c}</Project>
       <Name>System_Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
