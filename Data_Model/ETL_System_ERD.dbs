@@ -47,8 +47,8 @@ Andrei Gurguta]]></comment>
 			<column name="job_instance_id" type="int" jt="4" mandatory="y" autoincrement="y" />
 			<column name="job_id" type="int" jt="4" />
 			<column name="result" type="varchar" length="128" jt="12" />
-			<column name="start_timestamp" type="timestamp" jt="93" />
-			<column name="end_timestamp" type="timestamp" jt="93" />
+			<column name="start_timestamp" type="datetime" jt="93" />
+			<column name="end_timestamp" type="datetime" jt="93" />
 			<column name="from_time_checkpoint" type="timestamp" jt="93" />
 			<column name="to_time_checkpoint" type="timestamp" jt="93" />
 			<column name="from_data_checkpoint" type="bigint" jt="-5" />
@@ -66,15 +66,15 @@ Andrei Gurguta]]></comment>
 		<table name="JobSchedules" >
 			<column name="job_schedule_id" type="int" jt="4" mandatory="y" autoincrement="y" />
 			<column name="job_id" type="int" jt="4" />
-			<column name="schedule_type_id" type="int" jt="4" />
+			<column name="schedule_detail_id" type="int" jt="4" />
 			<index name="Pk_Job_Schedules_job_schedule_id" unique="PRIMARY_KEY" >
 				<column name="job_schedule_id" />
 			</index>
 			<fk name="Fk_JobSchedules_Jobs" virtual="y" to_schema="ETL_System" to_table="Jobs" >
 				<fk_column name="job_id" pk="job_id" />
 			</fk>
-			<fk name="Fk_JobSchedules_ScheduleTypes" virtual="y" to_schema="ETL_System" to_table="ScheduleTypes" >
-				<fk_column name="schedule_type_id" pk="schedule_type_id" />
+			<fk name="Fk_JobSchedules_ScheduleTypes" virtual="y" to_schema="ETL_System" to_table="ScheduleDetails" >
+				<fk_column name="schedule_detail_id" pk="schedule_detail_id" />
 			</fk>
 		</table>
 		<table name="JobTypes" >
@@ -90,7 +90,7 @@ Andrei Gurguta]]></comment>
 			<column name="last_instance_id" type="int" jt="4" />
 			<column name="job_type_id" type="int" jt="4" />
 			<column name="sys_change_id" type="int" jt="4" />
-			<column name="last_instance_timestamp" type="timestamp" jt="93" />
+			<column name="last_instance_timestamp" type="datetime" jt="93" />
 			<column name="name" type="varchar" length="250" jt="12" />
 			<column name="execution_path" type="varchar" length="2408" jt="12" />
 			<column name="max_try_count" type="int" jt="4" />
@@ -98,7 +98,7 @@ Andrei Gurguta]]></comment>
 			<column name="delay_seconds" type="int" jt="4" />
 			<column name="latency_alert_seconds" type="int" jt="4" />
 			<column name="data_chceckpoint" type="bigint" jt="-5" />
-			<column name="time_checkpoint" type="timestamp" jt="93" />
+			<column name="time_checkpoint" type="datetime" jt="93" />
 			<index name="Pk_Jobs_job_id" unique="PRIMARY_KEY" >
 				<column name="job_id" />
 			</index>
@@ -114,13 +114,13 @@ Andrei Gurguta]]></comment>
 				<column name="role_id" />
 			</index>
 		</table>
-		<table name="ScheduleTypes" >
-			<column name="schedule_type_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+		<table name="ScheduleDetails" >
+			<column name="schedule_detail_id" type="int" jt="4" mandatory="y" autoincrement="y" />
 			<column name="timestamp_anchor" type="timestamp" jt="93" />
 			<column name="frequency_seconds" type="bigint" jt="-5" />
 			<column name="execution_window_seconds" type="int" jt="4" />
 			<index name="Pk_Schedules_schedule_id" unique="PRIMARY_KEY" >
-				<column name="schedule_type_id" />
+				<column name="schedule_detail_id" />
 			</index>
 		</table>
 		<table name="User" >
@@ -150,15 +150,15 @@ Andrei Gurguta]]></comment>
 	</schema>
 	<layout name="Default Layout" id="Layout_135c844" show_relation="columns" >
 		<entity schema="ETL_System" name="JobTypes" color="c1d8ee" x="60" y="60" />
-		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="JobDependency" color="c1d8ee" x="330" y="45" />
 		<entity schema="ETL_System" name="DependencyTypes" color="c1d8ee" x="630" y="60" />
-		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
 		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="330" y="510" />
 		<entity schema="ETL_System" name="User" color="c1d8ee" x="600" y="510" />
 		<entity schema="ETL_System" name="Roles" color="c1d8ee" x="645" y="690" />
 		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="360" y="690" />
-		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
 		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="615" y="225" />
+		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
+		<entity schema="ETL_System" name="ScheduleDetails" color="c1d8ee" x="45" y="510" />
+		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 	</layout>
 </project>

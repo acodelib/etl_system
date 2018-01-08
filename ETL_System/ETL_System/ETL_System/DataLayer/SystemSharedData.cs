@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ETL_System {
     class SystemSharedData {
 
-        public static ConcurrentDictionary<string, string> clients_table;
+        public static ConcurrentDictionary<string, string> clients_table;        
 
         public static string app_db_connstring;
 

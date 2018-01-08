@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataLayer\CoreDB.cs" />
+    <Compile Include="DataLayer\JobsCatalogue.cs" />
+    <Compile Include="DataLayer\SystemJob.cs" />
     <Compile Include="DataLayer\SystemSharedData.cs" />
     <Compile Include="JobsSystem\QueueController.cs" />
     <Compile Include="JobsSystem\WorkersController.cs" />
@@ -74,7 +76,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Scripts\DB_Creation.sql" />
+    <Content Include="Scripts\DB_Creation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

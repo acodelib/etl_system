@@ -11,11 +11,11 @@ namespace ETL_System {
     public static class LogManager {
 
 
-        public static void writeErrorToLog(string log_path, Exception e) {
+        public static void writeErrorToLog(string message, string log_path) {
 
         }
 
-        public static void writeStartEvent(string log_path) {
+        public static void writeStartEvent(string message,string log_path) {
 
         }
     }

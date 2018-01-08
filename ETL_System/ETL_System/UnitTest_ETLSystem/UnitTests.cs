@@ -7,13 +7,10 @@ namespace UnitTest_ETLSystem {
     [TestClass]
     public class TestSystemManager {
 
-        [TestMethod]
-        public void TestMethod1() {
-            Assert.AreEqual(1, 1);
-        }
+      
 
         [TestMethod]
-        public void testSystemStart() {
+        public void testSystemStartFiles() {
 
             SystemManager test_system = new SystemManager();
             test_system.startSystem();
@@ -43,6 +40,14 @@ namespace UnitTest_ETLSystem {
         }
 
         [TestMethod]
-        public void checkAppDB
+        public void checkAppDBConnectionFromFile() {
+            /*
+            SystemManager sm = new SystemManager();
+            sm.startSystem();
+            Assert.AreEqual("aa", sm.path_to_config);
+            string cs = sm.readDBConnStringFromFile(sm.path_to_config);
+            Assert.AreEqual("App DB Success", CoreDB.checkDBConnStringIsValid(cs));
+            */
+        }
     }
 }
