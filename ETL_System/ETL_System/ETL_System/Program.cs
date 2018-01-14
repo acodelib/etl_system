@@ -28,12 +28,18 @@ namespace ETL_System
             
             
             SystemManager etl_system_manager = new SystemManager();
-            string cp = null;            
+            string cp = null;
+            string dp = null;
             etl_system_manager.startSystem();
+            string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";
+            etl_system_manager.registerDBConnString(conn_str,null);
+            etl_system_manager.deployDBScript(cp,dp);
+            //etl_system_manager.deployDBScript(cp + "Scripts\\DB_Creation.sql");
+            //etl_system_manager.registerExecutionFolderToConfig("C:\\thefolder", null);
+            //etl_system_manager.addOrChangeConfigToFile("ExecutionPath", "C:\\awwk\\Pers\\pers_dev\\p_ETL\\TestJobs", null);
             //etl_system_manager.deployDBScript(cp);            
-            Console.WriteLine(etl_system_manager.jobs_catalogue.sys_change_id.ToString());
-            //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";
-            //etl_system_manager.registerDBConnString(conn_str,null);
+            //Console.WriteLine(etl_system_manager.jobs_catalogue.sys_change_id.ToString());
+
             //Console.WriteLine(etl_system_manager.readDBConnStringFromFile(etl_system_manager.path_to_config));
 
 
