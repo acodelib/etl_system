@@ -105,7 +105,9 @@ CREATE TABLE dbo.Jobs (
 
  --- CREATE default admin:
  INSERT INTO dbo.[User]
- SELECT 'admin',hashbytes('SHA1','admin'),GETDATE(),1; 
+ SELECT 'admin',hashbytes('SHA1','admin'),GETDATE(),1
+ UNION ALL
+ SELECT 'sys',hashbytes('SHA1','admin'),GETDATE(),1;
 
  INSERT INTO dbo.Roles
  SELECT 'admin','This is the master role for the system';

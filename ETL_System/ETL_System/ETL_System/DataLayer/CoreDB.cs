@@ -51,7 +51,7 @@ namespace ETL_System {
 
 
                 foreach(DataRow r in etl_database.Tables["ScheduleTypes"].Rows) {
-                    SystemSharedData.schedule_types.Add((int)r["schedule_type_id"], new ScheduleType {
+                  SystemSharedData.schedule_types.Add((int)r["schedule_type_id"], new ScheduleType {
                         schedule_type_name          = (string)r["schedule_type_name"],
                         frequency_seconds           = (int)r["frequency_seconds"],
                         execution_window_seconds    = (int)r["execution_window_seconds"]
@@ -84,10 +84,10 @@ namespace ETL_System {
                     time_checkpoint         = (DateTime)r["time_checkpoint"],
                     type_name               = job_types.Select($"job_type_id = {(int)r["job_type_id"]}").Count() > 0 ? (string)job_types.Select($"job_type_id = {(int)r["job_type_id"]}")[0]["type_name"] :null
                 };
-                if (j.type_name == "Schedule" && etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
-                    s.Clear();
-                    s.Add()
-                }
+               // if (j.type_name == "Schedule" && etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
+               //     s.Clear();
+               //     s.Add()
+               // }
                 collection.Add(j.name, j);
             }
         }
