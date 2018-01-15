@@ -84,10 +84,10 @@ namespace ETL_System {
                     time_checkpoint         = (DateTime)r["time_checkpoint"],
                     type_name               = job_types.Select($"job_type_id = {(int)r["job_type_id"]}").Count() > 0 ? (string)job_types.Select($"job_type_id = {(int)r["job_type_id"]}")[0]["type_name"] :null
                 };
-                if (j.type_name == "Schedule" && etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
-                    s.Clear();
-                    s.Add()
-                }
+               // if (j.type_name == "Schedule" && etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
+                 //   s.Clear();
+                  //  s.Add()
+               // }
                 collection.Add(j.name, j);
             }
         }

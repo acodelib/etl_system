@@ -130,3 +130,9 @@ CREATE TABLE dbo.Jobs (
  SELECT 'Schedule','Job is meant to be run by calendar schedle type. Types are defined in ScheduleTypes'
  UNION ALL
  SELECT 'Dependency','Job is to be run in the checkpoint dependencies system';
+
+
+ INSERT INTO dbo.Jobs
+ SELECT 11,1,1,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,20,0,2134324,'2018-01-11 22:00:00'
+ UNION ALL
+ SELECT 11,1,1,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,20,0,2134324,'2018-01-11 22:00:00';
