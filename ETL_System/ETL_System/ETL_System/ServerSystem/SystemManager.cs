@@ -59,6 +59,7 @@ namespace ETL_System {
                 Console.WriteLine("SERVER started OK");
             }
             catch(Exception e) {
+                Console.WriteLine(e.Message.ToString());
                 return e.Message;
             }
             return null;

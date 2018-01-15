@@ -93,7 +93,7 @@ Andrei Gurguta]]></comment>
 			<column name="sys_change_id" type="int" jt="4" />
 			<column name="last_instance_timestamp" type="datetime" jt="93" />
 			<column name="name" type="varchar" length="250" jt="12" />
-			<column name="execution_path" type="varchar" length="2408" jt="12" />
+			<column name="executable_name" type="varchar" length="512" jt="12" />
 			<column name="max_try_count" type="int" jt="4" />
 			<column name="is_failed" type="int" jt="4" />
 			<column name="delay_seconds" type="int" jt="4" />
@@ -158,8 +158,8 @@ Andrei Gurguta]]></comment>
 		<entity schema="ETL_System" name="Roles" color="c1d8ee" x="645" y="690" />
 		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="360" y="690" />
 		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="615" y="225" />
-		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
+		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
 	</layout>
 </project>

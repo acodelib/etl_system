@@ -31,9 +31,9 @@ namespace ETL_System
             string cp = null;
             string dp = null;
             etl_system_manager.startSystem();
-            string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";
-            etl_system_manager.registerDBConnString(conn_str,null);
-            etl_system_manager.deployDBScript(cp,dp);
+            //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";
+            //etl_system_manager.registerDBConnString(conn_str,null);
+            //etl_system_manager.deployDBScript(cp,dp);
             //etl_system_manager.deployDBScript(cp + "Scripts\\DB_Creation.sql");
             //etl_system_manager.registerExecutionFolderToConfig("C:\\thefolder", null);
             //etl_system_manager.addOrChangeConfigToFile("ExecutionPath", "C:\\awwk\\Pers\\pers_dev\\p_ETL\\TestJobs", null);

@@ -15,7 +15,7 @@ namespace ETL_System{
         public string   name;
         public string   executable_name;
         public int      max_try_count;
-        public int      is_failed;
+        public bool     is_failed;
         public int      delay_seconds;
         public int      latency_alert_seconds;
         public long     data_chceckpoint;
@@ -23,7 +23,41 @@ namespace ETL_System{
 
         public string   type_name;
         
-        private Dictionary<int, string> schecdules;
+        private Dictionary<int, string> schedules;
+        private Dictionary<int, string> dependencies;
+
+        public void setDependencies(Dictionary<int,string> deps) {
+            this.dependencies = deps;
+        }
+
+        public void setSchedules(Dictionary<int, string> sch) {
+            this.schedules = sch;
+        }
+
+        public void computeNextScheduleExecution() {
+
+        }
+    }
+
+    public struct Dependency {
+        public int job_dependency_id;
+        public int job_id;
+        public int depending_job_id;
+        public int dependency_type_id;
+    }
+
+
+    public struct Schedule {
+        public int job_schedule_id;
+        public int job_id;
+        public int schedule_type_id;
+        public DateTime next_execution;
+    }
+
+    public struct ScheduleType {        
+        public string schedule_type_name;
+        public int frequency_seconds;
+        public int execution_window_seconds;
     }
 
 }

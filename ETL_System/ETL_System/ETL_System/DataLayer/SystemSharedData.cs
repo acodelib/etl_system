@@ -12,5 +12,6 @@ namespace ETL_System {
 
         public static string app_db_connstring;
 
+        public static Dictionary<int, ScheduleType> schedule_types;
     }
 }
