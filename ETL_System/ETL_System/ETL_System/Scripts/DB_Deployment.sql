@@ -138,3 +138,8 @@ CREATE TABLE dbo.Jobs (
  SELECT 11,1,1,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,20,0,2134324,'2018-01-11 22:00:00'
  UNION ALL
  SELECT 11,1,1,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,20,0,2134324,'2018-01-11 22:00:00';
+
+ INSERT INTO dbo.DependencyTypes
+ SELECT 'Data','Resolves Checkpoints for jobs that need to run prior to the target Job'
+ UNION ALL
+ SELECT 'Execution','Resolves Checkpoitns for jobs that need to run after the target Job';

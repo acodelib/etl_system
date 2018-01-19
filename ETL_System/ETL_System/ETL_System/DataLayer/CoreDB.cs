@@ -50,10 +50,21 @@ namespace ETL_System {
                     db_adapter.Fill(this.etl_database, "ScheduleTypes");
 
 
-                foreach(DataRow r in etl_database.Tables["ScheduleTypes"].Rows) {
+                fill_query = "Select * from ETL_System.dbo.DependencyTypes";
+                using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
+                    db_adapter.Fill(this.etl_database, "DependencyTypes");
+
+                foreach(DataRow r in etl_database.Tables["DependencyTypes"].Rows) {
+                    SystemSharedData.dependency_types.Add((int)r["dependency_type_id"], new DependencyType {
+                        name = (string)r["name"],
+                        description = (string)r["description"]
+                    });
+                }
+
+                foreach (DataRow r in etl_database.Tables["ScheduleTypes"].Rows) {                                        
                     SystemSharedData.schedule_types.Add((int)r["schedule_type_id"], new ScheduleType {
                         schedule_type_name          = (string)r["schedule_type_name"],
-                        frequency_seconds           = (int)r["frequency_seconds"],
+                        frequency_seconds           = (long)r["frequency_seconds"],
                         execution_window_seconds    = (int)r["execution_window_seconds"]
                     });
                 }
@@ -65,7 +76,7 @@ namespace ETL_System {
         public void fillJobsCollection(Dictionary<string,Job> collection) {            
             DataTable jobs = etl_database.Tables["Jobs"];
             DataTable job_types = etl_database.Tables["JobTypes"];
-            Dictionary<int, Schedule>   s = new Dictionary<int, Schedule>();
+            
             Dictionary<int, Dependency> d = new Dictionary<int, Dependency>();
 
             foreach (DataRow r in jobs.Rows) {                                
@@ -84,10 +95,34 @@ namespace ETL_System {
                     time_checkpoint         = (DateTime)r["time_checkpoint"],
                     type_name               = job_types.Select($"job_type_id = {(int)r["job_type_id"]}").Count() > 0 ? (string)job_types.Select($"job_type_id = {(int)r["job_type_id"]}")[0]["type_name"] :null
                 };
-               // if (j.type_name == "Schedule" && etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
-                 //   s.Clear();
-                  //  s.Add()
-               // }
+
+                //add Dependencies
+                if (j.type_name == "Dependency" && etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
+                    Dictionary<int, Dependency> s = new Dictionary<int, Dependency>();
+                    foreach(DataRow rw in etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}")) {
+                        s.Add((int)rw["job_dependency_id"], new Dependency {
+                           job_dependency_id    = (int)rw["job_dependency_id"],
+                           job_id               = (int)rw["job_id"],
+                           depending_job_id     = (int)rw["depending_job_id"],
+                           dependency_type_id   = (int)rw["dependency_type_id"]
+                        });
+                    }
+                    j.setDependencies(s);
+                }
+
+                //add Schedules
+                if (j.type_name == "Schedule" && etl_database.Tables["JobSchedules"].Select($"job_id = {j.job_id}").Count() > 0) {
+                    Dictionary<int, Schedule> s = new Dictionary<int, Schedule>();
+                    foreach (DataRow rw in etl_database.Tables["JobSchedules"].Select($"job_id = {j.job_id}")) {
+                        s.Add((int)rw["job_schedule_id"], new Schedule {
+                            job_schedule_id = (int)rw["job_schedule_id"],
+                            job_id = (int)rw["job_id"],
+                            schedule_type_id = (int)rw["schedule_type_id"],
+                            next_execution = (DateTime)rw["next_execution"]
+                        });
+                    }
+                    j.setSchedules(s);
+                }
                 collection.Add(j.name, j);
             }
         }
@@ -123,7 +158,7 @@ namespace ETL_System {
                 using (SqlCommand cmd = new SqlCommand(command, conn)) {
                     cmd.ExecuteNonQuery();
                 }
-                //conn.Close();
+                conn.Close();
             }
 
         }
@@ -135,6 +170,7 @@ namespace ETL_System {
                     string r = (string)cmd.ExecuteScalar();
                     return r;
                 }
+                conn.Close();
             }
         }
             

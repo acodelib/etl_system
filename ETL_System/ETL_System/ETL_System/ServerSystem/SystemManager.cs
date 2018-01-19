@@ -27,6 +27,9 @@ namespace ETL_System {
         public SystemManager() {
             this._path_to_config    = AppDomain.CurrentDomain.BaseDirectory + "ETLSystemConfig.etl";
             this._path_to_log       = AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl";
+
+            SystemSharedData.schedule_types     = new Dictionary<int, ScheduleType>();
+            SystemSharedData.dependency_types   = new Dictionary<int, DependencyType>();
         }
         
 
