@@ -15,6 +15,7 @@ CREATE TABLE dbo.Jobs (
 	latency_alert_seconds int    ,
 	data_chceckpoint     bigint    ,
 	time_checkpoint      datetime    ,
+	notifications_list   varchar(4096)
 	CONSTRAINT Pk_Jobs_job_id PRIMARY KEY  ( job_id )
  );
 
@@ -135,9 +136,9 @@ CREATE TABLE dbo.Jobs (
 
 
  INSERT INTO dbo.Jobs
- SELECT 11,1,1,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,20,0,2134324,'2018-01-11 22:00:00'
+ SELECT 11,1,1,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com'
  UNION ALL
- SELECT 11,1,1,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,20,0,2134324,'2018-01-11 22:00:00';
+ SELECT 11,1,1,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com';
 
  INSERT INTO dbo.DependencyTypes
  SELECT 'Data','Resolves Checkpoints for jobs that need to run prior to the target Job'

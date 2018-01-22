@@ -100,6 +100,7 @@ Andrei Gurguta]]></comment>
 			<column name="latency_alert_seconds" type="int" jt="4" />
 			<column name="data_chceckpoint" type="bigint" jt="-5" />
 			<column name="time_checkpoint" type="datetime" jt="93" />
+			<column name="notifications_list" type="varchar" length="4096" jt="12" />
 			<index name="Pk_Jobs_job_id" unique="PRIMARY_KEY" >
 				<column name="job_id" />
 			</index>
