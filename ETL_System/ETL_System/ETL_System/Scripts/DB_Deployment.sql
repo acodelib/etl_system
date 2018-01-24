@@ -2,7 +2,7 @@
 USE ETL_System;
 
 CREATE TABLE dbo.Jobs ( 
-	job_id               int NOT NULL   IDENTITY,
+	job_id               int NOT NULL ,--  IDENTITY,
 	last_instance_id     int    ,
 	job_type_id          int    ,
 	sys_change_id        int    ,
@@ -20,7 +20,7 @@ CREATE TABLE dbo.Jobs (
  );
 
  CREATE TABLE dbo.JobInstances ( 
-	job_instance_id      int NOT NULL   IDENTITY,
+	job_instance_id      int NOT NULL  IDENTITY,
 	job_id               int    ,
 	result               varchar(128),
 	start_timestamp      datetime    ,
@@ -51,7 +51,7 @@ CREATE TABLE dbo.Jobs (
  );
 
  CREATE TABLE dbo.JobChanges ( 
-	sys_change_id        int NOT NULL   IDENTITY,
+	sys_change_id        int NOT NULL,--  IDENTITY,
 	job_id               int    ,
 	user_id              int    ,
 	change_timestamp     datetime    ,
@@ -60,8 +60,8 @@ CREATE TABLE dbo.Jobs (
 
  CREATE TABLE dbo.[User] ( 
 	user_id              int NOT NULL   IDENTITY,
-	login                varchar(256)    ,
-	password             varchar(64)    ,
+	login                varchar(256)   UNIQUE ,
+	password             varchar(256)    ,
 	last_conn_timestamp  datetime    ,
 	is_active            bit    ,
 	CONSTRAINT Pk_User_user_id PRIMARY KEY  ( user_id )
@@ -117,7 +117,7 @@ CREATE TABLE dbo.Jobs (
  SELECT 'default','This is a single use role';
 
  INSERT INTO dbo.JobChanges
- SELECT 0,1,GETDATE();
+ SELECT 1,1,1,GETDATE();
 
  INSERT INTO dbo.UserRoles
  SELECT 1,1;
@@ -136,9 +136,9 @@ CREATE TABLE dbo.Jobs (
 
 
  INSERT INTO dbo.Jobs
- SELECT 11,1,1,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com'
+ SELECT 1,11,1,NULL,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com'
  UNION ALL
- SELECT 11,1,1,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com';
+ SELECT 2,11,1,NULL,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com';
 
  INSERT INTO dbo.DependencyTypes
  SELECT 'Data','Resolves Checkpoints for jobs that need to run prior to the target Job'
