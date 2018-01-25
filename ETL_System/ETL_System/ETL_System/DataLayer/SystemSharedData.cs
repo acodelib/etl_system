@@ -6,13 +6,33 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ETL_System {
-    class SystemSharedData {
-
-        public static ConcurrentDictionary<string, string> clients_table;        
-
+   public class SystemSharedData {       
+           
         public static string app_db_connstring;
-
         public static Dictionary<int, ScheduleType> schedule_types;
         public static Dictionary<int, DependencyType> dependency_types;
+
+        private static int jobs_key_sequence;
+        private static int changes_key_sequence;
+
+        //================ METHODS
+        public static int getJobsKey() {
+            jobs_key_sequence ++;
+            return jobs_key_sequence;
+        }
+
+        public static int getJobChangesKey() {            
+            return ++changes_key_sequence;
+        }
+
+        public static void initKeyGenerators() {
+            //jobs:
+            string sql = "SELECT ISNULL(max(job_id),0) FROM ETL_SYSTEM.dbo.Jobs";
+            jobs_key_sequence = CoreDB.runIntCustomScalarSQLCommand(sql, app_db_connstring);
+
+            //job changes
+            sql = "SELECT ISNULL(max(sys_change_id),0) FROM ETL_SYSTEM.dbo.JobChanges";
+            changes_key_sequence = CoreDB.runIntCustomScalarSQLCommand(sql, app_db_connstring);
+        }
     }
 }

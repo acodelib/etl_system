@@ -31,7 +31,13 @@ namespace ETL_System
             string cp = null;
             string dp = null;
             etl_system_manager.startSystem();
-            Job j = new Job {
+            
+            User u = new User { user_id = 1, login = "admin" };
+            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_bobo", u);
+            //etl_system_manager.jobs_catalogue.deleteJob("the_bobo",u);
+            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "jpipicaca", u);
+            etl_system_manager.jobs_catalogue.deleteJob("jpipicaca",u);
+            Job j = new Job() {
                 last_instance_id = 11,
                 job_type_id = 1,
                 sys_change_id = 12,
@@ -47,11 +53,18 @@ namespace ETL_System
                 notifiactions_list = "andrei.gurguta@veeam.com",
                 type_name = "Schedule"
             };
-            etl_system_manager.jobs_catalogue.addNewJob(j);
+            //etl_system_manager.jobs_catalogue.addNewJob(j,u);
+            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_CREATE_JOB, j, u);
+            
 
+            j.is_failed = true;
+            j.name = "jpipicaca";
+            //etl_system_manager.jobs_catalogue.updateJob(j,u);
+            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_UPDATE_JOB, j, u);
+            
             //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";
             //etl_system_manager.registerDBConnString(conn_str,null);
-         //   etl_system_manager.deployDBScript(cp,dp);
+           // etl_system_manager.deployDBScript(cp,dp);
             //etl_system_manager.deployDBScript(cp + "Scripts\\DB_Creation.sql");
             //etl_system_manager.registerExecutionFolderToConfig("C:\\thefolder", null);
             //etl_system_manager.addOrChangeConfigToFile("ExecutionPath", "C:\\awwk\\Pers\\pers_dev\\p_ETL\\TestJobs", null);

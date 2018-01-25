@@ -17,15 +17,12 @@ namespace ETL_System {
         private System.Object _locker = new System.Object();  // local critical zone locking
 
         private string connection_string;
-        private DataSet etl_database;
-
-        private Dictionary<string, SqlDataAdapter> adapters_table;
+        private DataSet etl_database;        
         
         //===================== CONSTRUCTORS
         public CoreDB(string conn_string) {
             this.connection_string = conn_string;
-            this.etl_database = new DataSet("ETL_System");
-            this.adapters_table = new Dictionary<string, SqlDataAdapter>();
+            this.etl_database = new DataSet("ETL_System");            
             this.initializeCoreDB();            
         }
 
@@ -37,12 +34,7 @@ namespace ETL_System {
             
             fill_query = "Select * from ETL_System.dbo.Jobs";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {  //wierdly enogh you can set connection string only from constructor                                
-                db_adapter.Fill(this.etl_database, "Jobs");
-                SqlCommand select = new SqlCommand("Select * from ETL_System.dbo.Jobs");
-                db_adapter.SelectCommand = select;
-                var builder = new SqlCommandBuilder(db_adapter);
-                this.adapters_table.Add("Jobs", db_adapter);
-                
+                db_adapter.Fill(this.etl_database, "Jobs");                                                                               
             }
             fill_query = "Select * from ETL_System.dbo.JobTypes";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
@@ -50,15 +42,11 @@ namespace ETL_System {
             
             fill_query = "Select * from ETL_System.dbo.JobDependency";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
-                db_adapter.Fill(this.etl_database, "JobDependency");
-                var builder = new SqlCommandBuilder(db_adapter);
-                this.adapters_table.Add("JobDependency", db_adapter);
+                db_adapter.Fill(this.etl_database, "JobDependency");                
             }
             fill_query = "Select * from ETL_System.dbo.JobSchedules";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
-                db_adapter.Fill(this.etl_database, "JobSchedules");
-                var builder = new SqlCommandBuilder(db_adapter);
-                this.adapters_table.Add("JobSchedule", db_adapter);
+                db_adapter.Fill(this.etl_database, "JobSchedules");                
             }
             fill_query = "Select * from ETL_System.dbo.ScheduleTypes";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
@@ -69,7 +57,12 @@ namespace ETL_System {
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
                 db_adapter.Fill(this.etl_database, "DependencyTypes");
 
-            foreach(DataRow r in etl_database.Tables["DependencyTypes"].Rows) {
+            fill_query = "WITH tops as (SELECT max(sys_change_id) sys_change_id from ETL_System.dbo.JobChanges GROUP BY job_id) Select jc.job_id,u.login user_name,jc.change_timestamp from ETL_System.dbo.JobChanges jc JOIN ETL_System.dbo.[User] u on jc.user_id = u.user_id WHERE EXISTS (SELECT sys_change_id FROM tops t WHERE t.sys_change_id = jc.sys_change_id)";
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
+                db_adapter.Fill(this.etl_database, "LastJobChanges");
+                        
+
+            foreach (DataRow r in etl_database.Tables["DependencyTypes"].Rows) {
                 SystemSharedData.dependency_types.Add((int)r["dependency_type_id"], new DependencyType {
                     name = (string)r["name"],
                     description = (string)r["description"]
@@ -85,9 +78,7 @@ namespace ETL_System {
             }
             
     }
-
-
-      
+              
         public void fillJobsCollection(Dictionary<string,Job> collection) {            
             DataTable jobs = etl_database.Tables["Jobs"];
             DataTable job_types = etl_database.Tables["JobTypes"];
@@ -95,7 +86,7 @@ namespace ETL_System {
             Dictionary<int, Dependency> d = new Dictionary<int, Dependency>();
 
             foreach (DataRow r in jobs.Rows) {                                
-                Job j = new Job {
+                Job j = new Job() {
                     job_id                  = (int)r["job_id"],
                     last_instance_id        = (int)r["last_instance_id"],
                     job_type_id             = (int)r["job_type_id"],
@@ -139,46 +130,100 @@ namespace ETL_System {
                     }
                     j.setSchedules(s);
                 }
+
+                //add last job change for audit
+                if (etl_database.Tables["LastJobChanges"].Select($"job_id = {j.job_id}").Count() > 0) {                    
+                    j.setLastJobChange(   (string)etl_database.Tables["LastJobChanges"].Select($"job_id = {j.job_id}")[0]["user_name"],
+                                          (DateTime)etl_database.Tables["LastJobChanges"].Select($"job_id = {j.job_id}")[0]["change_timestamp"]
+                                        );
+                }
+
                 collection.Add(j.name, j);
             }
         }
 
-        public void insertNewJob(Job new_job) {
+        public void addNewJob(Job new_job, User changer) {
             DataTable job_types = etl_database.Tables["JobTypes"];
-            DataRow r;
-            try {
-                lock (_locker) {
-                    r = etl_database.Tables["Jobs"].NewRow();
-                }
+            DataRow r;            
+            lock (_locker) {
+                r = etl_database.Tables["Jobs"].NewRow();
+            }
 
-                r["job_id"] = new_job.job_id;
-                r["last_instance_id"] = new_job.last_instance_id;
-                r["job_type_id"] = new_job.job_type_id;
-                r["last_instance_timestamp"] = new_job.last_instance_timestamp;
-                r["name"] = new_job.name;
-                r["executable_name"] = new_job.executable_name;
-                r["max_try_count"] = new_job.max_try_count;
-                r["is_failed"] = new_job.is_failed;
-                r["delay_seconds"] = new_job.delay_seconds;
-                r["latency_alert_seconds"] = new_job.latency_alert_seconds;
-                r["data_chceckpoint"] = new_job.data_chceckpoint;
-                r["time_checkpoint"] = new_job.time_checkpoint;
-                r["notifications_list"] = new_job.notifiactions_list;
-                //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
+            r["job_id"]                     = new_job.job_id;
+            r["last_instance_id"]           = new_job.last_instance_id;
+            r["job_type_id"]                = new_job.job_type_id;
+            r["last_instance_timestamp"]    = new_job.last_instance_timestamp;
+            r["sys_change_id"]              = new_job.sys_change_id;
+            r["name"]                       = new_job.name;
+            r["executable_name"]            = new_job.executable_name;
+            r["max_try_count"]              = new_job.max_try_count;
+            r["is_failed"]                  = new_job.is_failed;
+            r["delay_seconds"]              = new_job.delay_seconds;
+            r["latency_alert_seconds"]      = new_job.latency_alert_seconds;
+            r["data_chceckpoint"]           = new_job.data_chceckpoint;
+            r["time_checkpoint"]            = new_job.time_checkpoint;
+            r["notifications_list"]         = new_job.notifiactions_list;
+            //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
                 
-                using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {                                                                        
-                        var builder = new SqlCommandBuilder(db_adapter);
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {                                                                        
+                    var builder = new SqlCommandBuilder(db_adapter);
+                lock (_locker) {                        
+                    etl_database.Tables["Jobs"].Rows.Add(r);
+                    DataRow[] target = { r };
+                    db_adapter.Update(target);
+                }
+            }
+            string sql = $"INSERT INTO ETL_System.dbo.JobChanges SELECT {new_job.sys_change_id},{new_job.job_id},{changer.user_id},'{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}",new_job.last_job_change.change_timestamp)}'";
+            runCustomSQLCommand(sql,SystemSharedData.app_db_connstring);
+        }
+
+        public void deleteJob(string job_name, User changer) {
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {
+                var builder = new SqlCommandBuilder(db_adapter);
+                try {
                     lock (_locker) {
-                        //etl_database.Tables["Jobs"].Rows.InsertAt(r, etl_database.Tables["Jobs"].Rows.Count);
-                        etl_database.Tables["Jobs"].Rows.Add(r);
+                        DataRow r = etl_database.Tables["Jobs"].Select($"name = '{job_name}'")[0];                        
+                        r.Delete();
                         DataRow[] target = { r };
                         db_adapter.Update(target);
                     }
+                }catch(Exception e) {
+                    Console.WriteLine(e.Message);
                 }
-            }catch(Exception e) {
-                Console.WriteLine(e.Message);
             }
         }
+
+        public void updateJob(Job target_job,User changer) {
+            DataTable job_types = etl_database.Tables["JobTypes"];
+            lock (_locker) {
+                DataRow r = etl_database.Tables["Jobs"].Select($"job_id = {target_job.job_id}")[0];                
+                r["last_instance_id"]               = target_job.last_instance_id;
+                r["job_type_id"]                    = target_job.job_type_id;
+                r["last_instance_timestamp"]        = target_job.last_instance_timestamp;
+                r["sys_change_id"]                  = target_job.sys_change_id;
+                r["name"]                           = target_job.name;
+                r["executable_name"]                = target_job.executable_name;
+                r["max_try_count"]                  = target_job.max_try_count;
+                r["is_failed"]                      = target_job.is_failed;
+                r["delay_seconds"]                  = target_job.delay_seconds;
+                r["latency_alert_seconds"]          = target_job.latency_alert_seconds;
+                r["data_chceckpoint"]               = target_job.data_chceckpoint;
+                r["time_checkpoint"]                = target_job.time_checkpoint;
+                r["notifications_list"]             = target_job.notifiactions_list;
+                //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
+
+                using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {
+                    var builder = new SqlCommandBuilder(db_adapter);                                           
+                        DataRow[] target = { r };
+                        db_adapter.Update(target);                    
+                }
+            }
+            string sql = $"INSERT INTO ETL_System.dbo.JobChanges SELECT {target_job.sys_change_id},{target_job.job_id},{changer.user_id},'{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", target_job.last_job_change.change_timestamp)}'";
+            runCustomSQLCommand(sql, SystemSharedData.app_db_connstring);         
+                
+        }
+
+
         //===================== HELPER METHODS
         public static string checkDBConnStringIsValid(string conn_string) {
             //method to validate that the connection string is good
@@ -221,9 +266,10 @@ namespace ETL_System {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(command, conn)) {
                     string r = (string)cmd.ExecuteScalar();
-                    return r;
+                    conn.Close();
+                    return r;                
                 }
-                conn.Close();
+                
             }
         }
             
@@ -233,6 +279,7 @@ namespace ETL_System {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(command, conn)) {
                     int r = (int)cmd.ExecuteScalar();
+                    conn.Close();
                     return r;
                 }      
             }                

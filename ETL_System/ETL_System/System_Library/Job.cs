@@ -26,6 +26,11 @@ namespace ETL_System{
         
         private Dictionary<int, Schedule> schedules;
         private Dictionary<int, Dependency> dependencies;
+        public  LastJobChange last_job_change;
+
+        public Job() {
+            this.last_job_change = new LastJobChange();
+        }
 
         public void setDependencies(Dictionary<int,Dependency> deps) {
             this.dependencies = deps;
@@ -35,9 +40,15 @@ namespace ETL_System{
             this.schedules = sch;
         }                
 
+        public void setLastJobChange(string login, DateTime? when ) {
+            this.last_job_change.login = login;
+            this.last_job_change.change_timestamp = when == null ? DateTime.Now : when;
+        }
         public DateTime? computeNextScheduleExecution() {
             return null;
         }
+
+
     }
 
     public struct Dependency {
@@ -66,4 +77,8 @@ namespace ETL_System{
         public string description;        
     }
 
+    public struct LastJobChange {
+        public string login;
+        public DateTime? change_timestamp;
+    }
 }

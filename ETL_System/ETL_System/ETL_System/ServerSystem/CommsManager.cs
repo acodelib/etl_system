@@ -16,12 +16,14 @@ namespace ETL_System
     public class CommsManager {
 
         Socket listener_socket;
+        SessionManager session_manager;
 
-        public CommsManager(ref ConcurrentDictionary<string,string> clients_table) {
+        public CommsManager() {
             Console.WriteLine("ETL Server Starting...");
             listener_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ip = new IPEndPoint(IPAddress.Parse(this.getIp4Address()), 6868);
             this.listener_socket.Bind(ip);
+            this.session_manager = new SessionManager();
 
             Thread ListenThread = new Thread(this.listenToClients);
 

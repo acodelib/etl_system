@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ETL_System {
-    class SystemJob : Job {
+  public  class SystemJob : Job {
 
     }
 }

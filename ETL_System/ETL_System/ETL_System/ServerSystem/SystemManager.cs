@@ -29,9 +29,16 @@ namespace ETL_System {
             this._path_to_log       = AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl";
 
             SystemSharedData.schedule_types     = new Dictionary<int, ScheduleType>();
-            SystemSharedData.dependency_types   = new Dictionary<int, DependencyType>();
+            SystemSharedData.dependency_types   = new Dictionary<int, DependencyType>();            
         }
-        
+
+        public SystemManager(string config_file, string log_file) {
+            this._path_to_config    = config_file;
+            this._path_to_log       = log_file;
+
+            SystemSharedData.schedule_types = new Dictionary<int, ScheduleType>();
+            SystemSharedData.dependency_types = new Dictionary<int, DependencyType>();
+        }
 
         //----------METHODS
         public string startSystem() {
@@ -54,11 +61,12 @@ namespace ETL_System {
                 if (SystemSharedData.app_db_connstring != null && CoreDB.checkDBisDeployed(SystemSharedData.app_db_connstring) > 0) {
                     this.data_layer     = new CoreDB(SystemSharedData.app_db_connstring);
                     this.jobs_catalogue = new JobsCatalogue(this.data_layer);
+                    SystemSharedData.initKeyGenerators();
 
                     Console.WriteLine("Jobs Catalogue is initialised");        
                 }
-                //Launch the CommsManager
-                CommsManager the_msg_handler = new CommsManager(ref SystemSharedData.clients_table);
+                //Launch the CommsManager                
+                CommsManager the_msg_handler = new CommsManager();
                 Console.WriteLine("SERVER started OK");
             }
             catch(Exception e) {
@@ -200,5 +208,45 @@ namespace ETL_System {
             }
             return null;
         }
+
+        public string executeMgmtCommand(MsgTypes msgtype, object data, User user_context) {
+            string fault_response = null;
+            switch (msgtype) {
+                case MsgTypes.MGMT_CREATE_JOB:
+                    try {
+                        this.jobs_catalogue.addNewJob((Job)data, user_context);
+                    }catch(Exception e) {
+                        Console.WriteLine(e.Message);
+                        return e.Message;
+                    }                    
+                    break;
+                case MsgTypes.MGMT_DELETE_JOB:
+                    try {
+                        this.jobs_catalogue.deleteJob((string)data, user_context);
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        return e.Message;
+                    }
+                    break;
+                case MsgTypes.MGMT_UPDATE_JOB:
+                    try {
+                        this.jobs_catalogue.updateJob((Job)data, user_context);
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        return e.Message;
+                    }
+                    break;
+                default:
+                    fault_response = "System Error: Not a valid MGMT_COMMAND!";
+                    Console.WriteLine(fault_response);                                        
+                    break;
+
+            }
+            return fault_response;            
+        }
+
+
     }
 }
