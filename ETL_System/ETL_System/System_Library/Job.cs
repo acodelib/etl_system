@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ETL_System{
-
+    [Serializable]
     public class Job : MsgAttachment {
 
         public int       job_id;     
@@ -15,6 +15,7 @@ namespace ETL_System{
         public string    name;
         public string    executable_name;
         public int       max_try_count;
+        public int       current_failed_count;
         public bool      is_failed;
         public int       delay_seconds;
         public int       latency_alert_seconds;
@@ -51,6 +52,7 @@ namespace ETL_System{
 
     }
 
+    [Serializable]
     public struct Dependency {
         public int? job_dependency_id;
         public int? job_id;
@@ -58,7 +60,7 @@ namespace ETL_System{
         public int? dependency_type_id;
     }
 
-
+    [Serializable]
     public struct Schedule {
         public int? job_schedule_id;
         public int? job_id;
@@ -66,17 +68,20 @@ namespace ETL_System{
         public DateTime? next_execution;
     }
 
+    [Serializable]
     public struct ScheduleType {        
         public string schedule_type_name;
         public long frequency_seconds;
         public int execution_window_seconds;
     }
 
+    [Serializable]
     public struct DependencyType {
         public string name;
         public string description;        
     }
 
+    [Serializable]
     public struct LastJobChange {
         public string login;
         public DateTime? change_timestamp;

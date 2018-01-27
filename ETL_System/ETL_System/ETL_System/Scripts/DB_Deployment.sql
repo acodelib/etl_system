@@ -10,6 +10,7 @@ CREATE TABLE dbo.Jobs (
 	name                 varchar(250)  UNIQUE,
 	executable_name      varchar(512)   ,
 	max_try_count        int    ,
+	current_failed_count int    ,
 	is_failed            bit    ,
 	delay_seconds        int    ,
 	latency_alert_seconds int    ,
@@ -39,6 +40,7 @@ CREATE TABLE dbo.Jobs (
 	job_schedule_id      int NOT NULL   IDENTITY,
 	job_id               int    ,
 	schedule_type_id     int    ,
+	next_execution       int	,
 	CONSTRAINT Pk_Job_Schedules_job_schedule_id PRIMARY KEY  ( job_schedule_id )
  );
 
@@ -103,7 +105,7 @@ CREATE TABLE dbo.Jobs (
 	description          varchar(512)    ,
 	CONSTRAINT Pk_Dependency_Types_dependency_type_id PRIMARY KEY  ( dependency_type_id )
  );
-
+ 
  --- CREATE default admin:
  INSERT INTO dbo.[User]
  SELECT 'admin',hashbytes('SHA1','admin'),GETDATE(),1
@@ -136,9 +138,9 @@ CREATE TABLE dbo.Jobs (
 
 
  INSERT INTO dbo.Jobs
- SELECT 1,11,1,NULL,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com'
+ SELECT 1,11,1,NULL,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,0,20,0,NULL,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com'
  UNION ALL
- SELECT 2,11,1,NULL,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,20,0,2134324,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com';
+ SELECT 2,12,2,NULL,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,0,20,0,2134324,NULL,'andrei_gurguta@yahoo.com';
 
  INSERT INTO dbo.DependencyTypes
  SELECT 'Data','Resolves Checkpoints for jobs that need to run prior to the target Job'

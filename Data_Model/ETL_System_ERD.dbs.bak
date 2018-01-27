@@ -127,7 +127,6 @@ Andrei Gurguta]]></comment>
 			<column name="user_id" type="int" jt="4" mandatory="y" autoincrement="y" />
 			<column name="login" type="varchar" length="256" jt="12" mandatory="y" />
 			<column name="password" type="varchar" length="256" jt="12" />
-			<column name="last_conn_timestamp" type="timestamp" jt="93" />
 			<column name="is_active" type="bit" jt="-7" />
 			<index name="Pk_User_user_id" unique="PRIMARY_KEY" >
 				<column name="user_id" />

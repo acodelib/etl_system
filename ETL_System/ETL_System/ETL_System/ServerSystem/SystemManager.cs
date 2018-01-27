@@ -9,8 +9,7 @@ using System.Windows.Forms;
 namespace ETL_System {
     public class SystemManager {
 
-        //----------- FIELDS
-
+        //=================================== FIELDS
         private System.Object _locker = new System.Object();  // local critical zone locking
 
         private string _path_to_log;
@@ -23,24 +22,16 @@ namespace ETL_System {
         public CoreDB data_layer;
 
 
-        //-----------CONSTRUCTORS
-        public SystemManager() {
-            this._path_to_config    = AppDomain.CurrentDomain.BaseDirectory + "ETLSystemConfig.etl";
-            this._path_to_log       = AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl";
+        //==================================CONSTRUCTORS
+        public SystemManager(string config_file = null, string log_file = null) {
+            this._path_to_config    = config_file   == null ? AppDomain.CurrentDomain.BaseDirectory + "ETLSystemConfig.etl" : config_file;
+            this._path_to_log       = log_file      == null ? AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl" : log_file;
 
             SystemSharedData.schedule_types     = new Dictionary<int, ScheduleType>();
             SystemSharedData.dependency_types   = new Dictionary<int, DependencyType>();            
-        }
+        }      
 
-        public SystemManager(string config_file, string log_file) {
-            this._path_to_config    = config_file;
-            this._path_to_log       = log_file;
-
-            SystemSharedData.schedule_types = new Dictionary<int, ScheduleType>();
-            SystemSharedData.dependency_types = new Dictionary<int, DependencyType>();
-        }
-
-        //----------METHODS
+        //==================================METHODS
         public string startSystem() {
 
             //1.Check if ETLSystemLog.txt and ETLSystemConfig.txt exist
@@ -189,10 +180,11 @@ namespace ETL_System {
             this.addOrChangeConfigToFile("ExecutionPath", path, this.path_to_config);
         }
 
-        public string deployDBScript (string db_creation_path,string db_deployment_path) {
+        public string deployDBScript (string db_creation_path = null,string db_deployment_path = null,string db_view_path = null) {
             // use defualt script path if none is provided
-            string creation   = db_creation_path    == null ? AppDomain.CurrentDomain.BaseDirectory + $"Scripts\\DB_Creation.sql" : db_creation_path;
-            string deployment = db_deployment_path  == null ? AppDomain.CurrentDomain.BaseDirectory + $"Scripts\\DB_Deployment.sql" : db_deployment_path;
+            string creation     = db_creation_path    == null ? AppDomain.CurrentDomain.BaseDirectory + $"Scripts\\DB_Creation.sql" : db_creation_path;
+            string deployment   = db_deployment_path  == null ? AppDomain.CurrentDomain.BaseDirectory + $"Scripts\\DB_Deployment.sql" : db_deployment_path;
+            string views        = db_view_path        == null ? AppDomain.CurrentDomain.BaseDirectory + $"Scripts\\DB_Views.sql" : db_view_path;
 
             //Read SQL from File
             try {
@@ -201,6 +193,9 @@ namespace ETL_System {
 
                 script = File.ReadAllText(deployment);
                 CoreDB.runCustomSQLCommand(script, SystemSharedData.app_db_connstring);
+
+                script = File.ReadAllText(views);
+                CoreDB.runCustomSQLCommandInETLSystem(script, SystemSharedData.app_db_connstring);
             }
             catch (Exception e){
                 Console.WriteLine(e.Message.ToString());
@@ -209,7 +204,9 @@ namespace ETL_System {
             return null;
         }
 
-        public string executeMgmtCommand(MsgTypes msgtype, object data, User user_context) {
+                           ////////// CLIENT REQUESTS //////
+        public string executeMgmtCommand(MsgTypes msgtype, object data, User user_context) {           
+            
             string fault_response = null;
             switch (msgtype) {
                 case MsgTypes.MGMT_CREATE_JOB:
@@ -246,7 +243,33 @@ namespace ETL_System {
             }
             return fault_response;            
         }
-
+        public string executeDataRequest(MsgTypes msgtype, string job_name, User user_context,ref MsgAttachment att) {
+            string fault_response = null;
+            switch (msgtype) {
+                case MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY:
+                    try {
+                        att = new JobsCatalogueDisplay(this.jobs_catalogue.sys_change_id, this.jobs_catalogue.produceDisplay());
+                    }catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        return e.Message;
+                    }
+                    break;
+                case MsgTypes.REQUEST_JOB:
+                    try {
+                        att = this.jobs_catalogue.getJob(job_name);
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        return e.Message;
+                    }
+                    break;
+                default:
+                    fault_response = "System Error: Not a valid REQUEST_COMMAND!";
+                    Console.WriteLine(fault_response);
+                    break;
+            }
+            return fault_response;
+        }
 
     }
 }

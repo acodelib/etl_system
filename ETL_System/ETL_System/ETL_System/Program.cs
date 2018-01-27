@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ETL_System;
 using System.Collections.Concurrent;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
-
-        
 namespace ETL_System
 {
 
@@ -27,24 +27,23 @@ namespace ETL_System
             //ETLSystemService.runInDebug(); 
             
             
-            SystemManager etl_system_manager = new SystemManager();
-            string cp = null;
-            string dp = null;
+            SystemManager etl_system_manager = new SystemManager();           
             etl_system_manager.startSystem();
             
             User u = new User { user_id = 1, login = "admin" };
             etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_bobo", u);
-            //etl_system_manager.jobs_catalogue.deleteJob("the_bobo",u);
+            
             etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "jpipicaca", u);
-            etl_system_manager.jobs_catalogue.deleteJob("jpipicaca",u);
+           // etl_system_manager.jobs_catalogue.deleteJob("jpipicaca",u);
             Job j = new Job() {
                 last_instance_id = 11,
                 job_type_id = 1,
-                sys_change_id = 12,
-                last_instance_timestamp = new DateTime(2018, 01, 12),
+                sys_change_id = null,
+                last_instance_timestamp = null, //new DateTime(2018, 01, 12),
                 name = "the_bobo",
                 executable_name = "bob.bat",
                 max_try_count = 2,
+                current_failed_count = 1,
                 is_failed = false,
                 delay_seconds = 12,
                 latency_alert_seconds = 3,
@@ -52,19 +51,24 @@ namespace ETL_System
                 time_checkpoint = new DateTime(2018, 01, 22),
                 notifiactions_list = "andrei.gurguta@veeam.com",
                 type_name = "Schedule"
-            };
-            //etl_system_manager.jobs_catalogue.addNewJob(j,u);
+            };            
             etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_CREATE_JOB, j, u);
-            
-
+            //Simulate message with job to change:
+            MemoryStream m = new MemoryStream();
+            BinaryFormatter b = new BinaryFormatter();
+            b.Serialize(m, j);
+            m.Position = 0;
+            j = (Job)b.Deserialize(m);
             j.is_failed = true;
-            j.name = "jpipicaca";
-            //etl_system_manager.jobs_catalogue.updateJob(j,u);
+            j.name = "jpipicaca";            
             etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_UPDATE_JOB, j, u);
+            MsgAttachment js = new MsgAttachment();
+            etl_system_manager.executeDataRequest(MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY, "", u,ref js);
+            etl_system_manager.executeDataRequest(MsgTypes.REQUEST_JOB, "dummy job", u, ref js);
             
-            //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";
-            //etl_system_manager.registerDBConnString(conn_str,null);
-           // etl_system_manager.deployDBScript(cp,dp);
+            string tl = null;
+            //  etl_system_manager.deployDBScript();
+            //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";            
             //etl_system_manager.deployDBScript(cp + "Scripts\\DB_Creation.sql");
             //etl_system_manager.registerExecutionFolderToConfig("C:\\thefolder", null);
             //etl_system_manager.addOrChangeConfigToFile("ExecutionPath", "C:\\awwk\\Pers\\pers_dev\\p_ETL\\TestJobs", null);

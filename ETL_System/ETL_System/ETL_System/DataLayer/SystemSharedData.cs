@@ -10,10 +10,12 @@ namespace ETL_System {
            
         public static string app_db_connstring;
         public static Dictionary<int, ScheduleType> schedule_types;
-        public static Dictionary<int, DependencyType> dependency_types;
+        public static Dictionary<int, DependencyType> dependency_types;        
 
         private static int jobs_key_sequence;
         private static int changes_key_sequence;
+
+        private static bool queue_run_flag;
 
         //================ METHODS
         public static int getJobsKey() {

@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ETL_System {
-    [Serializable]
-    public  class MsgAttachment {
-        public int? sys_change_id;
-
+   public class ETLWorker {
+        //================================FIELDS
+        public string name;
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ETL_System;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace UnitTest_ETLSystem {
     [TestClass]
@@ -60,16 +61,17 @@ namespace UnitTest_ETLSystem {
             Job j = new Job() {
                 last_instance_id = 11,
                 job_type_id = 1,
-                sys_change_id = 12,
-                last_instance_timestamp = new DateTime(2018, 01, 12),
+                sys_change_id = null,
+                last_instance_timestamp = null, // new DateTime(2018, 01, 12),
                 name = "the_test_1",
                 executable_name = "bob.bat",
                 max_try_count = 2,
+                current_failed_count = 1,
                 is_failed = false,
                 delay_seconds = 12,
                 latency_alert_seconds = 3,
-                data_chceckpoint = 31231,
-                time_checkpoint = new DateTime(2018, 01, 22),
+                data_chceckpoint = null, //31231,
+                time_checkpoint = null, // new DateTime(2018, 01, 22),
                 notifiactions_list = "andrei.gurguta@veeam.com",
                 type_name = "Schedule"
             };
@@ -79,7 +81,12 @@ namespace UnitTest_ETLSystem {
                            CoreDB.runIntCustomScalarSQLCommand("Select isnull(count(name),0) from ETL_System.dbo.Jobs WHERE name in ('the_test_1')",
                                                         "Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true")
                           );
-
+            //simulate incomming message:
+                    MemoryStream m = new MemoryStream();
+                    BinaryFormatter b = new BinaryFormatter();
+                    b.Serialize(m, j);
+                    m.Position = 0;
+                    j = (Job)b.Deserialize(m);
             j.is_failed = true;
             j.name = "the_test_2";            
             etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_UPDATE_JOB, j, u);

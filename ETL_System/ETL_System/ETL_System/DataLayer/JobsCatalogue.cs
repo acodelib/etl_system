@@ -33,6 +33,15 @@ namespace ETL_System {
             return CoreDB.runIntCustomScalarSQLCommand(sql, SystemSharedData.app_db_connstring);           
         }
 
+        public Job getJob(string name) {
+            try {
+                return this.jobs_collection[name];
+            }catch(KeyNotFoundException e) {
+                throw new Exception("Job doesn't exist! ");
+            } 
+
+        }
+
         public string addNewJob(Job new_job, User changer) {                        
             lock (_locker) {
                 if (jobs_collection.ContainsKey(new_job.name))
@@ -62,9 +71,11 @@ namespace ETL_System {
                 
                 //referential integrity check first:
                 bool searcher = false;
+                string named_changed = null;
                 foreach (var k in jobs_collection.Values) {
                     if (k.job_id == target_job.job_id) {
                         searcher = true;
+                        named_changed = k.name;
                         break;
                     }
                 }
@@ -72,7 +83,7 @@ namespace ETL_System {
                     return "Job doesn't exists or there is another job already named like this.";                
 
                 //if integrity check passes then do updates:
-                this.jobs_collection.Remove(target_job.name);
+                this.jobs_collection.Remove(named_changed);
                 target_job.sys_change_id = SystemSharedData.getJobChangesKey();
                 target_job.setLastJobChange(changer.login, null);
                 this.jobs_collection.Add(target_job.name,target_job);
@@ -85,6 +96,10 @@ namespace ETL_System {
         private int refreshJobsCollection() {
             data_layer.fillJobsCollection(this.jobs_collection);
             return 1;
+        }
+
+        public DataTable produceDisplay() {                     
+            return  this.data_layer.getJobsDefaultView();
         }
     }
 }
