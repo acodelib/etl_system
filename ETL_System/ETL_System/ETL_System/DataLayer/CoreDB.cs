@@ -82,25 +82,30 @@ namespace ETL_System {
         public void fillJobsCollection(Dictionary<string,Job> collection) {            
             DataTable jobs = etl_database.Tables["Jobs"];
             DataTable job_types = etl_database.Tables["JobTypes"];            
-            Dictionary<int, Dependency> d = new Dictionary<int, Dependency>();            
+            Dictionary<int, Dependency> d = new Dictionary<int, Dependency>();
+            try {
+                foreach (DataRow r in jobs.Rows) {
+                    Job j = new Job() {
+                        job_id = (int)r["job_id"],
+                        last_instance_id = (int)r["last_instance_id"],
+                        job_type_id = (int)r["job_type_id"],
+                        last_instance_timestamp = (DateTime?)(r["last_instance_timestamp"] == DBNull.Value ? null : r["last_instance_timestamp"]),
+                        name = (string)r["name"],
+                        executable_name = (string)r["executable_name"],
+                        max_try_count = (int)r["max_try_count"],
+                        current_failed_count = (int)r["current_failed_count"],
+                        is_failed = (bool)r["is_failed"],
+                        delay_seconds = (int)r["delay_seconds"],
+                        latency_alert_seconds = (int)r["latency_alert_seconds"],
+                        data_chceckpoint = (long?)(r["data_chceckpoint"] == DBNull.Value ? null : r["data_chceckpoint"]),
+                        time_checkpoint = (DateTime?)(r["time_checkpoint"] == DBNull.Value ? null : r["time_checkpoint"]),
+                        notifiactions_list = (string)r["notifications_list"],
+                        type_name = job_types.Select($"job_type_id = {(int)r["job_type_id"]}").Count() > 0 ? (string)job_types.Select($"job_type_id = {(int)r["job_type_id"]}")[0]["type_name"] : null,
+                        is_executing = false,
+                        is_queued = false,
+                        is_active = (bool)r["is_active"],
+                        is_paused = (bool)r["is_paused"]
 
-                foreach (DataRow r in jobs.Rows) {           
-                Job j = new Job() {
-                        job_id                  = (int)r["job_id"],
-                        last_instance_id        = (int)r["last_instance_id"],
-                        job_type_id             = (int)r["job_type_id"],
-                        last_instance_timestamp = (DateTime?)(r["last_instance_timestamp"] == DBNull.Value?null: r["last_instance_timestamp"]),
-                        name                    = (string)r["name"],
-                        executable_name         = (string)r["executable_name"],
-                        max_try_count           = (int)r["max_try_count"],
-                        current_failed_count    = (int)r["current_failed_count"],
-                        is_failed               = (bool)r["is_failed"],
-                        delay_seconds           = (int)r["delay_seconds"],
-                        latency_alert_seconds   = (int)r["latency_alert_seconds"],
-                        data_chceckpoint        = (long?)(r["data_chceckpoint"]==DBNull.Value?null: r["data_chceckpoint"]),
-                        time_checkpoint         = (DateTime?)(r["time_checkpoint"] == DBNull.Value ? null : r["time_checkpoint"]),
-                        notifiactions_list      = (string)r["notifications_list"],
-                        type_name = job_types.Select($"job_type_id = {(int)r["job_type_id"]}").Count() > 0 ? (string)job_types.Select($"job_type_id = {(int)r["job_type_id"]}")[0]["type_name"] : null
                     };
 
                     //add Dependencies
@@ -115,8 +120,7 @@ namespace ETL_System {
                             });
                         }
                         j.setDependencies(s);
-                    }
-
+                    }               
                     //add Schedules
                     if (j.type_name == "Schedule" && etl_database.Tables["JobSchedules"].Select($"job_id = {j.job_id}").Count() > 0) {
                         Dictionary<int, Schedule> s = new Dictionary<int, Schedule>();
@@ -140,7 +144,9 @@ namespace ETL_System {
 
                     collection.Add(j.name, j);
                 }
-       
+            }
+            catch (Exception e) { }
+
         }
 
         public void addNewJob(Job new_job, User changer) {
@@ -171,15 +177,17 @@ namespace ETL_System {
             r["name"]                       = new_job.name;
             r["executable_name"]            = new_job.executable_name;
             r["max_try_count"]              = new_job.max_try_count;
-            r["current_failed_count"]       = new_job.current_failed_count;
-            r["is_failed"]                  = new_job.is_failed;
+            r["current_failed_count"]       = new_job.current_failed_count;            
             r["delay_seconds"]              = new_job.delay_seconds;
             r["latency_alert_seconds"]      = new_job.latency_alert_seconds;
             r["data_chceckpoint"]           = dc;
             r["time_checkpoint"]            = tc;
             r["notifications_list"]         = new_job.notifiactions_list;
+            r["is_failed"]                  = new_job.is_failed;
+            r["is_active"]                  = new_job.is_active;
+            r["is_paused"]                  = new_job.is_paused;
             //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
-                
+
             using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {                                                                        
                     var builder = new SqlCommandBuilder(db_adapter);
                 lock (_locker) {                        
@@ -235,13 +243,14 @@ namespace ETL_System {
                 r["name"]                           = target_job.name;
                 r["executable_name"]                = target_job.executable_name;
                 r["max_try_count"]                  = target_job.max_try_count;
-                r["current_failed_count"]           = target_job.current_failed_count;
-                r["is_failed"]                      = target_job.is_failed;
+                r["current_failed_count"]           = target_job.current_failed_count;                
                 r["delay_seconds"]                  = target_job.delay_seconds;
                 r["latency_alert_seconds"]          = target_job.latency_alert_seconds;
                 r["data_chceckpoint"]               = dc;
                 r["time_checkpoint"]                = tc;
                 r["notifications_list"]             = target_job.notifiactions_list;
+                r["is_active"]                      = target_job.is_active;
+                r["is_paused"]                      = target_job.is_paused;
             //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
 
             lock (_locker) { 
@@ -263,6 +272,7 @@ namespace ETL_System {
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
                 DataSet ds = new DataSet();
                 db_adapter.Fill(ds = new DataSet(), "JobsView");
+                //ds.Tables["JobsView"].Columns.Add("State", typeof(string));                
                 return ds.Tables["JobsView"];
             }    
             

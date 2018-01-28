@@ -10,13 +10,15 @@ CREATE TABLE dbo.Jobs (
 	name                 varchar(250)  UNIQUE,
 	executable_name      varchar(512)   ,
 	max_try_count        int    ,
-	current_failed_count int    ,
-	is_failed            bit    ,
+	current_failed_count int    ,	
 	delay_seconds        int    ,
 	latency_alert_seconds int    ,
 	data_chceckpoint     bigint    ,
 	time_checkpoint      datetime    ,
-	notifications_list   varchar(4096)
+	notifications_list   varchar(4096),
+	is_failed            bit    ,
+	is_active            bit	,
+	is_paused            bit
 	CONSTRAINT Pk_Jobs_job_id PRIMARY KEY  ( job_id )
  );
 
@@ -106,6 +108,9 @@ CREATE TABLE dbo.Jobs (
 	CONSTRAINT Pk_Dependency_Types_dependency_type_id PRIMARY KEY  ( dependency_type_id )
  );
  
+ CREATE NONCLUSTERED INDEX IX_jobinstances_jid  ON ETL_System.dbo.JobInstances (job_id); 
+ CREATE NONCLUSTERED INDEX IX_jobchanges_jid    ON ETL_System.dbo.JobChanges (job_id); 
+
  --- CREATE default admin:
  INSERT INTO dbo.[User]
  SELECT 'admin',hashbytes('SHA1','admin'),GETDATE(),1
@@ -138,9 +143,9 @@ CREATE TABLE dbo.Jobs (
 
 
  INSERT INTO dbo.Jobs
- SELECT 1,11,1,NULL,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,0,20,0,NULL,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com'
+ SELECT 1,11,1,NULL,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,0,20,NULL,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com',0,0,0
  UNION ALL
- SELECT 2,12,2,NULL,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,0,20,0,2134324,NULL,'andrei_gurguta@yahoo.com';
+ SELECT 2,12,2,NULL,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,0,20,2134324,NULL,'andrei_gurguta@yahoo.com',0,0,0;
 
  INSERT INTO dbo.DependencyTypes
  SELECT 'Data','Resolves Checkpoints for jobs that need to run prior to the target Job'

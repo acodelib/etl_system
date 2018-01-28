@@ -13,7 +13,7 @@ namespace ETL_System {
 
         //=========================================FIELDS
         private System.Object _locker = new System.Object();  // local critical zone locking
-        private Dictionary<string,ETL_System.Job> jobs_collection;        
+        public Dictionary<string,ETL_System.Job> jobs_collection;        
         private int _sys_change_id;
         public int sys_change_id { get; }
         private CoreDB data_layer;
@@ -58,8 +58,8 @@ namespace ETL_System {
 
         public string deleteJob(string job_name,User changer) {
             lock (_locker) {
-                if (!jobs_collection.ContainsKey(job_name))
-                    return "Job doesn't exists.";
+                if (!jobs_collection.ContainsKey(job_name) || jobs_collection[job_name].is_queued)
+                    return "Can't remove job. Job either doesn't exists or is executing.";
                 this.jobs_collection.Remove(job_name);
             }
             this.data_layer.deleteJob(job_name,changer); // change audit not implemented currently for delete           
@@ -74,6 +74,8 @@ namespace ETL_System {
                 string named_changed = null;
                 foreach (var k in jobs_collection.Values) {
                     if (k.job_id == target_job.job_id) {
+                        if (k.is_queued)
+                            return "Can't change job, it is executing or about to execute!";
                         searcher = true;
                         named_changed = k.name;
                         break;
@@ -90,7 +92,7 @@ namespace ETL_System {
             }
             this.data_layer.updateJob(target_job,changer);
             this._sys_change_id = this.getCurrentSysChangeId();
-            return null;
+            return "Job Update success!";
         }
 
         private int refreshJobsCollection() {
@@ -98,8 +100,15 @@ namespace ETL_System {
             return 1;
         }
 
-        public DataTable produceDisplay() {                     
-            return  this.data_layer.getJobsDefaultView();
+        public DataTable produceDisplay() {              
+            DataTable view = this.data_layer.getJobsDefaultView();
+            DataRow[] r;            
+            view.Columns.Add("State", typeof(string));
+            foreach(Job j in this.jobs_collection.Values) {                
+                r = view.Select($"job_id ={j.job_id}");
+                r[0]["State"] = j.is_executing ? "EXECUTING" : j.is_queued ? "IN QUEUE" : "WAITING"; 
+            }
+            return view;
         }
     }
 }

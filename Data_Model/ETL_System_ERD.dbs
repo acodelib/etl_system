@@ -94,12 +94,14 @@ Andrei Gurguta]]></comment>
 			<column name="executable_name" type="varchar" length="512" jt="12" />
 			<column name="max_try_count" type="int" jt="4" />
 			<column name="current_failed_count" type="int" jt="4" />
-			<column name="is_failed" type="int" jt="4" />
 			<column name="delay_seconds" type="int" jt="4" />
 			<column name="latency_alert_seconds" type="int" jt="4" />
 			<column name="data_chceckpoint" type="bigint" jt="-5" />
 			<column name="time_checkpoint" type="datetime" jt="93" />
 			<column name="notifications_list" type="varchar" length="4096" jt="12" />
+			<column name="is_failed" type="int" jt="4" />
+			<column name="is_active" type="bit" jt="-7" />
+			<column name="is_paused" type="bit" jt="-7" />
 			<index name="Pk_Jobs_job_id" unique="PRIMARY_KEY" >
 				<column name="job_id" />
 			</index>
@@ -155,8 +157,8 @@ Andrei Gurguta]]></comment>
 		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="615" y="225" />
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
-		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="330" y="510" />
 		<entity schema="ETL_System" name="User" color="c1d8ee" x="600" y="510" />
 		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
+		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="330" y="540" />
 	</layout>
 </project>

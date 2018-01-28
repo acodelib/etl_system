@@ -29,15 +29,15 @@
             // 
             // rtbDisplay
             // 
-            this.rtbDisplay.Location = new System.Drawing.Point(87, 34);
+            this.rtbDisplay.Location = new System.Drawing.Point(778, 246);
             this.rtbDisplay.Name = "rtbDisplay";
-            this.rtbDisplay.Size = new System.Drawing.Size(669, 382);
+            this.rtbDisplay.Size = new System.Drawing.Size(348, 190);
             this.rtbDisplay.TabIndex = 0;
             this.rtbDisplay.Text = "";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(875, 34);
+            this.button1.Location = new System.Drawing.Point(862, 171);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;

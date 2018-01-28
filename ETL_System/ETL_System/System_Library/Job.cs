@@ -15,15 +15,19 @@ namespace ETL_System{
         public string    name;
         public string    executable_name;
         public int       max_try_count;
-        public int       current_failed_count;
-        public bool      is_failed;
+        public int       current_failed_count;        
         public int       delay_seconds;
         public int       latency_alert_seconds;
         public long?     data_chceckpoint;
         public DateTime? time_checkpoint;
         public string    notifiactions_list;
+        public bool      is_failed;
+        public bool      is_active;
+        public bool      is_paused;
 
         public string   type_name;
+        public bool     is_executing;
+        public bool     is_queued;
         
         private Dictionary<int, Schedule> schedules;
         private Dictionary<int, Dependency> dependencies;

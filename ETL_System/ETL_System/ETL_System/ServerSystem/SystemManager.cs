@@ -20,6 +20,8 @@ namespace ETL_System {
 
         public JobsCatalogue jobs_catalogue;
         public CoreDB data_layer;
+        public QueueManager queue_manager;
+        public JobsQueue jobs_queue;
 
 
         //==================================CONSTRUCTORS
@@ -27,8 +29,9 @@ namespace ETL_System {
             this._path_to_config    = config_file   == null ? AppDomain.CurrentDomain.BaseDirectory + "ETLSystemConfig.etl" : config_file;
             this._path_to_log       = log_file      == null ? AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl" : log_file;
 
-            SystemSharedData.schedule_types     = new Dictionary<int, ScheduleType>();
-            SystemSharedData.dependency_types   = new Dictionary<int, DependencyType>();            
+            SystemSharedData.schedule_types         = new Dictionary<int, ScheduleType>();
+            SystemSharedData.dependency_types       = new Dictionary<int, DependencyType>();
+            SystemSharedData.catalogue_scan_flag    = true;       
         }      
 
         //==================================METHODS
@@ -48,23 +51,35 @@ namespace ETL_System {
                 File.CreateText(this._path_to_log).Close();
 
             try {
-                //Launch the Data Layer and JobsCatalogue
+                //Launch  Data Layer, Jobs Catalogue, JobsQueue, Queue Manager and ETL Worker
                 if (SystemSharedData.app_db_connstring != null && CoreDB.checkDBisDeployed(SystemSharedData.app_db_connstring) > 0) {
                     this.data_layer     = new CoreDB(SystemSharedData.app_db_connstring);
                     this.jobs_catalogue = new JobsCatalogue(this.data_layer);
                     SystemSharedData.initKeyGenerators();
+                    //Console.WriteLine("Jobs Catalogue is initialised");
+                    LogManager.writeStartEvent("Jobs Catalogue is initialised", this._path_to_log);
 
-                    Console.WriteLine("Jobs Catalogue is initialised");        
+                    this.jobs_queue = new JobsQueue();
+//                    Console.WriteLine("Jobs Queue is initialised");
+                    LogManager.writeStartEvent("Jobs Queue is initialised", this._path_to_log);
+                    this.queue_manager = new QueueManager(jobs_catalogue, jobs_queue, 10);
                 }
                 //Launch the CommsManager                
-                CommsManager the_msg_handler = new CommsManager();
-                Console.WriteLine("SERVER started OK");
+                CommsManager the_msg_handler = new CommsManager(this);
+                //Console.WriteLine("SERVER started OK");
+                LogManager.writeStartEvent("SERVER started OK", this._path_to_log);
             }
             catch(Exception e) {
                 Console.WriteLine(e.Message.ToString());
                 return e.Message;
             }
             return null;
+        }
+        public string startQueueing() {
+            SystemSharedData.catalogue_scan_flag = true;
+            this.queue_manager.startWork();
+            Console.WriteLine("Queueing Service started OK.");
+            return "Queueing Service started OK.";
         }
 
                 ///////

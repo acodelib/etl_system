@@ -17,9 +17,11 @@ namespace ETL_System
 
         Socket listener_socket;
         SessionManager session_manager;
+        SystemManager system_manager;
 
-        public CommsManager() {
-            Console.WriteLine("ETL Server Starting...");
+        public CommsManager(SystemManager sys_mng) {
+            this.system_manager = sys_mng;            
+            LogManager.writeStartEvent("Comms Manager Starting...", system_manager.path_to_log);
             listener_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ip = new IPEndPoint(IPAddress.Parse(this.getIp4Address()), 6868);
             this.listener_socket.Bind(ip);
@@ -28,7 +30,7 @@ namespace ETL_System
             Thread ListenThread = new Thread(this.listenToClients);
 
             ListenThread.Start();
-            Console.WriteLine("Server is awaiting connections on IP: " + getIp4Address() + ":6868");            
+            LogManager.writeStartEvent("Server is awaiting connections on IP: " + getIp4Address() + ":6868", system_manager.path_to_log);            
 
         }    
         

@@ -29,7 +29,8 @@ namespace ETL_System
             
             SystemManager etl_system_manager = new SystemManager();           
             etl_system_manager.startSystem();
-            
+            //etl_system_manager.startQueueing();
+            /*
             User u = new User { user_id = 1, login = "admin" };
             etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_bobo", u);
             
@@ -67,7 +68,8 @@ namespace ETL_System
             etl_system_manager.executeDataRequest(MsgTypes.REQUEST_JOB, "dummy job", u, ref js);
             
             string tl = null;
-            //  etl_system_manager.deployDBScript();
+            */
+      //        etl_system_manager.deployDBScript();
             //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";            
             //etl_system_manager.deployDBScript(cp + "Scripts\\DB_Creation.sql");
             //etl_system_manager.registerExecutionFolderToConfig("C:\\thefolder", null);

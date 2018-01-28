@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace ETL_System {
    public class SystemSharedData {       
            
-        public static string app_db_connstring;
+        public static string app_db_connstring;        
         public static Dictionary<int, ScheduleType> schedule_types;
-        public static Dictionary<int, DependencyType> dependency_types;        
+        public static Dictionary<int, DependencyType> dependency_types;
+        public static bool catalogue_scan_flag;
+        public static bool workers_start_flag;
 
         private static int jobs_key_sequence;
-        private static int changes_key_sequence;
-
-        private static bool queue_run_flag;
+        private static int changes_key_sequence;        
 
         //================ METHODS
         public static int getJobsKey() {
