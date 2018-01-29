@@ -22,5 +22,13 @@ namespace ETL_System_Client
             this.rtbDisplay.Text = await Sender.communicateWithServer();
             Sender = null;
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e) {
+
+        }
+
+        private void rtbDisplay_TextChanged(object sender, EventArgs e) {
+
+        }
     }
 }
