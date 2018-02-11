@@ -64,6 +64,7 @@ CREATE TABLE dbo.Jobs (
 
  CREATE TABLE dbo.[User] ( 
 	user_id              int NOT NULL   IDENTITY,
+	role_id				 int NOT NULL,
 	login                varchar(256)   UNIQUE ,
 	password             varchar(256)    ,
 	last_conn_timestamp  datetime    ,
@@ -71,14 +72,8 @@ CREATE TABLE dbo.Jobs (
 	CONSTRAINT Pk_User_user_id PRIMARY KEY  ( user_id )
  );
 
- CREATE TABLE dbo.UserRoles ( 
-	user_role_id         int NOT NULL   IDENTITY,
-	user_id              int    ,
-	role_id              int    ,
-	CONSTRAINT Pk_UserRoles_user_role_id PRIMARY KEY  ( user_role_id )
- );
 
- CREATE TABLE dbo.Roles ( 
+ CREATE TABLE dbo.UserRoles ( 
 	role_id              int NOT NULL   IDENTITY,
 	name                 varchar(100)    ,
 	description          varchar(256)    ,
@@ -113,21 +108,19 @@ CREATE TABLE dbo.Jobs (
 
  --- CREATE default admin:
  INSERT INTO dbo.[User]
- SELECT 'admin',hashbytes('SHA1','admin'),GETDATE(),1
+ SELECT 1,'admin','208512264222772174181102151942010236531331277169151',GETDATE(),1
  UNION ALL
- SELECT 'sys',hashbytes('SHA1','admin'),GETDATE(),1;
+ SELECT 1,'sys','208512264222772174181102151942010236531331277169151',GETDATE(),1;
 
- INSERT INTO dbo.Roles
- SELECT 'admin','This is the master role for the system';
-
- INSERT INTO dbo.Roles
- SELECT 'default','This is a single use role';
+ INSERT INTO dbo.UserRoles
+ SELECT 'admin','This is the master role for the system'
+ UNION ALL
+ SELECT 'developer','Standard access role';
 
  INSERT INTO dbo.JobChanges
  SELECT 1,1,1,GETDATE();
 
- INSERT INTO dbo.UserRoles
- SELECT 1,1;
+ 
 
  INSERT INTO dbo.ScheduleTypes
  SELECT 'Hourly',3600,60

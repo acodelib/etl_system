@@ -8,6 +8,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.Collections.Concurrent;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace ETL_System
 {
@@ -19,24 +21,24 @@ namespace ETL_System
         SessionManager session_manager;
         SystemManager system_manager;
 
-        public CommsManager(SystemManager sys_mng) {
-            this.system_manager = sys_mng;            
+        public CommsManager(SystemManager sys_mng,SessionManager sm) {
+            this.system_manager = sys_mng;
+            this.session_manager = sm;
             LogManager.writeStartEvent("Comms Manager Starting...", system_manager.path_to_log);
+
             listener_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ip = new IPEndPoint(IPAddress.Parse(this.getIp4Address()), 6868);
-            this.listener_socket.Bind(ip);
-            this.session_manager = new SessionManager();
+            this.listener_socket.Bind(ip);           
 
             Thread ListenThread = new Thread(this.listenToClients);
 
             ListenThread.Start();
-            LogManager.writeStartEvent("Server is awaiting connections on IP: " + getIp4Address() + ":6868", system_manager.path_to_log);            
+            LogManager.writeStartEvent("Server is awaiting connections on IP: " + getIp4Address() + ":6868", system_manager.path_to_log);
 
         }    
         
         private void listenToClients() {
-            while (true) {
-                
+            while (true) {                
                 this.listener_socket.Listen(0);
                 handleMessageFromClient(listener_socket.Accept());
             }
@@ -51,21 +53,26 @@ namespace ETL_System
             Socket client_socket = (Socket)incoming_socket;
             byte[] Buffer;
             int readBytes;
-            StringBuilder str_message = new StringBuilder();
+            Message message;
+            Message reply;
             while (1 == 1) {
                 try {
                     Buffer = new byte[client_socket.SendBufferSize];
                     readBytes = client_socket.Receive(Buffer);
                     if (readBytes > 0) {
-                        str_message.Clear();
-                        str_message.Append(Encoding.ASCII.GetString(Buffer, 0, readBytes));
-                        string content = str_message.ToString();
-                        Console.WriteLine("Received Message: " + content);
+                        //read inpute stream as Message:
+                        BinaryFormatter b   = new BinaryFormatter();
+                        MemoryStream m      = new MemoryStream(Buffer);
+                        message             = (Message)b.Deserialize(m);
+                        Console.WriteLine("Received Message: " + message.id.ToString());
 
-                        //reply
-                        client_socket.Send(Encoding.ASCII.GetBytes("Receivend your message: " + content));
-                        str_message = null;
-                        content = null;
+                        if(message.msg_type == MsgTypes.TRY_CONNECT) {
+                            reply = session_manager.validateLogin(message);
+                            client_socket.Send(reply.encodeToBytes());
+                        }
+                        
+
+
                         Buffer = null;
                         break;
                     }

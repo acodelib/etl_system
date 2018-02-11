@@ -94,26 +94,20 @@ Andrei Gurguta]]></comment>
 			<column name="executable_name" type="varchar" length="512" jt="12" />
 			<column name="max_try_count" type="int" jt="4" />
 			<column name="current_failed_count" type="int" jt="4" />
-			<column name="is_failed" type="int" jt="4" />
 			<column name="delay_seconds" type="int" jt="4" />
 			<column name="latency_alert_seconds" type="int" jt="4" />
 			<column name="data_chceckpoint" type="bigint" jt="-5" />
 			<column name="time_checkpoint" type="datetime" jt="93" />
 			<column name="notifications_list" type="varchar" length="4096" jt="12" />
+			<column name="is_failed" type="int" jt="4" />
+			<column name="is_active" type="bit" jt="-7" />
+			<column name="is_paused" type="bit" jt="-7" />
 			<index name="Pk_Jobs_job_id" unique="PRIMARY_KEY" >
 				<column name="job_id" />
 			</index>
 			<fk name="Fk_Jobs_JobTypes" virtual="y" to_schema="ETL_System" to_table="JobTypes" >
 				<fk_column name="job_type_id" pk="job_type_id" />
 			</fk>
-		</table>
-		<table name="Roles" >
-			<column name="role_id" type="int" jt="4" mandatory="y" autoincrement="y" />
-			<column name="name" type="varchar" length="100" jt="12" />
-			<column name="description" type="varchar" length="256" jt="12" />
-			<index name="Pk_Roles_role_id" unique="PRIMARY_KEY" >
-				<column name="role_id" />
-			</index>
 		</table>
 		<table name="ScheduleTypes" >
 			<column name="schedule_typel_id" type="int" jt="4" mandatory="y" autoincrement="y" />
@@ -126,37 +120,36 @@ Andrei Gurguta]]></comment>
 		</table>
 		<table name="User" >
 			<column name="user_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="role_id" type="int" jt="4" />
 			<column name="login" type="varchar" length="256" jt="12" mandatory="y" />
 			<column name="password" type="varchar" length="256" jt="12" />
 			<column name="is_active" type="bit" jt="-7" />
 			<index name="Pk_User_user_id" unique="PRIMARY_KEY" >
 				<column name="user_id" />
 			</index>
-		</table>
-		<table name="UserRoles" >
-			<column name="user_role_id" type="int" jt="4" mandatory="y" autoincrement="y" />
-			<column name="user_id" type="int" jt="4" />
-			<column name="role_id" type="int" jt="4" />
-			<index name="Pk_UserRoles_user_role_id" unique="PRIMARY_KEY" >
-				<column name="user_role_id" />
-			</index>
-			<fk name="Fk_UserRoles_User" virtual="y" to_schema="ETL_System" to_table="User" />
-			<fk name="Fk_UserRoles_Roles" virtual="y" to_schema="ETL_System" to_table="Roles" >
+			<fk name="Fk_User_UserRoles" virtual="y" to_schema="ETL_System" to_table="UserRoles" >
 				<fk_column name="role_id" pk="role_id" />
 			</fk>
+		</table>
+		<table name="UserRoles" >
+			<column name="role_id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="description" type="varchar" length="256" jt="12" />
+			<index name="Pk_Roles_role_id" unique="PRIMARY_KEY" >
+				<column name="role_id" />
+			</index>
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_135c844" show_relation="columns" >
 		<entity schema="ETL_System" name="JobTypes" color="c1d8ee" x="60" y="60" />
 		<entity schema="ETL_System" name="JobDependency" color="c1d8ee" x="330" y="45" />
 		<entity schema="ETL_System" name="DependencyTypes" color="c1d8ee" x="630" y="60" />
-		<entity schema="ETL_System" name="Roles" color="c1d8ee" x="645" y="690" />
-		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="360" y="690" />
 		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="615" y="225" />
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
-		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="330" y="510" />
-		<entity schema="ETL_System" name="User" color="c1d8ee" x="600" y="510" />
 		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
+		<entity schema="ETL_System" name="User" color="c1d8ee" x="600" y="510" />
+		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="375" y="720" />
+		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="345" y="570" />
 	</layout>
 </project>

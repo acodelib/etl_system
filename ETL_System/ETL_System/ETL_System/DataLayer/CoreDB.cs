@@ -60,9 +60,24 @@ namespace ETL_System {
             fill_query = "WITH tops as (SELECT max(sys_change_id) sys_change_id from ETL_System.dbo.JobChanges GROUP BY job_id) Select jc.job_id,u.login user_name,jc.change_timestamp from ETL_System.dbo.JobChanges jc JOIN ETL_System.dbo.[User] u on jc.user_id = u.user_id WHERE EXISTS (SELECT sys_change_id FROM tops t WHERE t.sys_change_id = jc.sys_change_id)";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
                 db_adapter.Fill(this.etl_database, "LastJobChanges");
-                        
 
-            foreach (DataRow r in etl_database.Tables["DependencyTypes"].Rows) {
+
+            fill_query = "Select * from ETL_System.dbo.[User]";
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
+                db_adapter.Fill(this.etl_database, "User");
+
+
+            fill_query = "Select * from ETL_System.dbo.UserRoles";
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string))
+                db_adapter.Fill(this.etl_database, "UserRoles");
+
+
+            foreach (DataRow r in etl_database.Tables["UserRoles"].Rows) {
+                SystemSharedData.user_roles.Add((int)r["role_id"], (string)r["name"]);
+            }            
+
+        
+           foreach (DataRow r in etl_database.Tables["DependencyTypes"].Rows) {
                 SystemSharedData.dependency_types.Add((int)r["dependency_type_id"], new DependencyType {
                     name = (string)r["name"],
                     description = (string)r["description"]
@@ -278,6 +293,12 @@ namespace ETL_System {
             
         }
 
+        public DataRow validateUserLineExists(string user, string pass) {
+            if (etl_database.Tables["User"].Select($"login = '{user}' and password = '{pass}'").Count()>0)
+                return etl_database.Tables["User"].Select($"login = '{user}' and password = '{pass}'")[0];
+            return null;            
+        }
+
 
         //===================== HELPER METHODS
         public static string checkDBConnStringIsValid(string conn_string) {
@@ -327,7 +348,6 @@ namespace ETL_System {
             }
 
         }
-
         public static string runStringCustomScalarSQLCommand(string command, string conn_string) {
             using (SqlConnection conn = new SqlConnection(conn_string)) {
                 conn.Open();
@@ -338,9 +358,7 @@ namespace ETL_System {
                 }
                 
             }
-        }
-            
-
+        }            
         public static int runIntCustomScalarSQLCommand(string command, string conn_string) {
             using (SqlConnection conn = new SqlConnection(conn_string)) {
                 conn.Open();
@@ -351,6 +369,8 @@ namespace ETL_System {
                 }      
             }                
         }      
+
+       
             
         
     }

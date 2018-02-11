@@ -18,10 +18,12 @@ namespace ETL_System {
         public string path_to_log { get { return _path_to_log; } }
         public string path_to_config { get { return _path_to_config; } }
 
-        public JobsCatalogue jobs_catalogue;
-        public CoreDB data_layer;
-        public QueueManager queue_manager;
-        public JobsQueue jobs_queue;
+        public JobsCatalogue    jobs_catalogue;
+        public CoreDB           data_layer;
+        public QueueManager     queue_manager;
+        public JobsQueue        jobs_queue;
+        public SessionManager   session_manager;
+        public CommsManager     the_msg_handler;
 
 
         //==================================CONSTRUCTORS
@@ -31,6 +33,7 @@ namespace ETL_System {
 
             SystemSharedData.schedule_types         = new Dictionary<int, ScheduleType>();
             SystemSharedData.dependency_types       = new Dictionary<int, DependencyType>();
+            SystemSharedData.user_roles             = new Dictionary<int, string>();
             SystemSharedData.catalogue_scan_flag    = true;       
         }      
 
@@ -59,14 +62,15 @@ namespace ETL_System {
                     //Console.WriteLine("Jobs Catalogue is initialised");
                     LogManager.writeStartEvent("Jobs Catalogue is initialised", this._path_to_log);
 
-                    this.jobs_queue = new JobsQueue();
+                    this.jobs_queue         = new JobsQueue();
 //                    Console.WriteLine("Jobs Queue is initialised");
                     LogManager.writeStartEvent("Jobs Queue is initialised", this._path_to_log);
-                    this.queue_manager = new QueueManager(jobs_catalogue, jobs_queue, 10);
+                    this.queue_manager      = new QueueManager(jobs_catalogue, jobs_queue, 10);
+                    this.session_manager    = new SessionManager(this.data_layer);
                 }
                 //Launch the CommsManager                
-                CommsManager the_msg_handler = new CommsManager(this);
-                //Console.WriteLine("SERVER started OK");
+                this.the_msg_handler = new CommsManager(this,this.session_manager);
+                Console.WriteLine("SERVER started OK");
                 LogManager.writeStartEvent("SERVER started OK", this._path_to_log);
             }
             catch(Exception e) {
