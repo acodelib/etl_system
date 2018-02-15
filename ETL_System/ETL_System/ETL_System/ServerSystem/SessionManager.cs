@@ -47,18 +47,20 @@ namespace ETL_System
                 result = new Message();
                 result.msg_type = MsgTypes.REPLY_SUCCESS;
                 result.body = "Loggin success";
-                result.header["user"] = u;
+                result.header["user"] = u;                
                 return result;
             }            
             return null;
         }
-
-        public void validateSession() {
-
+        
+        public bool validateSession(Guid sessionid) {
+            if (this.sessions_table.ContainsKey(sessionid))
+                return true;
+            return false;
         }
 
-        public void logout() {
-
+        public void clearSessionOnLogout(Guid sessionid) {
+            this.sessions_table.Remove(sessionid);
         }
 
         public void sessionsHousekeeping() {

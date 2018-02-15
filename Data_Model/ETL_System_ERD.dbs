@@ -148,8 +148,8 @@ Andrei Gurguta]]></comment>
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
 		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
-		<entity schema="ETL_System" name="User" color="c1d8ee" x="600" y="510" />
 		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="375" y="720" />
 		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="345" y="570" />
+		<entity schema="ETL_System" name="User" color="c1d8ee" x="660" y="510" />
 	</layout>
 </project>

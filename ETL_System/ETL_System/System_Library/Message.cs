@@ -13,26 +13,29 @@ namespace ETL_System
     public class Message {
 
         //-----------FIELDS
-        private System.Guid  _id;
-        public System.Guid   id { get { return _id; } }
+        public System.Guid  id;
+        
+
+
 
         public MsgTypes         msg_type;
-        
+
+        public System.Guid      session_channel;
         public int              sys_change_id { get; set; }        
         public DateTime         timestamp { get; set; }
-        private MsgAttachment   attachement;
+        public MsgAttachment    attachement;
         public Hashtable        header;
         public string           body;
 
         //------------CONSTRUCTORS
         public Message(MsgAttachment attch) {
-            this._id = new Guid();
+            this.id = Guid.NewGuid();
             this.attachement = attch;
             timestamp = DateTime.Now;
         }
         
         public Message() {
-            this._id = new Guid();
+            this.id = Guid.NewGuid();
             timestamp = DateTime.Now;
             header = new Hashtable();
         }        
@@ -50,6 +53,10 @@ namespace ETL_System
             this.attachement = att;
         }
 
+        public MsgAttachment getAttachement() {
+            return this.attachement;
+        }
+
         public static Message getMessageFromBytes(byte[] data) {
             BinaryFormatter b = new BinaryFormatter();
             MemoryStream m = new MemoryStream(data);
@@ -60,25 +67,25 @@ namespace ETL_System
     }
 
     public enum MsgTypes {
-        TRY_CONNECT,
-        SERVER_ERROR,
-        SERVER_WARNING,
-        REQUEST_JOB,
-        REQUEST_JOB_CATALOGUE_DISPLAY,
-        REQUEST_JOB_QUEUE_DISPLAY,
-        REQUEST_DEPENDENCY_CATALOGUE,
-        MGMT_CREATE_JOB,
-        MGMT_DELETE_JOB,
-        MGMT_UPDATE_JOB,
-        COMMAND_PAUSE_JOB,
-        COMMAND_RESTART_JOB,        
-        COMMAND_HALT_JOB,
-        COMMAND_SYSTEM_PAUSE,
-        COMMAND_SYSTEM_HALT,
-        REPLY_SUCCESS        
+        TRY_CONNECT = 0,        
+        REQUEST_JOB = 1,
+        REQUEST_JOB_CATALOGUE_DISPLAY = 2,
+        REQUEST_JOB_QUEUE_DISPLAY = 3,
+        REQUEST_DEPENDENCY_CATALOGUE = 4,
+        MGMT_CREATE_JOB = 5,
+        MGMT_DELETE_JOB = 6,
+        MGMT_UPDATE_JOB = 7,
+        COMMAND_PAUSE_JOB = 8,
+        COMMAND_RESTART_JOB = 9,         
+        COMMAND_HALT_JOB = 10,
+        COMMAND_SYSTEM_PAUSE = 11,
+        COMMAND_SYSTEM_HALT = 12,
+        REPLY_SUCCESS = 13,
+        REPLY_FAIL = 14,
+        SERVER_ERROR = 15,
+        SERVER_WARNING = 16
     }
-
-   
+      
 
     public struct MsgHeader {
         public Dictionary<int, ScheduleType> schedule_types;

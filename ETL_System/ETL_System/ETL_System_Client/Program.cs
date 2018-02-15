@@ -10,16 +10,16 @@ namespace ETL_System
     public static class Program
     {
 
-        static SystemManager manager;
+        static ClientManager manager;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main() {
 
-            SystemManager.schedulte_types = new Dictionary<int, ScheduleType>();
-            SystemManager.dependency_types = new Dictionary<int, DependencyType>();
-            SystemManager.user_roles = new Dictionary<int, string>();
+            ClientManager.schedulte_types = new Dictionary<int, ScheduleType>();
+            ClientManager.dependency_types = new Dictionary<int, DependencyType>();
+            ClientManager.user_roles = new Dictionary<int, string>();
 
 
             Application.EnableVisualStyles();

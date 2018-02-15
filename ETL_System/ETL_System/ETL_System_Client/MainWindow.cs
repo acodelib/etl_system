@@ -13,12 +13,12 @@ namespace ETL_System
 {
     public partial class MainWindow : Form
     {
-        public SystemManager manager;
+        public ClientManager manager;
 
         public MainWindow() {
             InitializeComponent();
 
-            manager = new SystemManager(this);
+            manager = new ClientManager(this);
         }
 
         /*
@@ -52,6 +52,19 @@ namespace ETL_System
 
         private void tslb_Response_Click(object sender, EventArgs e) {
 
+        }
+
+        private void tp_Catalogue_Click(object sender, EventArgs e) {
+
+        }
+
+        
+        private void tc_Main_Selected(object sender,EventArgs e) {          
+            if (tc_Main.SelectedTab == tp_Catalogue) {
+                if (ClientManager.login_active) {
+                    manager.requestCatalogue();
+                }
+            }
         }
     }
 }

@@ -110,5 +110,11 @@ namespace ETL_System {
             }
             return view;
         }
+        public List<string> produceJobsList() {
+            List<string> jobs_list = new List<string>();
+            foreach (string n in this.jobs_collection.Keys)
+                jobs_list.Add(n);
+            return jobs_list;
+        }
     }
 }

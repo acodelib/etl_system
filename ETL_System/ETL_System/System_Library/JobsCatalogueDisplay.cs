@@ -7,6 +7,7 @@ using ETL_System;
 using System.Data;
 
 namespace ETL_System {
+    [Serializable]
     public class JobsCatalogueDisplay : MsgAttachment {
         
         public DataTable data;

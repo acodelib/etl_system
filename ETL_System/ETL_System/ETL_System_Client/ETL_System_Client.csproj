@@ -85,7 +85,7 @@
     <Compile Include="MsgEngine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemManager.cs" />
+    <Compile Include="ClientManager.cs" />
     <Compile Include="WorkingStatus.cs">
       <SubType>Form</SubType>
     </Compile>

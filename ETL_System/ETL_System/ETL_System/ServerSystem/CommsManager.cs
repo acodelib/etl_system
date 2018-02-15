@@ -39,7 +39,7 @@ namespace ETL_System
         
         private void listenToClients() {
             while (true) {                
-                this.listener_socket.Listen(0);
+                this.listener_socket.Listen(5);
                 handleMessageFromClient(listener_socket.Accept());
             }
         }
@@ -66,13 +66,21 @@ namespace ETL_System
                         message             = (Message)b.Deserialize(m);
                         Console.WriteLine("Received Message: " + message.id.ToString());
 
-                        if(message.msg_type == MsgTypes.TRY_CONNECT) {
+                        //message received, handle it if its a connection request:
+                        if (message.msg_type == MsgTypes.TRY_CONNECT) {
                             reply = session_manager.validateLogin(message);
+                            reply.header["jobs_list"] = this.system_manager.pipeTasksRawList();
                             client_socket.Send(reply.encodeToBytes());
                         }
-                        
+                        //else validate the session and let the System manager resolve it
+                        else {
+                            if (session_manager.validateSession(message.session_channel)) {
+                                reply = this.system_manager.handleClientMessage(message);
+                                client_socket.Send(reply.encodeToBytes());
+                            }
+                        }
 
-
+                        //client_socket.Close();
                         Buffer = null;
                         break;
                     }

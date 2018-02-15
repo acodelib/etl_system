@@ -12,12 +12,16 @@ namespace ETL_System {
     public partial class LoginForm : Form {
 
         MainWindow parent_window;
-        SystemManager sys_manager;
+        ClientManager sys_manager;
 
         public LoginForm(MainWindow parent) {
             this.parent_window = parent;
             this.sys_manager = parent.manager;
             InitializeComponent();
+            this.tb_Server.Text = "192.168.56.1";
+            this.tb_Port.Text = "6868";
+            this.tb_UserName.Text = "admin";
+            this.tb_Pass.Text = "admin";
             
         }
 
@@ -40,7 +44,7 @@ namespace ETL_System {
         }
 
         private void btn_Login_Click(object sender, EventArgs e) {
-            if (!SystemManager.login_active) {
+            if (!ClientManager.login_active) {
                 using (Form f = new WorkingStatus(this.doLogin, "Contacting ETL System...")) {
                     f.ShowDialog(this);
                 }                

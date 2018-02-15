@@ -224,70 +224,113 @@ namespace ETL_System {
         }
 
                            ////////// CLIENT REQUESTS //////
-        public string executeMgmtCommand(MsgTypes msgtype, object data, User user_context) {           
+        public List<string> pipeTasksRawList() {
+            return this.jobs_catalogue.produceJobsList();
+        }
+        public Message handleClientMessage(Message msg) {
+            Message result;
+            if (msg.msg_type >= (MsgTypes)1 && msg.msg_type <= (MsgTypes)4) {
+                result = this.executeDataRequest(msg);
+                return result;
+            }
+            if (msg.msg_type >= (MsgTypes)5 && msg.msg_type <= (MsgTypes)7) {
+                result = this.executeMgmtCommand(msg.msg_type, msg.attachement, (User)msg.header["user"]);
+                return result;
+            }
+            return null;
             
-            string fault_response = null;
+        }
+        public Message executeMgmtCommand(MsgTypes msgtype, object data, User user_context) {
+            Message outcome = new Message();            
             switch (msgtype) {
                 case MsgTypes.MGMT_CREATE_JOB:
                     try {
                         this.jobs_catalogue.addNewJob((Job)data, user_context);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
                     }catch(Exception e) {
                         Console.WriteLine(e.Message);
-                        return e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to create job. Original system message: {e.Message}";
+                        return outcome;
                     }                    
-                    break;
+                    
                 case MsgTypes.MGMT_DELETE_JOB:
                     try {
                         this.jobs_catalogue.deleteJob((string)data, user_context);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
                     }
                     catch (Exception e) {
                         Console.WriteLine(e.Message);
-                        return e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        outcome.body = $"Failed to delete job. Original system message: {e.Message}";
+                        return outcome;
                     }
-                    break;
+                    
                 case MsgTypes.MGMT_UPDATE_JOB:
                     try {
                         this.jobs_catalogue.updateJob((Job)data, user_context);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
                     }
                     catch (Exception e) {
                         Console.WriteLine(e.Message);
-                        return e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to UPDATE job. Original system message: {e.Message}";
+                        return outcome;
                     }
-                    break;
+                    
                 default:
-                    fault_response = "System Error: Not a valid MGMT_COMMAND!";
-                    Console.WriteLine(fault_response);                                        
-                    break;
+                    outcome.msg_type = MsgTypes.REPLY_FAIL;
+                    outcome.body = $"Unknown COMMAND TYPE";
+                    return outcome;                                                                            
 
-            }
-            return fault_response;            
+            }            
         }
-        public string executeDataRequest(MsgTypes msgtype, string job_name, User user_context,ref MsgAttachment att) {
-            string fault_response = null;
-            switch (msgtype) {
+        //public string executeDataRequest(MsgTypes msgtype, string job_name, User user_context,ref MsgAttachment att) {
+        public Message executeDataRequest(Message m) {
+            Message outcome = new Message();
+            switch (m.msg_type) {
                 case MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY:
                     try {
-                        att = new JobsCatalogueDisplay(this.jobs_catalogue.sys_change_id, this.jobs_catalogue.produceDisplay());
-                    }catch (Exception e) {
-                        Console.WriteLine(e.Message);
-                        return e.Message;
-                    }
-                    break;
-                case MsgTypes.REQUEST_JOB:
-                    try {
-                        att = this.jobs_catalogue.getJob(job_name);
+                        //>>>>>>>> HERE TO ADD SYS_CHANGE_ID comparison <<<<<
+                        MsgAttachment att = new JobsCatalogueDisplay(this.jobs_catalogue.sys_change_id, this.jobs_catalogue.produceDisplay());
+                        outcome.attachement = att;
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
                     }
                     catch (Exception e) {
                         Console.WriteLine(e.Message);
-                        return e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to retrieve Jobs Catalogue. Original system message: {e.Message}";
+                        return outcome;
                     }
-                    break;
+                    
+                case MsgTypes.REQUEST_JOB:
+                    try {
+                        MsgAttachment att = this.jobs_catalogue.getJob(m.body);
+                        outcome.attachement = att;
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to retrieve Job. Original system message: {e.Message}";
+                        return outcome;
+                    }                    
                 default:
-                    fault_response = "System Error: Not a valid REQUEST_COMMAND!";
-                    Console.WriteLine(fault_response);
-                    break;
-            }
-            return fault_response;
+                    outcome.msg_type = MsgTypes.REPLY_FAIL;
+                    outcome.body = $"Unknown COMMAND TYPE";
+                    return outcome;
+            }            
         }
 
     }

@@ -1,4 +1,6 @@
-﻿namespace ETL_System {
+﻿using System.Windows.Forms;
+
+namespace ETL_System {
     partial class MainWindow {
         /// <summary>
         /// Required designer variable.
@@ -23,6 +25,8 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tslb_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -34,6 +38,7 @@
             this.tp_Schedules = new System.Windows.Forms.TabPage();
             this.tp_Dependencies = new System.Windows.Forms.TabPage();
             this.tp_Catalogue = new System.Windows.Forms.TabPage();
+            this.dgv_Catalogue = new System.Windows.Forms.DataGridView();
             this.tp_Queue = new System.Windows.Forms.TabPage();
             this.tp_Graph = new System.Windows.Forms.TabPage();
             this.tp_Admin = new System.Windows.Forms.TabPage();
@@ -52,12 +57,12 @@
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tc_Job.SuspendLayout();
-            this.tp_Definition.SuspendLayout();
+            this.tp_Catalogue.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -107,6 +112,7 @@
             this.tc_Main.SelectedIndex = 0;
             this.tc_Main.Size = new System.Drawing.Size(1026, 571);
             this.tc_Main.TabIndex = 7;
+            this.tc_Main.SelectedIndexChanged += new System.EventHandler(this.tc_Main_Selected);
             // 
             // tabPage1
             // 
@@ -136,7 +142,6 @@
             // 
             // tp_Definition
             // 
-            this.tp_Definition.Controls.Add(this.toolStrip1);
             this.tp_Definition.Location = new System.Drawing.Point(4, 24);
             this.tp_Definition.Name = "tp_Definition";
             this.tp_Definition.Padding = new System.Windows.Forms.Padding(3);
@@ -168,6 +173,7 @@
             // 
             // tp_Catalogue
             // 
+            this.tp_Catalogue.Controls.Add(this.dgv_Catalogue);
             this.tp_Catalogue.Location = new System.Drawing.Point(4, 25);
             this.tp_Catalogue.Name = "tp_Catalogue";
             this.tp_Catalogue.Padding = new System.Windows.Forms.Padding(3);
@@ -175,6 +181,38 @@
             this.tp_Catalogue.TabIndex = 1;
             this.tp_Catalogue.Text = "Catalogue";
             this.tp_Catalogue.UseVisualStyleBackColor = true;
+            this.tp_Catalogue.Click += new System.EventHandler(this.tp_Catalogue_Click);
+            // 
+            // dgv_Catalogue
+            // 
+            this.dgv_Catalogue.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgv_Catalogue.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_Catalogue.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgv_Catalogue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_Catalogue.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgv_Catalogue.GridColor = System.Drawing.SystemColors.Control;
+            this.dgv_Catalogue.Location = new System.Drawing.Point(22, 13);
+            this.dgv_Catalogue.Name = "dgv_Catalogue";
+            this.dgv_Catalogue.ReadOnly = true;
+            this.dgv_Catalogue.RowHeadersVisible = false;
+            this.dgv_Catalogue.Size = new System.Drawing.Size(972, 512);
+            this.dgv_Catalogue.TabIndex = 0;
             // 
             // tp_Queue
             // 
@@ -243,6 +281,13 @@
             this.lv_JobsList.Size = new System.Drawing.Size(214, 493);
             this.lv_JobsList.TabIndex = 5;
             this.lv_JobsList.UseCompatibleStateImageBehavior = false;
+            ColumnHeader header = new ColumnHeader();
+            header.Text = "";
+            header.Name = "col1";
+            header.Width = lv_JobsList.Width;
+            this.lv_JobsList.Columns.Clear();
+            this.lv_JobsList.Columns.Add(header);
+            this.lv_JobsList.View = System.Windows.Forms.View.List;
             // 
             // btn_searchjob
             // 
@@ -346,14 +391,6 @@
             this.ts_NewJob.Size = new System.Drawing.Size(94, 34);
             this.ts_NewJob.Text = "New Job";
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(998, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -373,8 +410,8 @@
             this.tc_Main.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tc_Job.ResumeLayout(false);
-            this.tp_Definition.ResumeLayout(false);
-            this.tp_Definition.PerformLayout();
+            this.tp_Catalogue.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.menuStrip.ResumeLayout(false);
@@ -385,35 +422,35 @@
         }
 
         #endregion
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.TabControl tc_Main;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tp_Catalogue;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ListView lv_JobsList;
-        private System.Windows.Forms.TextBox tb_Search;
-        private System.Windows.Forms.Button btn_searchjob;
-        private System.Windows.Forms.Button btn_clear;
-        private System.Windows.Forms.TabPage tp_Queue;
-        private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem ts_User;
-        private System.Windows.Forms.ToolStripMenuItem ts_Login;
-        private System.Windows.Forms.ToolStripMenuItem ts_Logout;
-        private System.Windows.Forms.ToolStripMenuItem ts_NewJob;
-        private System.Windows.Forms.TabPage tp_Graph;
-        private System.Windows.Forms.TabPage tp_Admin;
-        private System.Windows.Forms.TabControl tc_Job;
-        private System.Windows.Forms.TabPage tp_Definition;
-        private System.Windows.Forms.TabPage tp_Schedules;
-        private System.Windows.Forms.TabPage tp_Dependencies;
+        public System.Windows.Forms.StatusStrip statusStrip;
+        public System.Windows.Forms.TabControl tc_Main;
+        public System.Windows.Forms.TabPage tabPage1;
+        public System.Windows.Forms.TabPage tp_Catalogue;
+        public System.Windows.Forms.GroupBox groupBox1;
+        public System.Windows.Forms.ListView lv_JobsList;
+        public System.Windows.Forms.TextBox tb_Search;
+        public System.Windows.Forms.Button btn_searchjob;
+        public System.Windows.Forms.Button btn_clear;
+        public System.Windows.Forms.TabPage tp_Queue;
+        public System.Windows.Forms.MenuStrip menuStrip;
+        public System.Windows.Forms.ToolStripMenuItem ts_User;
+        public System.Windows.Forms.ToolStripMenuItem ts_Login;
+        public System.Windows.Forms.ToolStripMenuItem ts_Logout;
+        public System.Windows.Forms.ToolStripMenuItem ts_NewJob;
+        public System.Windows.Forms.TabPage tp_Graph;
+        public System.Windows.Forms.TabPage tp_Admin;
+        public System.Windows.Forms.TabControl tc_Job;
+        public System.Windows.Forms.TabPage tp_Definition;
+        public System.Windows.Forms.TabPage tp_Schedules;
+        public System.Windows.Forms.TabPage tp_Dependencies;
         public System.Windows.Forms.ToolStripStatusLabel tslb_Status;
-        private System.Windows.Forms.ToolStripMenuItem ts_Server;
-        private System.Windows.Forms.ToolStripMenuItem ts_PauseQ;
-        private System.Windows.Forms.ToolStripMenuItem ts_ResumeQ;
-        private System.Windows.Forms.ToolStripMenuItem ts_PauseW;
+        public System.Windows.Forms.ToolStripMenuItem ts_Server;
+        public System.Windows.Forms.ToolStripMenuItem ts_PauseQ;
+        public System.Windows.Forms.ToolStripMenuItem ts_ResumeQ;
+        public System.Windows.Forms.ToolStripMenuItem ts_PauseW;
         public System.Windows.Forms.ToolStripStatusLabel tslb_Response;
-        private System.Windows.Forms.ToolStripMenuItem ts_ResumeW;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        public System.Windows.Forms.ToolStripMenuItem ts_ResumeW;
+        public System.Windows.Forms.DataGridView dgv_Catalogue;
     }
 }
 
