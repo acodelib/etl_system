@@ -103,6 +103,7 @@ namespace ETL_System {
 
                     //2.Populate controls with data from message
                     j = (Job)r.attachement;
+                    parent.tb_Id.Text               = j.job_id.ToString();
                     parent.tb_Name.Text             = j.name;
                     parent.tb_Executable.Text       = j.executable_name;
                     parent.tb_MaxAttempts.Text      = j.max_try_count.ToString();
@@ -151,6 +152,7 @@ namespace ETL_System {
             //3.instantiate and fill in a job
             try {
                 j = new Job(this_user) {
+                    
                     job_type_id = parent.cb_Type.Text == "Schedule" ? 1 : 2,
                     last_instance_id = 0,
                     type_name = parent.cb_Type.Text,
@@ -185,6 +187,69 @@ namespace ETL_System {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
             }
         }
+
+        public void updateJob() {
+            //1.first check to see that job is not in the view
+            string ln = parent.tb_Name.Text;
+            bool job_found = false;
+            Job j;
+
+            //for (int i = 0 ; i < parent.lv_JobsList.Items.Count;i++) {
+            foreach (ListViewItem i in parent.lv_JobsList.Items) {
+                if (i.SubItems[0].Text == ln) {
+                    job_found = true;                    
+                    break;
+                }
+            }
+            if (!job_found) {
+                MessageBox.Show("Can't find what to update. Job name is not in list.");
+                return;
+            }
+            //2.make sure the user wants to do this action
+            if (MessageBox.Show($"Job {ln} will be modified. Continue with sending this update to the server?", "", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            //3.instantiate and fill in a job
+            try {
+                j = new Job(this_user) {
+                    job_id                  = Int32.Parse(parent.tb_Id.Text),
+                    job_type_id             = parent.cb_Type.Text == "Schedule" ? 1 : 2,
+                    last_instance_id        = 0,
+                    type_name               = parent.cb_Type.Text,
+                    name                    = ln,
+                    executable_name         = parent.tb_Executable.Text,
+                    max_try_count           = Int32.Parse(parent.tb_MaxAttempts.Text),
+                    delay_seconds           = Int32.Parse(parent.tb_DelaySecs.Text),
+                    latency_alert_seconds   = Int32.Parse(parent.tb_LatencyAlert.Text),
+                    notifiactions_list      = parent.tb_Notifications.Text,
+                    is_failed               = false,
+                    is_active               = parent.tb_isActive.Text == "YES" ? true : false,
+                    is_paused               = parent.tb_IsPaused.Text == "YES" ? true : false,
+
+                };
+            }
+            catch (System.FormatException e) {
+                MessageBox.Show("Please make sure that #Max Attempts,Latency Alert Seconds and Delay Seconds are valid numbers.");
+                return;
+            }
+            //4.attach to message and send
+            Message m = new Message(j);
+            m.msg_type = MsgTypes.MGMT_UPDATE_JOB;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            //m.session_channel = ClientManager.session_id;
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    //5.refresh list view
+                    this.refreshTasksListRoutine((List<string>)r.header["jobs_list"]);
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
+            }
+        }
+
 
         //---------------------------------------Static------------------------------------------------
         public static string GetSHA1HashData(string data) {

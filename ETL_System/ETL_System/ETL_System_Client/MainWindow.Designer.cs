@@ -91,6 +91,8 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
+            this.tb_Id = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -111,9 +113,9 @@ namespace ETL_System {
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslb_Status,
             this.tslb_Response});
-            this.statusStrip.Location = new System.Drawing.Point(0, 715);
+            this.statusStrip.Location = new System.Drawing.Point(0, 798);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1338, 24);
+            this.statusStrip.Size = new System.Drawing.Size(1324, 24);
             this.statusStrip.TabIndex = 3;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -149,7 +151,7 @@ namespace ETL_System {
             this.tc_Main.Location = new System.Drawing.Point(238, 56);
             this.tc_Main.Name = "tc_Main";
             this.tc_Main.SelectedIndex = 0;
-            this.tc_Main.Size = new System.Drawing.Size(1088, 654);
+            this.tc_Main.Size = new System.Drawing.Size(1074, 737);
             this.tc_Main.TabIndex = 7;
             this.tc_Main.SelectedIndexChanged += new System.EventHandler(this.tc_Main_Selected);
             // 
@@ -159,7 +161,7 @@ namespace ETL_System {
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1080, 625);
+            this.tabPage1.Size = new System.Drawing.Size(1066, 708);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "ETL Job";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -174,7 +176,7 @@ namespace ETL_System {
             this.tc_Job.Location = new System.Drawing.Point(6, 6);
             this.tc_Job.Name = "tc_Job";
             this.tc_Job.SelectedIndex = 0;
-            this.tc_Job.Size = new System.Drawing.Size(1074, 616);
+            this.tc_Job.Size = new System.Drawing.Size(1060, 699);
             this.tc_Job.TabIndex = 2;
             // 
             // tp_Definition
@@ -184,7 +186,7 @@ namespace ETL_System {
             this.tp_Definition.Location = new System.Drawing.Point(4, 24);
             this.tp_Definition.Name = "tp_Definition";
             this.tp_Definition.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Definition.Size = new System.Drawing.Size(1066, 588);
+            this.tp_Definition.Size = new System.Drawing.Size(1052, 671);
             this.tp_Definition.TabIndex = 0;
             this.tp_Definition.Text = "Definition";
             this.tp_Definition.UseVisualStyleBackColor = true;
@@ -199,7 +201,7 @@ namespace ETL_System {
             this.groupBox4.Controls.Add(this.btn_Save);
             this.groupBox4.Location = new System.Drawing.Point(18, 21);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(793, 560);
+            this.groupBox4.Size = new System.Drawing.Size(793, 644);
             this.groupBox4.TabIndex = 29;
             this.groupBox4.TabStop = false;
             // 
@@ -209,7 +211,7 @@ namespace ETL_System {
             this.btn_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Create.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btn_Create.Image = global::ETL_System_Client.Properties.Resources.create;
-            this.btn_Create.Location = new System.Drawing.Point(161, 506);
+            this.btn_Create.Location = new System.Drawing.Point(161, 564);
             this.btn_Create.Name = "btn_Create";
             this.btn_Create.Size = new System.Drawing.Size(135, 39);
             this.btn_Create.TabIndex = 29;
@@ -220,6 +222,8 @@ namespace ETL_System {
             // 
             // gb_General
             // 
+            this.gb_General.Controls.Add(this.tb_Id);
+            this.gb_General.Controls.Add(this.label14);
             this.gb_General.Controls.Add(this.cb_Type);
             this.gb_General.Controls.Add(this.label3);
             this.gb_General.Controls.Add(this.tb_Name);
@@ -236,7 +240,7 @@ namespace ETL_System {
             this.gb_General.Controls.Add(this.tb_LatencyAlert);
             this.gb_General.Location = new System.Drawing.Point(10, 16);
             this.gb_General.Name = "gb_General";
-            this.gb_General.Size = new System.Drawing.Size(775, 232);
+            this.gb_General.Size = new System.Drawing.Size(775, 277);
             this.gb_General.TabIndex = 28;
             this.gb_General.TabStop = false;
             this.gb_General.Text = "General";
@@ -247,16 +251,16 @@ namespace ETL_System {
             this.cb_Type.Items.AddRange(new object[] {
             "Schedule",
             "Dependency"});
-            this.cb_Type.Location = new System.Drawing.Point(136, 38);
+            this.cb_Type.Location = new System.Drawing.Point(130, 85);
             this.cb_Type.Name = "cb_Type";
-            this.cb_Type.Size = new System.Drawing.Size(301, 23);
-            this.cb_Type.TabIndex = 0;
+            this.cb_Type.Size = new System.Drawing.Size(304, 23);
+            this.cb_Type.TabIndex = 1;
             this.cb_Type.SelectedIndexChanged += new System.EventHandler(this.cb_Type_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(94, 41);
+            this.label3.Location = new System.Drawing.Point(91, 90);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(36, 15);
             this.label3.TabIndex = 27;
@@ -264,15 +268,15 @@ namespace ETL_System {
             // 
             // tb_Name
             // 
-            this.tb_Name.Location = new System.Drawing.Point(136, 87);
+            this.tb_Name.Location = new System.Drawing.Point(130, 41);
             this.tb_Name.Name = "tb_Name";
             this.tb_Name.Size = new System.Drawing.Size(304, 21);
-            this.tb_Name.TabIndex = 1;
+            this.tb_Name.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(86, 90);
+            this.label1.Location = new System.Drawing.Point(83, 44);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 15);
             this.label1.TabIndex = 1;
@@ -280,7 +284,7 @@ namespace ETL_System {
             // 
             // tb_Executable
             // 
-            this.tb_Executable.Location = new System.Drawing.Point(136, 136);
+            this.tb_Executable.Location = new System.Drawing.Point(130, 136);
             this.tb_Executable.Name = "tb_Executable";
             this.tb_Executable.Size = new System.Drawing.Size(304, 21);
             this.tb_Executable.TabIndex = 2;
@@ -297,7 +301,7 @@ namespace ETL_System {
             // 
             // tb_MaxAttempts
             // 
-            this.tb_MaxAttempts.Location = new System.Drawing.Point(627, 38);
+            this.tb_MaxAttempts.Location = new System.Drawing.Point(627, 87);
             this.tb_MaxAttempts.Name = "tb_MaxAttempts";
             this.tb_MaxAttempts.Size = new System.Drawing.Size(117, 21);
             this.tb_MaxAttempts.TabIndex = 3;
@@ -305,7 +309,7 @@ namespace ETL_System {
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(530, 41);
+            this.label4.Location = new System.Drawing.Point(530, 90);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(91, 15);
             this.label4.TabIndex = 7;
@@ -314,7 +318,7 @@ namespace ETL_System {
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 183);
+            this.label8.Location = new System.Drawing.Point(8, 237);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(122, 15);
             this.label8.TabIndex = 15;
@@ -322,14 +326,14 @@ namespace ETL_System {
             // 
             // tb_DelaySecs
             // 
-            this.tb_DelaySecs.Location = new System.Drawing.Point(627, 136);
+            this.tb_DelaySecs.Location = new System.Drawing.Point(627, 185);
             this.tb_DelaySecs.Name = "tb_DelaySecs";
             this.tb_DelaySecs.Size = new System.Drawing.Size(117, 21);
             this.tb_DelaySecs.TabIndex = 5;
             // 
             // tb_Notifications
             // 
-            this.tb_Notifications.Location = new System.Drawing.Point(136, 180);
+            this.tb_Notifications.Location = new System.Drawing.Point(136, 234);
             this.tb_Notifications.Name = "tb_Notifications";
             this.tb_Notifications.Size = new System.Drawing.Size(608, 21);
             this.tb_Notifications.TabIndex = 6;
@@ -337,7 +341,7 @@ namespace ETL_System {
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(529, 139);
+            this.label7.Location = new System.Drawing.Point(529, 188);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(92, 15);
             this.label7.TabIndex = 11;
@@ -346,7 +350,7 @@ namespace ETL_System {
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(491, 90);
+            this.label6.Location = new System.Drawing.Point(491, 139);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(130, 15);
             this.label6.TabIndex = 13;
@@ -354,7 +358,7 @@ namespace ETL_System {
             // 
             // tb_LatencyAlert
             // 
-            this.tb_LatencyAlert.Location = new System.Drawing.Point(627, 87);
+            this.tb_LatencyAlert.Location = new System.Drawing.Point(627, 136);
             this.tb_LatencyAlert.Name = "tb_LatencyAlert";
             this.tb_LatencyAlert.Size = new System.Drawing.Size(117, 21);
             this.tb_LatencyAlert.TabIndex = 4;
@@ -371,7 +375,7 @@ namespace ETL_System {
             this.gb_Status.Controls.Add(this.label12);
             this.gb_Status.Controls.Add(this.tb_FailedAttempts);
             this.gb_Status.Controls.Add(this.label5);
-            this.gb_Status.Location = new System.Drawing.Point(161, 278);
+            this.gb_Status.Location = new System.Drawing.Point(161, 336);
             this.gb_Status.Name = "gb_Status";
             this.gb_Status.Size = new System.Drawing.Size(483, 148);
             this.gb_Status.TabIndex = 25;
@@ -483,7 +487,7 @@ namespace ETL_System {
             this.btn_Delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Delete.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btn_Delete.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
-            this.btn_Delete.Location = new System.Drawing.Point(509, 506);
+            this.btn_Delete.Location = new System.Drawing.Point(509, 564);
             this.btn_Delete.Name = "btn_Delete";
             this.btn_Delete.Size = new System.Drawing.Size(135, 39);
             this.btn_Delete.TabIndex = 18;
@@ -495,7 +499,7 @@ namespace ETL_System {
             this.btn_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Save.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btn_Save.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
-            this.btn_Save.Location = new System.Drawing.Point(337, 506);
+            this.btn_Save.Location = new System.Drawing.Point(337, 564);
             this.btn_Save.Name = "btn_Save";
             this.btn_Save.Size = new System.Drawing.Size(135, 39);
             this.btn_Save.TabIndex = 11;
@@ -511,7 +515,7 @@ namespace ETL_System {
             this.gb_Changes.Controls.Add(this.tb_When);
             this.gb_Changes.Controls.Add(this.label9);
             this.gb_Changes.Controls.Add(this.tb_Who);
-            this.gb_Changes.Location = new System.Drawing.Point(832, 478);
+            this.gb_Changes.Location = new System.Drawing.Point(818, 561);
             this.gb_Changes.Name = "gb_Changes";
             this.gb_Changes.Size = new System.Drawing.Size(228, 104);
             this.gb_Changes.TabIndex = 16;
@@ -640,7 +644,7 @@ namespace ETL_System {
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.groupBox1.Location = new System.Drawing.Point(12, 41);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(224, 673);
+            this.groupBox1.Size = new System.Drawing.Size(224, 756);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Jobs List";
@@ -665,7 +669,7 @@ namespace ETL_System {
             this.lv_JobsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lv_JobsList.Location = new System.Drawing.Point(6, 91);
             this.lv_JobsList.Name = "lv_JobsList";
-            this.lv_JobsList.Size = new System.Drawing.Size(214, 576);
+            this.lv_JobsList.Size = new System.Drawing.Size(214, 659);
             this.lv_JobsList.TabIndex = 5;
             this.lv_JobsList.UseCompatibleStateImageBehavior = false;
             this.lv_JobsList.View = System.Windows.Forms.View.List;
@@ -706,7 +710,7 @@ namespace ETL_System {
             this.ts_NewJob});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1338, 38);
+            this.menuStrip.Size = new System.Drawing.Size(1324, 38);
             this.menuStrip.TabIndex = 8;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -780,12 +784,29 @@ namespace ETL_System {
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
             // 
+            // tb_Id
+            // 
+            this.tb_Id.Location = new System.Drawing.Point(627, 38);
+            this.tb_Id.Name = "tb_Id";
+            this.tb_Id.ReadOnly = true;
+            this.tb_Id.Size = new System.Drawing.Size(117, 21);
+            this.tb_Id.TabIndex = 28;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(535, 41);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(86, 15);
+            this.label14.TabIndex = 29;
+            this.label14.Text = "Job System Id:";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1338, 739);
+            this.ClientSize = new System.Drawing.Size(1324, 822);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tc_Main);
             this.Controls.Add(this.statusStrip);
@@ -884,6 +905,8 @@ namespace ETL_System {
         public GroupBox gb_General;
         public GroupBox groupBox4;
         public Button btn_Create;
+        public TextBox tb_Id;
+        public Label label14;
     }
 }
 

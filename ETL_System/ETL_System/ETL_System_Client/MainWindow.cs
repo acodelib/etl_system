@@ -170,7 +170,7 @@ namespace ETL_System
         }
 
         private void btn_Save_Click(object sender, EventArgs e) {
-
+            manager.updateJob();
         }
 
         private void button1_Click(object sender, EventArgs e) {

@@ -73,7 +73,7 @@ namespace ETL_System {
                 bool searcher = false;
                 string named_changed = null;
                 foreach (var k in jobs_collection.Values) {
-                    if (k.job_id == target_job.job_id) {
+                    if (k.name == target_job.name) {
                         if (k.is_queued)
                             return "Can't change job, it is executing or about to execute!";
                         searcher = true;
@@ -81,8 +81,8 @@ namespace ETL_System {
                         break;
                     }
                 }
-                if (!searcher || jobs_collection.ContainsKey(target_job.name))
-                    return "Job doesn't exists or there is another job already named like this.";                
+                if (!(searcher || jobs_collection.ContainsKey(target_job.name)))
+                    return "Job doesn't exists.";                
 
                 //if integrity check passes then do updates:
                 this.jobs_collection.Remove(named_changed);

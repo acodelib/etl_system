@@ -234,18 +234,19 @@ namespace ETL_System {
                 return result;
             }
             if (msg.msg_type >= (MsgTypes)5 && msg.msg_type <= (MsgTypes)7) {
-                result = this.executeMgmtCommand(msg.msg_type, msg.attachement, (User)msg.header["user"]);
+                result = this.executeMgmtCommand(msg, (User)msg.header["user"]);
                 return result;
             }
             return null;
             
         }
-        public Message executeMgmtCommand(MsgTypes msgtype, object data, User user_context) {
-            Message outcome = new Message();            
+        public Message executeMgmtCommand(Message msg, User user_context) {
+            Message outcome = new Message();
+            MsgTypes msgtype = msg.msg_type;   
             switch (msgtype) {
                 case MsgTypes.MGMT_CREATE_JOB:
                     try {
-                        this.jobs_catalogue.addNewJob((Job)data, user_context);
+                        this.jobs_catalogue.addNewJob((Job)msg.attachement, user_context);
                         outcome.msg_type = MsgTypes.REPLY_SUCCESS;
                         outcome.header["jobs_list"] = pipeTasksRawList();
                         return outcome;
@@ -258,7 +259,7 @@ namespace ETL_System {
                     
                 case MsgTypes.MGMT_DELETE_JOB:
                     try {
-                        this.jobs_catalogue.deleteJob((string)data, user_context);
+                        this.jobs_catalogue.deleteJob(msg.body, user_context);
                         outcome.msg_type = MsgTypes.REPLY_SUCCESS;
                         outcome.header["jobs_list"] = pipeTasksRawList();
                         return outcome;
@@ -273,7 +274,7 @@ namespace ETL_System {
                     
                 case MsgTypes.MGMT_UPDATE_JOB:
                     try {
-                        this.jobs_catalogue.updateJob((Job)data, user_context);
+                        this.jobs_catalogue.updateJob((Job)msg.attachement, user_context);
                         outcome.msg_type = MsgTypes.REPLY_SUCCESS;
                         outcome.header["jobs_list"] = pipeTasksRawList();
                         return outcome;

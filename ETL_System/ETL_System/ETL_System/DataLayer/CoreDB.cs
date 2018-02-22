@@ -254,7 +254,7 @@ namespace ETL_System {
 
             lock (_locker) {
                 r = etl_database.Tables["Jobs"].Select($"job_id = {target_job.job_id}")[0];
-            }
+            
                 r["last_instance_id"]               = target_job.last_instance_id;
                 r["job_type_id"]                    = target_job.job_type_id;
                 r["last_instance_timestamp"]        = lit;
@@ -272,7 +272,7 @@ namespace ETL_System {
                 r["is_paused"]                      = target_job.is_paused;
             //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
 
-            lock (_locker) { 
+            
                 using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {
                     var builder = new SqlCommandBuilder(db_adapter);                                           
                         DataRow[] target = { r };
