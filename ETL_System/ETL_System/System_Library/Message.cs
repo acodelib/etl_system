@@ -31,6 +31,7 @@ namespace ETL_System
         public Message(MsgAttachment attch) {
             this.id = Guid.NewGuid();
             this.attachement = attch;
+            header = new Hashtable();
             timestamp = DateTime.Now;
         }
         
@@ -59,7 +60,8 @@ namespace ETL_System
 
         public static Message getMessageFromBytes(byte[] data) {
             BinaryFormatter b = new BinaryFormatter();
-            MemoryStream m = new MemoryStream(data);
+            MemoryStream m = new MemoryStream(data);            
+            m.Position = 0;
             return (Message)b.Deserialize(m);
         }
         

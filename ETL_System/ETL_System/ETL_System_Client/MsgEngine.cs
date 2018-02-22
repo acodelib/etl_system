@@ -28,6 +28,7 @@ namespace ETL_System {
             //first send message
             try { 
                 master_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                master_socket.SendBufferSize = 3200000;
                 master_socket.Connect(ipe);
                 master_socket.Send(byte_message);        
 

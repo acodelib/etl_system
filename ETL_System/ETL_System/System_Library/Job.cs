@@ -37,6 +37,12 @@ namespace ETL_System{
             this.last_job_change = new LastJobChange();
         }
 
+        public Job(User auser) {
+            this.last_job_change = new LastJobChange();
+            this.last_job_change.login = auser.login;
+            this.last_job_change.change_timestamp = DateTime.Now;
+        }
+
         public void setDependencies(Dictionary<int,Dependency> deps) {
             this.dependencies = deps;
         }

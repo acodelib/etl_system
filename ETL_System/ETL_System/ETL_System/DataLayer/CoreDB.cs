@@ -172,20 +172,24 @@ namespace ETL_System {
             }
 
             object lit = null;  // care for nullable inserts
+            object lid = null;
             object dc = null;
             object tc = null;
 
             if (new_job.last_instance_timestamp == null) lit = DBNull.Value;
             else lit = new_job.last_instance_timestamp;
 
-            if(new_job.data_chceckpoint == null) dc = DBNull.Value;
+            if (new_job.last_instance_id == null) lid = DBNull.Value;
+            else lid = new_job.last_instance_id;
+
+            if (new_job.data_chceckpoint == null) dc = DBNull.Value;
             else dc = new_job.data_chceckpoint;
 
             if (new_job.time_checkpoint == null) tc = DBNull.Value;
             else tc = new_job.time_checkpoint;
 
             r["job_id"]                     = new_job.job_id;
-            r["last_instance_id"]           = new_job.last_instance_id;
+            r["last_instance_id"]           = lid;
             r["job_type_id"]                = new_job.job_type_id;
             r["last_instance_timestamp"]    = lit;
             r["sys_change_id"]              = new_job.sys_change_id;

@@ -51,6 +51,7 @@ namespace ETL_System
 
         public void decodeNetMessage(object incoming_socket) {
             Socket client_socket = (Socket)incoming_socket;
+            client_socket.SendBufferSize = 3200000;
             byte[] Buffer;
             int readBytes;
             Message message;
