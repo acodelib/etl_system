@@ -36,6 +36,8 @@ namespace ETL_System {
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btn_Create = new System.Windows.Forms.Button();
             this.gb_General = new System.Windows.Forms.GroupBox();
+            this.tb_Id = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.cb_Type = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tb_Name = new System.Windows.Forms.TextBox();
@@ -91,8 +93,6 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
-            this.tb_Id = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -244,6 +244,23 @@ namespace ETL_System {
             this.gb_General.TabIndex = 28;
             this.gb_General.TabStop = false;
             this.gb_General.Text = "General";
+            // 
+            // tb_Id
+            // 
+            this.tb_Id.Location = new System.Drawing.Point(627, 38);
+            this.tb_Id.Name = "tb_Id";
+            this.tb_Id.ReadOnly = true;
+            this.tb_Id.Size = new System.Drawing.Size(117, 21);
+            this.tb_Id.TabIndex = 28;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(535, 41);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(86, 15);
+            this.label14.TabIndex = 29;
+            this.label14.Text = "Job System Id:";
             // 
             // cb_Type
             // 
@@ -492,6 +509,7 @@ namespace ETL_System {
             this.btn_Delete.Size = new System.Drawing.Size(135, 39);
             this.btn_Delete.TabIndex = 18;
             this.btn_Delete.UseVisualStyleBackColor = true;
+            this.btn_Delete.Click += new System.EventHandler(this.btn_Delete_Click);
             // 
             // btn_Save
             // 
@@ -562,7 +580,7 @@ namespace ETL_System {
             this.tp_Catalogue.Location = new System.Drawing.Point(4, 25);
             this.tp_Catalogue.Name = "tp_Catalogue";
             this.tp_Catalogue.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Catalogue.Size = new System.Drawing.Size(1080, 625);
+            this.tp_Catalogue.Size = new System.Drawing.Size(1066, 708);
             this.tp_Catalogue.TabIndex = 1;
             this.tp_Catalogue.Text = "Catalogue";
             this.tp_Catalogue.UseVisualStyleBackColor = true;
@@ -588,7 +606,7 @@ namespace ETL_System {
             this.tp_Queue.Location = new System.Drawing.Point(4, 25);
             this.tp_Queue.Name = "tp_Queue";
             this.tp_Queue.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Queue.Size = new System.Drawing.Size(1080, 625);
+            this.tp_Queue.Size = new System.Drawing.Size(1066, 708);
             this.tp_Queue.TabIndex = 2;
             this.tp_Queue.Text = "Queue";
             this.tp_Queue.UseVisualStyleBackColor = true;
@@ -598,7 +616,7 @@ namespace ETL_System {
             this.tp_Graph.Location = new System.Drawing.Point(4, 25);
             this.tp_Graph.Name = "tp_Graph";
             this.tp_Graph.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Graph.Size = new System.Drawing.Size(1080, 625);
+            this.tp_Graph.Size = new System.Drawing.Size(1066, 708);
             this.tp_Graph.TabIndex = 3;
             this.tp_Graph.Text = "Dependency Graph";
             this.tp_Graph.UseVisualStyleBackColor = true;
@@ -608,7 +626,7 @@ namespace ETL_System {
             this.tp_Admin.Location = new System.Drawing.Point(4, 25);
             this.tp_Admin.Name = "tp_Admin";
             this.tp_Admin.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Admin.Size = new System.Drawing.Size(1080, 625);
+            this.tp_Admin.Size = new System.Drawing.Size(1066, 708);
             this.tp_Admin.TabIndex = 4;
             this.tp_Admin.Text = "Administer";
             this.tp_Admin.UseVisualStyleBackColor = true;
@@ -783,23 +801,6 @@ namespace ETL_System {
             this.ts_NewJob.Size = new System.Drawing.Size(94, 34);
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
-            // 
-            // tb_Id
-            // 
-            this.tb_Id.Location = new System.Drawing.Point(627, 38);
-            this.tb_Id.Name = "tb_Id";
-            this.tb_Id.ReadOnly = true;
-            this.tb_Id.Size = new System.Drawing.Size(117, 21);
-            this.tb_Id.TabIndex = 28;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(535, 41);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(86, 15);
-            this.label14.TabIndex = 29;
-            this.label14.Text = "Job System Id:";
             // 
             // MainWindow
             // 
