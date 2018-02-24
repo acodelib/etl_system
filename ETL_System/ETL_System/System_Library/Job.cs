@@ -29,16 +29,20 @@ namespace ETL_System{
         public bool     is_executing;
         public bool     is_queued;
         
-        private Dictionary<int, Schedule> schedules;
-        private Dictionary<int, Dependency> dependencies;
+        public Dictionary<int, Schedule> schedules;
+        public Dictionary<int, Dependency> dependencies;
         public  LastJobChange last_job_change;
 
         public Job() {
             this.last_job_change = new LastJobChange();
+            this.schedules = new Dictionary<int, Schedule>();
+            this.dependencies = new Dictionary<int, Dependency>();
         }
 
         public Job(User auser) {
             this.last_job_change = new LastJobChange();
+            this.schedules = new Dictionary<int, Schedule>();
+            this.dependencies = new Dictionary<int, Dependency>();
             this.last_job_change.login = auser.login;
             this.last_job_change.change_timestamp = DateTime.Now;
         }

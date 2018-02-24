@@ -71,6 +71,9 @@ namespace ETL_System
                         if (message.msg_type == MsgTypes.TRY_CONNECT) {
                             reply = session_manager.validateLogin(message);
                             reply.header["jobs_list"] = this.system_manager.pipeTasksRawList();
+                            reply.header["schedule_types"] = SystemSharedData.schedule_types;
+                            reply.header["dependency_types"] = SystemSharedData.dependency_types;
+                            reply.header["user_roles"] = SystemSharedData.user_roles;
                             client_socket.Send(reply.encodeToBytes());
                         }
                         //else validate the session and let the System manager resolve it
@@ -96,11 +99,12 @@ namespace ETL_System
         
         public string getIp4Address() {
             IPAddress[] ips = Dns.GetHostAddresses(Dns.GetHostName());
+           //return "192.168.0.179";
             foreach (IPAddress i in ips) {
                 if (i.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
                     return i.ToString();
                 }
-            }
+            }           
             return "127.0.0.1";
         }
 

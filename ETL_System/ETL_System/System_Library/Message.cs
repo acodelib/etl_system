@@ -77,15 +77,19 @@ namespace ETL_System
         MGMT_CREATE_JOB = 5,
         MGMT_DELETE_JOB = 6,
         MGMT_UPDATE_JOB = 7,
-        COMMAND_PAUSE_JOB = 8,
-        COMMAND_RESTART_JOB = 9,         
-        COMMAND_HALT_JOB = 10,
-        COMMAND_SYSTEM_PAUSE = 11,
-        COMMAND_SYSTEM_HALT = 12,
-        REPLY_SUCCESS = 13,
-        REPLY_FAIL = 14,
-        SERVER_ERROR = 15,
-        SERVER_WARNING = 16
+        MGMT_CREATE_SCHEDULE = 8,
+        MGMT_DELETE_SCHEDULE = 9,
+        MGMG_CREATE_DEPENDENCY = 10,
+        MGMT_DELETE_DEPENDENCY = 11,
+        COMMAND_PAUSE_JOB = 12,
+        COMMAND_RESTART_JOB = 13,         
+        COMMAND_HALT_JOB = 14,
+        COMMAND_SYSTEM_PAUSE = 15,
+        COMMAND_SYSTEM_HALT = 16,
+        REPLY_SUCCESS = 17,
+        REPLY_FAIL = 18,
+        SERVER_ERROR = 19,
+        SERVER_WARNING = 20
     }
       
 

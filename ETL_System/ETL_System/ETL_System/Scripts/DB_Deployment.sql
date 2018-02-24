@@ -42,7 +42,7 @@ CREATE TABLE dbo.Jobs (
 	job_schedule_id      int NOT NULL   IDENTITY,
 	job_id               int    ,
 	schedule_type_id     int    ,
-	next_execution       int	,
+	next_execution       datetime	,
 	CONSTRAINT Pk_Job_Schedules_job_schedule_id PRIMARY KEY  ( job_schedule_id )
  );
 
@@ -103,8 +103,12 @@ CREATE TABLE dbo.Jobs (
 	CONSTRAINT Pk_Dependency_Types_dependency_type_id PRIMARY KEY  ( dependency_type_id )
  );
  
+
+ ------------------------
  CREATE NONCLUSTERED INDEX IX_jobinstances_jid  ON ETL_System.dbo.JobInstances (job_id); 
  CREATE NONCLUSTERED INDEX IX_jobchanges_jid    ON ETL_System.dbo.JobChanges (job_id); 
+
+
 
  --- CREATE default admin:
  INSERT INTO dbo.[User]

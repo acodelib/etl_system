@@ -50,8 +50,12 @@ namespace UnitTest_ETLSystem {
             etl_system_manager.startSystem();
 
             User u = new User { user_id = 1, login = "admin" };
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_test_1", u);
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_test_2", u);
+            Message m = new Message();
+            m.msg_type = MsgTypes.MGMT_DELETE_JOB;
+            m.body = "the_test_1";
+            etl_system_manager.executeMgmtCommand(m, u);
+            m.body = "the_test_2";
+            etl_system_manager.executeMgmtCommand(m, u);
 
             Assert.AreEqual(0, 
                             CoreDB.runIntCustomScalarSQLCommand("Select isnull(count(name),0) from ETL_System.dbo.Jobs WHERE name in ('the_test_1','the_test_2')", 
@@ -75,29 +79,36 @@ namespace UnitTest_ETLSystem {
                 notifiactions_list = "andrei.gurguta@veeam.com",
                 type_name = "Schedule"
             };
-            
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_CREATE_JOB, j, u);
+
+            m.msg_type = MsgTypes.MGMT_CREATE_JOB;
+            m.attachement = j;
+            etl_system_manager.executeMgmtCommand(m, u);
             Assert.AreEqual(1,
                            CoreDB.runIntCustomScalarSQLCommand("Select isnull(count(name),0) from ETL_System.dbo.Jobs WHERE name in ('the_test_1')",
                                                         "Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true")
                           );
             //simulate incomming message:
-                    MemoryStream m = new MemoryStream();
+                    MemoryStream ms = new MemoryStream();
                     BinaryFormatter b = new BinaryFormatter();
-                    b.Serialize(m, j);
-                    m.Position = 0;
-                    j = (Job)b.Deserialize(m);
+                    b.Serialize(ms, j);
+                    ms.Position = 0;
+                    j = (Job)b.Deserialize(ms);
             j.is_failed = true;
-            j.name = "the_test_2";            
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_UPDATE_JOB, j, u);
+            j.name = "the_test_2";
+            m.msg_type = MsgTypes.MGMT_UPDATE_JOB;
+            m.attachement = j;
+            etl_system_manager.executeMgmtCommand(m, u);
 
            Assert.AreEqual(1,
                          CoreDB.runIntCustomScalarSQLCommand("Select isnull(count(name),0) from ETL_System.dbo.Jobs WHERE name in ('the_test_2')",
                                                       "Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true")
                         );
 
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_test_1", u);
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_test_2", u);
+            m.msg_type = MsgTypes.MGMT_DELETE_JOB;
+            m.body = "the_test_1";
+            etl_system_manager.executeMgmtCommand(m, u);
+            m.body = "the_test_2";
+            etl_system_manager.executeMgmtCommand(m, u);
 
             Assert.AreEqual(0,
                             CoreDB.runIntCustomScalarSQLCommand("Select isnull(count(name),0) from ETL_System.dbo.Jobs WHERE name in ('the_test_1','the_test_2')",

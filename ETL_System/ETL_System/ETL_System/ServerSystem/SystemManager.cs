@@ -31,7 +31,7 @@ namespace ETL_System {
             this._path_to_config    = config_file   == null ? AppDomain.CurrentDomain.BaseDirectory + "ETLSystemConfig.etl" : config_file;
             this._path_to_log       = log_file      == null ? AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl" : log_file;
 
-            SystemSharedData.schedule_types         = new Dictionary<int, ScheduleType>();
+            SystemSharedData.schedule_types         = new Dictionary<int?, ScheduleType>();
             SystemSharedData.dependency_types       = new Dictionary<int, DependencyType>();
             SystemSharedData.user_roles             = new Dictionary<int, string>();
             SystemSharedData.catalogue_scan_flag    = true;       
@@ -233,7 +233,7 @@ namespace ETL_System {
                 result = this.executeDataRequest(msg);
                 return result;
             }
-            if (msg.msg_type >= (MsgTypes)5 && msg.msg_type <= (MsgTypes)7) {
+            if (msg.msg_type >= (MsgTypes)5 && msg.msg_type <= (MsgTypes)11) {
                 result = this.executeMgmtCommand(msg, (User)msg.header["user"]);
                 return result;
             }
@@ -285,7 +285,21 @@ namespace ETL_System {
                         outcome.body = $"Failed to UPDATE job. Original system message: {e.Message}";
                         return outcome;
                     }
-                    
+                case MsgTypes.MGMT_CREATE_SCHEDULE:
+                    try {
+                        outcome.attachement = this.jobs_catalogue.addNewSchedule((Job)msg.attachement, user_context);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.body = e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to UPDATE job. Original system message: {e.Message}";
+                        return outcome;
+                    }
+
                 default:
                     outcome.msg_type = MsgTypes.REPLY_FAIL;
                     outcome.body = $"Unknown COMMAND TYPE";

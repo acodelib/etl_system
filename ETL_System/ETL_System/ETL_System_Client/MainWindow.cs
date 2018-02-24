@@ -17,7 +17,10 @@ namespace ETL_System
 
         public MainWindow() {
             InitializeComponent();
-
+            foreach (Control c in tc_Job.Controls) {
+                if (c.Name != "tp_Definition")
+                    tc_Job.Controls.Remove(c);
+            }
             manager = new ClientManager(this);
         }
 
@@ -67,6 +70,14 @@ namespace ETL_System
             }
         }
 
+        private void tc_Job_Selected(object sender, EventArgs e) {
+            if(tc_Job.SelectedTab == tp_Schedules) {
+                cb_ScheduleType.Items.Clear();
+                foreach (ScheduleType s in ClientManager.schedulte_types.Values)
+                    cb_ScheduleType.Items.Add(s.schedule_type_name);
+            }
+        }
+
         private void label2_Click(object sender, EventArgs e) {
 
         }
@@ -93,35 +104,11 @@ namespace ETL_System
         }
 
         private void tb_isActive_TextChanged(object sender, EventArgs e) {
-            /*
-            switch (tb_isActive.Text) {
-                case "NO":
-                    btn_Activation.Text = "Activate";
-                    break;
-                case "YES":
-                    btn_Activation.Text = "Deactivate";
-                    break;
-                default:
-                    btn_Activation.Text = "Deactivate";
-                    break;
-            }
-            */
+          
         }
 
         private void tb_IsPaused_TextChanged(object sender, EventArgs e) {
-            /*
-            switch (tb_IsPaused.Text) {
-                case "NO":
-                    btn_Pausing.Text = "Pause";
-                    break;
-                case "YES":
-                    btn_Pausing.Text = "Un-Pause";
-                    break;
-                default:
-                    btn_Pausing.Text = "Pause";
-                    break;
-            }
-            */
+          
         }
 
         private void btn_Activation_Click(object sender, EventArgs e) {
@@ -166,6 +153,7 @@ namespace ETL_System
                 if (c.GetType() == typeof(TextBox))
                     c.Text = "";
             }
+            manager.cleanSchedules();
 
         }
 
@@ -175,6 +163,18 @@ namespace ETL_System
 
         private void button1_Click(object sender, EventArgs e) {
             manager.createJob();
+        }
+
+        private void btn_Delete_Click(object sender, EventArgs e) {
+            manager.deleteJob();
+        }
+
+        private void tp_Queue_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btn_AddSchedule_Click(object sender, EventArgs e) {
+            manager.addNewSchedule();
         }
     }
 }

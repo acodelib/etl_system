@@ -73,7 +73,7 @@ namespace ETL_System {
                 bool searcher = false;
                 string named_changed = null;
                 foreach (var k in jobs_collection.Values) {
-                    if (k.name == target_job.name) {
+                    if (k.job_id == target_job.job_id) {
                         if (k.is_queued)
                             return "Can't change job, it is executing or about to execute!";
                         searcher = true;
@@ -94,6 +94,35 @@ namespace ETL_System {
             this._sys_change_id = this.getCurrentSysChangeId();
             return "Job Update success!";
         }
+
+        public Job addNewSchedule(Job target_job,User changer) {
+            lock (_locker) {
+                bool searcher = false;
+                string named_changed = null;
+                foreach (var k in jobs_collection.Values) {
+                    if (k.job_id == target_job.job_id) {
+                        if (k.is_queued)
+                            throw new Exception("Job is in queue, can't change now.");
+                        searcher = true;
+                        named_changed = k.name;
+                        break;
+                    }
+                }
+                if (!(searcher || jobs_collection.ContainsKey(target_job.name)))
+                    throw new Exception("Can't find job");
+                
+                //this.jobs_collection.Add(target_job.name, target_job);
+                target_job.sys_change_id = SystemSharedData.getJobChangesKey();
+                target_job.setLastJobChange(changer.login, null);
+                jobs_collection[target_job.name].setSchedules(this.data_layer.addSingleScheduleToJob(target_job, changer));
+
+                return jobs_collection[target_job.name];
+            }           
+        }
+
+        public void deleteSchedule(Job target_job,User changer) { }
+        public void addNewDependency(Job target_job,User changer) { }
+        public void deleteDependency(Job target_job, User changer) { }
 
         private int refreshJobsCollection() {
             data_layer.fillJobsCollection(this.jobs_collection);

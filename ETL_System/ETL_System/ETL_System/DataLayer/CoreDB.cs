@@ -204,8 +204,7 @@ namespace ETL_System {
             r["notifications_list"]         = new_job.notifiactions_list;
             r["is_failed"]                  = new_job.is_failed;
             r["is_active"]                  = new_job.is_active;
-            r["is_paused"]                  = new_job.is_paused;
-            //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
+            r["is_paused"]                  = new_job.is_paused;            
 
             using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {                                                                        
                     var builder = new SqlCommandBuilder(db_adapter);
@@ -215,9 +214,10 @@ namespace ETL_System {
                     db_adapter.Update(target);
                 }
             }
+            //record job change:
             string sql = $"INSERT INTO ETL_System.dbo.JobChanges SELECT {new_job.sys_change_id},{new_job.job_id},{changer.user_id},'{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}",new_job.last_job_change.change_timestamp)}'";
             runCustomSQLCommand(sql,SystemSharedData.app_db_connstring);
-        }
+        }        
 
         public void deleteJob(string job_name, User changer) {
             using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {
@@ -283,7 +283,70 @@ namespace ETL_System {
             runCustomSQLCommand(sql, SystemSharedData.app_db_connstring);         
                 
         }
+
+        public Dictionary<int,Schedule> addSingleScheduleToJob(Job j,User changer, bool record_system_change = true) {
+            DataRow r;
+            Schedule sch = j.schedules[0];
+            lock (_locker) {
+                r = etl_database.Tables["JobSchedules"].NewRow();
+               // r["job_schedule_id"] = sch.job_schedule_id;
+                r["job_id"] = sch.job_id;
+                r["schedule_type_id"] = sch.schedule_type_id;
+                r["next_execution"] = sch.next_execution;
+
+                using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.JobSchedules", SystemSharedData.app_db_connstring)) {
+                    var builder = new SqlCommandBuilder(db_adapter);                 
+                        etl_database.Tables["JobSchedules"].Rows.Add(r);
+                        DataRow[] target = { r };
+                        db_adapter.Update(target);                 
+                }
+            }
+            if (record_system_change) {
+                string sql = $"INSERT INTO ETL_System.dbo.JobChanges SELECT {j.sys_change_id},{j.job_id},{changer.user_id},'{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", j.last_job_change.change_timestamp)}'";
+                runCustomSQLCommand(sql, SystemSharedData.app_db_connstring);
+            }
+
+            //now return a fresh copy of the schedules
+            Dictionary<int, Schedule> s = new Dictionary<int, Schedule>();
+            etl_database.Tables["JobSchedules"].Reset();            
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.JobSchedules", this.connection_string)) {
+                db_adapter.Fill(this.etl_database, "JobSchedules");
+            }
+            foreach (DataRow rw in etl_database.Tables["JobSchedules"].Select($"job_id = {j.job_id}")) {
+                s.Add((int)rw["job_schedule_id"], new Schedule {
+                    job_schedule_id = (int)rw["job_schedule_id"],
+                    job_id = (int)rw["job_id"],
+                    schedule_type_id = (int)rw["schedule_type_id"],
+                    next_execution = (DateTime)rw["next_execution"]
+                });
+            }
+            return s;
+        }
         
+        public void addMultipleSchedulesToJob(Job j, User changer) {
+            DataRow r;
+            foreach (Schedule sch in j.schedules.Values) {
+                lock (_locker) {
+                    r = etl_database.Tables["JobSchedules"].NewRow();
+                    //r["job_schedule_id"] = DBNull;
+                    r["job_id"] = sch.job_id;
+                    r["schedule_type_id"] = sch.schedule_type_id;
+                    r["next_execution"] = sch.next_execution;
+
+                    using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.JobSchedules", SystemSharedData.app_db_connstring)) {
+                        var builder = new SqlCommandBuilder(db_adapter);
+                        etl_database.Tables["JobSchedules"].Rows.Add(r);
+                        DataRow[] target = { r };
+                        db_adapter.Update(target);
+                    }
+                }
+            }
+            
+        }
+
+        private void removeScheduleFromJob(Schedule sch) {
+
+        }
         public DataTable getJobsDefaultView() {
 
             string fill_query;

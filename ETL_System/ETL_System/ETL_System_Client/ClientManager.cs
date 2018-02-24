@@ -17,7 +17,7 @@ namespace ETL_System {
         public static bool      login_active;
         public static User      this_user;
 
-        public static Dictionary<int, ScheduleType> schedulte_types;
+        public static Dictionary<int?, ScheduleType> schedulte_types;
         public static Dictionary<int, DependencyType> dependency_types;
         public static Dictionary<int, string> user_roles;
         
@@ -46,7 +46,10 @@ namespace ETL_System {
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     ClientManager.login_active = true;
                     //ClientManager.session_id = r.session_channel;
-                    this_user = (User)r.header["user"];                    
+                    this_user = (User)r.header["user"];
+                    user_roles = (Dictionary<int,string>)r.header["user_roles"];
+                    schedulte_types = (Dictionary<int?, ScheduleType>)r.header["schedule_types"];
+                    dependency_types = (Dictionary<int, DependencyType>)r.header["dependency_types"];
                     parent.tslb_Status.Text = $"Connected to: {Ip} login:{user}";
                     parent.tslb_Response.Visible = true;
                     parent.tslb_Response.Text = $"Last server reply:{r.body} @({r.timestamp})";
@@ -79,17 +82,23 @@ namespace ETL_System {
 
         public void refreshTasksListRoutine(List<string> jobs) {
             if (jobs != null) {
-                parent.lv_JobsList.Clear();
-                foreach (string s in jobs)
-                    parent.lv_JobsList.Items.Add(s);
+                 parent.lv_JobsList.Clear();                
+                foreach (string s in jobs) {
+                    ListViewItem l = new ListViewItem(s);
+                    parent.lv_JobsList.Items.Add(l);
+                }
                 //parent.lv_JobsList.Items[0].Selected = true;
             }
         }
-        
+        public void cleanSchedules() {
+            foreach (ListViewItem i in parent.lv_Schedules.Items) {
+                i.Remove();
+            }
+        }
 
         public void initETLJobDefinitionTab() {
             //1.Request Data From server
-            Message m = new Message();
+            Message m = new Message();                       
             m.msg_type = MsgTypes.REQUEST_JOB;
             m.header["user"] = this_user;
             m.session_channel = this_user.this_sessions_id;
@@ -100,7 +109,7 @@ namespace ETL_System {
                 r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     this.refreshTasksListRoutine((List<string>)r.header["jobs_list"]);
-
+                    this.cleanSchedules();                                        
                     //2.Populate controls with data from message
                     j = (Job)r.attachement;
                     parent.tb_Id.Text               = j.job_id.ToString();
@@ -123,7 +132,18 @@ namespace ETL_System {
                     parent.btn_Activation.Text      = parent.tb_isActive.Text == "NO" ? "Activate" : "Deactivate";
                     parent.btn_Pausing.Text         = parent.tb_IsPaused.Text == "NO" ? "Pause" : "Un-Pause";
 
+                    //3.populate either Schedules or Dependencies
+                    if(j.job_type_id == 1) {
+                        if(j.schedules.Count > 0) {
+                            foreach(Schedule s in j.schedules.Values) {
+                                ListViewItem i = new ListViewItem(s.job_schedule_id.ToString());
+                                i.SubItems.Add(schedulte_types[s.schedule_type_id].schedule_type_name);
+                                i.SubItems.Add(String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", s.next_execution));
+                                parent.lv_Schedules.Items.Add(i);
+                            }
 
+                        }
+                    }
                 }
 
             }
@@ -189,7 +209,7 @@ namespace ETL_System {
         }
 
         public void updateJob() {
-            //1.first check to see that job is not in the view
+            //1.first check to see that job exists in the view
             string ln = parent.tb_Name.Text;
             bool job_found = false;
             Job j;
@@ -250,6 +270,91 @@ namespace ETL_System {
             }
         }
 
+        public void deleteJob() {
+            //1.first check to see that job exists in the view
+            string ln = parent.tb_Name.Text;
+            bool job_found = false;
+            Job j;
+
+            //for (int i = 0 ; i < parent.lv_JobsList.Items.Count;i++) {
+            foreach (ListViewItem i in parent.lv_JobsList.Items) {
+                if (i.SubItems[0].Text == ln) {
+                    job_found = true;
+                    break;
+                }
+            }
+            if (!job_found) {
+                MessageBox.Show("Can't find what to update. Job name is not in list.");
+                return;
+            }
+            //2.make sure the user wants to do this action
+            if (MessageBox.Show($"Job {ln} will be deleted. Continue with sending this update to the server?", "", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+
+            //3.Send the message
+            Message m = new Message();
+            m.msg_type = MsgTypes.MGMT_DELETE_JOB;
+            m.body = ln;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            //m.session_channel = ClientManager.session_id;
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    //5.refresh list view
+                    this.refreshTasksListRoutine((List<string>)r.header["jobs_list"]);
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
+            }
+        }
+
+        public void addNewSchedule() {
+            //check if type is selected
+            if (parent.cb_ScheduleType.Text == "") {
+                MessageBox.Show("Select a Schedule Type please.");
+                    return;
+            }
+
+            //instantiate dummy job with new schedule
+            Job j = new Job() { job_id = Int32.Parse(parent.tb_Id.Text),
+                                name = parent.tb_Name.Text
+                               };
+            Schedule sch = new Schedule { job_id = j.job_id,
+                                          schedule_type_id = getScheduleTypeName(parent.cb_ScheduleType.Text),
+                                          next_execution = DateTime.Parse(parent.dtp_Schedule.Text)
+                                                     
+            };
+            j.schedules.Add(0, sch);
+
+            //send it over to the server
+            Message m = new Message(j);
+            m.msg_type = MsgTypes.MGMT_CREATE_SCHEDULE;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    cleanSchedules();
+                    j = (Job)r.attachement;
+                    //display schedules
+                    foreach (Schedule s in j.schedules.Values) {
+                        ListViewItem i = new ListViewItem(s.job_schedule_id.ToString());
+                        i.SubItems.Add(schedulte_types[s.schedule_type_id].schedule_type_name);
+                        i.SubItems.Add(String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", s.next_execution));
+                        parent.lv_Schedules.Items.Add(i);
+                    }
+                    this.refreshTasksListRoutine((List<string>)r.header["jobs_list"]);
+                }else {
+                    MessageBox.Show(r.body);
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
+            }
+        }
 
         //---------------------------------------Static------------------------------------------------
         public static string GetSHA1HashData(string data) {
@@ -263,6 +368,13 @@ namespace ETL_System {
 
 
             return returnValue.ToString();
+        }
+        public static int getScheduleTypeName(string selected_name) {
+            foreach(int i in schedulte_types.Keys) {
+                if (schedulte_types[i].schedule_type_name == selected_name)
+                    return i;
+            }
+            return 0;
         }
 
     }
