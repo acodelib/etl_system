@@ -115,14 +115,88 @@ namespace ETL_System {
                 target_job.sys_change_id = SystemSharedData.getJobChangesKey();
                 target_job.setLastJobChange(changer.login, null);
                 jobs_collection[target_job.name].setSchedules(this.data_layer.addSingleScheduleToJob(target_job, changer));
+                this._sys_change_id = this.getCurrentSysChangeId();
 
                 return jobs_collection[target_job.name];
             }           
         }
 
-        public void deleteSchedule(Job target_job,User changer) { }
-        public void addNewDependency(Job target_job,User changer) { }
-        public void deleteDependency(Job target_job, User changer) { }
+        public Job deleteSchedules(Job target_job,User changer) {
+            lock (_locker) {
+                bool searcher = false;
+                string named_changed = null;
+                foreach (var k in jobs_collection.Values) {
+                    if (k.job_id == target_job.job_id) {
+                        if (k.is_queued)
+                            throw new Exception("Job is in queue, can't change now.");
+                        searcher = true;
+                        named_changed = k.name;
+                        break;
+                    }
+                }
+                if (!(searcher || jobs_collection.ContainsKey(target_job.name)))
+                    throw new Exception("Can't find job");
+
+                //this.jobs_collection.Add(target_job.name, target_job);
+                target_job.sys_change_id = SystemSharedData.getJobChangesKey();
+                target_job.setLastJobChange(changer.login, DateTime.Now);
+                jobs_collection[target_job.name].setSchedules(this.data_layer.removeSchedulesFromJob(target_job, changer));
+                this._sys_change_id = this.getCurrentSysChangeId();
+
+                return jobs_collection[target_job.name];
+
+            }
+        }
+                
+        public Job addNewDependency(Job target_job,User changer) {
+            lock (_locker) {
+                bool searcher = false;
+                string named_changed = null;
+                foreach (var k in jobs_collection.Values) {
+                    if (k.job_id == target_job.job_id) {
+                        if (k.is_queued)
+                            throw new Exception("Job is in queue, can't change now.");
+                        searcher = true;
+                        named_changed = k.name;
+                        break;
+                    }
+                }
+                if (!(searcher || jobs_collection.ContainsKey(target_job.name)))
+                    throw new Exception("Can't find job");
+
+                //this.jobs_collection.Add(target_job.name, target_job);
+                target_job.sys_change_id = SystemSharedData.getJobChangesKey();
+                target_job.setLastJobChange(changer.login, null);
+                jobs_collection[target_job.name].setDependencies(this.data_layer.addSingleDependencyToJob(target_job, changer));
+                this._sys_change_id = this.getCurrentSysChangeId();
+
+                return jobs_collection[target_job.name];
+            }
+        }
+        public Job deleteDependency(Job target_job, User changer) {
+            lock (_locker) {
+                bool searcher = false;
+                string named_changed = null;
+                foreach (var k in jobs_collection.Values) {
+                    if (k.job_id == target_job.job_id) {
+                        if (k.is_queued)
+                            throw new Exception("Job is in queue, can't change now.");
+                        searcher = true;
+                        named_changed = k.name;
+                        break;
+                    }
+                }
+                if (!(searcher || jobs_collection.ContainsKey(target_job.name)))
+                    throw new Exception("Can't find job");
+
+                //this.jobs_collection.Add(target_job.name, target_job);
+                target_job.sys_change_id = SystemSharedData.getJobChangesKey();
+                target_job.setLastJobChange(changer.login, DateTime.Now);
+                jobs_collection[target_job.name].setDependencies(this.data_layer.removeDependencyFromJob(target_job, changer));
+                this._sys_change_id = this.getCurrentSysChangeId();
+                return jobs_collection[target_job.name];
+            }
+        }
 
         private int refreshJobsCollection() {
             data_layer.fillJobsCollection(this.jobs_collection);
@@ -139,10 +213,10 @@ namespace ETL_System {
             }
             return view;
         }
-        public List<string> produceJobsList() {
-            List<string> jobs_list = new List<string>();
-            foreach (string n in this.jobs_collection.Keys)
-                jobs_list.Add(n);
+        public Dictionary<int,string> produceJobsList() {
+            Dictionary<int,string> jobs_list = new Dictionary<int, string>();
+            foreach (Job j in this.jobs_collection.Values)
+                jobs_list.Add(j.job_id,j.name);
             return jobs_list;
         }
     }

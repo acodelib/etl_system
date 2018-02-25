@@ -70,10 +70,12 @@ namespace ETL_System
                         //message received, handle it if its a connection request:
                         if (message.msg_type == MsgTypes.TRY_CONNECT) {
                             reply = session_manager.validateLogin(message);
-                            reply.header["jobs_list"] = this.system_manager.pipeTasksRawList();
-                            reply.header["schedule_types"] = SystemSharedData.schedule_types;
-                            reply.header["dependency_types"] = SystemSharedData.dependency_types;
-                            reply.header["user_roles"] = SystemSharedData.user_roles;
+
+                            reply.header["jobs_list"]           = this.system_manager.pipeTasksRawList();
+                            reply.header["schedule_types"]      = SystemSharedData.schedule_types;
+                            reply.header["dependency_types"]    = SystemSharedData.dependency_types;
+                            reply.header["user_roles"]          = SystemSharedData.user_roles;
+
                             client_socket.Send(reply.encodeToBytes());
                         }
                         //else validate the session and let the System manager resolve it

@@ -76,6 +76,11 @@ namespace ETL_System
                 foreach (ScheduleType s in ClientManager.schedulte_types.Values)
                     cb_ScheduleType.Items.Add(s.schedule_type_name);
             }
+            if (tc_Job.SelectedTab == tp_Dependencies) {
+                cb_DepTypes.Items.Clear();
+                foreach (DependencyType s in ClientManager.dependency_types.Values)
+                    cb_DepTypes.Items.Add(s.name);
+            }
         }
 
         private void label2_Click(object sender, EventArgs e) {
@@ -175,6 +180,26 @@ namespace ETL_System
 
         private void btn_AddSchedule_Click(object sender, EventArgs e) {
             manager.addNewSchedule();
+        }
+
+        private void lv_JobsList_SelectedIndexChanged_1(object sender, EventArgs e) {
+            if (tc_Main.SelectedTab == tabPage1) {               
+                manager.initETLJobDefinitionTab();
+                //ListViewItem i = lv_JobsList.SelectedItems[];
+                //i.BackColor = System.Drawing.Color.Aquamarine;
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e) {
+            manager.deleteSchedules();
+        }
+
+        private void btn_AddDependency_Click(object sender, EventArgs e) {
+            manager.addNewDependency();
+        }
+
+        private void btn_DelDependency_Click(object sender, EventArgs e) {
+            manager.deleteDependency();
         }
     }
 }

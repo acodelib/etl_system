@@ -32,7 +32,7 @@ namespace ETL_System {
             this._path_to_log       = log_file      == null ? AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl" : log_file;
 
             SystemSharedData.schedule_types         = new Dictionary<int?, ScheduleType>();
-            SystemSharedData.dependency_types       = new Dictionary<int, DependencyType>();
+            SystemSharedData.dependency_types       = new Dictionary<int?, DependencyType>();
             SystemSharedData.user_roles             = new Dictionary<int, string>();
             SystemSharedData.catalogue_scan_flag    = true;       
         }      
@@ -224,7 +224,7 @@ namespace ETL_System {
         }
 
                            ////////// CLIENT REQUESTS //////
-        public List<string> pipeTasksRawList() {
+        public Dictionary<int,string> pipeTasksRawList() {
             return this.jobs_catalogue.produceJobsList();
         }
         public Message handleClientMessage(Message msg) {
@@ -296,7 +296,49 @@ namespace ETL_System {
                         Console.WriteLine(e.Message);
                         outcome.body = e.Message;
                         outcome.msg_type = MsgTypes.REPLY_FAIL;
-                        outcome.body = $"Failed to UPDATE job. Original system message: {e.Message}";
+                        outcome.body = $"Failed to UPDATE job with new schedule. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.MGMT_DELETE_SCHEDULE:
+                    try {
+                        outcome.attachement = this.jobs_catalogue.deleteSchedules((Job)msg.attachement, user_context);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.body = e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to DELETE schedules. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.MGMG_CREATE_DEPENDENCY:
+                    try {
+                        outcome.attachement = this.jobs_catalogue.addNewDependency((Job)msg.attachement, user_context);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.body = e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to UPDATE job with new schedule. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.MGMT_DELETE_DEPENDENCY:
+                    try {
+                        outcome.attachement = this.jobs_catalogue.deleteDependency((Job)msg.attachement, user_context);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.body = e.Message;
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to DELETE schedules. Original system message: {e.Message}";
                         return outcome;
                     }
 

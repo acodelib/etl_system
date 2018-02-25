@@ -17,10 +17,10 @@ namespace ETL_System
         [STAThread]
         static void Main() {
 
-            ClientManager.schedulte_types = new Dictionary<int?, ScheduleType>();
-            ClientManager.dependency_types = new Dictionary<int, DependencyType>();
-            ClientManager.user_roles = new Dictionary<int, string>();
-
+            ClientManager.schedulte_types   = new Dictionary<int?, ScheduleType>();
+            ClientManager.dependency_types  = new Dictionary<int?, DependencyType>();
+            ClientManager.user_roles        = new Dictionary<int, string>();
+            ClientManager.jobs              = new Dictionary<int, string>();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

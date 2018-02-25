@@ -86,15 +86,27 @@ namespace ETL_System {
             this.dtp_Schedule = new System.Windows.Forms.DateTimePicker();
             this.cb_ScheduleType = new System.Windows.Forms.ComboBox();
             this.tp_Dependencies = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.btn_DelDependency = new System.Windows.Forms.Button();
+            this.lv_Dependencies = new System.Windows.Forms.ListView();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.cb_DepJobs = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.btn_AddDependency = new System.Windows.Forms.Button();
+            this.cb_DepTypes = new System.Windows.Forms.ComboBox();
             this.tp_Catalogue = new System.Windows.Forms.TabPage();
             this.dgv_Catalogue = new System.Windows.Forms.DataGridView();
             this.tp_Queue = new System.Windows.Forms.TabPage();
             this.tp_Graph = new System.Windows.Forms.TabPage();
             this.tp_Admin = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btn_clear = new System.Windows.Forms.Button();
             this.lv_JobsList = new System.Windows.Forms.ListView();
-            this.jobs_col = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btn_clear = new System.Windows.Forms.Button();
             this.btn_searchjob = new System.Windows.Forms.Button();
             this.tb_Search = new System.Windows.Forms.TextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -119,6 +131,9 @@ namespace ETL_System {
             this.tp_Schedules.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.tp_Dependencies.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.tp_Catalogue.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -628,7 +643,7 @@ namespace ETL_System {
             // 
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.lv_Schedules);
-            this.groupBox3.Location = new System.Drawing.Point(20, 36);
+            this.groupBox3.Location = new System.Drawing.Point(411, 22);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(433, 574);
             this.groupBox3.TabIndex = 5;
@@ -645,6 +660,7 @@ namespace ETL_System {
             this.button1.Size = new System.Drawing.Size(135, 39);
             this.button1.TabIndex = 19;
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // lv_Schedules
             // 
@@ -685,7 +701,7 @@ namespace ETL_System {
             this.groupBox2.Controls.Add(this.btn_AddSchedule);
             this.groupBox2.Controls.Add(this.dtp_Schedule);
             this.groupBox2.Controls.Add(this.cb_ScheduleType);
-            this.groupBox2.Location = new System.Drawing.Point(521, 36);
+            this.groupBox2.Location = new System.Drawing.Point(21, 22);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(359, 190);
             this.groupBox2.TabIndex = 4;
@@ -744,6 +760,8 @@ namespace ETL_System {
             // 
             // tp_Dependencies
             // 
+            this.tp_Dependencies.Controls.Add(this.groupBox5);
+            this.tp_Dependencies.Controls.Add(this.groupBox6);
             this.tp_Dependencies.Location = new System.Drawing.Point(4, 24);
             this.tp_Dependencies.Name = "tp_Dependencies";
             this.tp_Dependencies.Padding = new System.Windows.Forms.Padding(3);
@@ -751,6 +769,124 @@ namespace ETL_System {
             this.tp_Dependencies.TabIndex = 2;
             this.tp_Dependencies.Text = "Dependencies";
             this.tp_Dependencies.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btn_DelDependency);
+            this.groupBox5.Controls.Add(this.lv_Dependencies);
+            this.groupBox5.Location = new System.Drawing.Point(411, 22);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(433, 574);
+            this.groupBox5.TabIndex = 7;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Saved Dependencies";
+            // 
+            // btn_DelDependency
+            // 
+            this.btn_DelDependency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_DelDependency.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_DelDependency.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
+            this.btn_DelDependency.Location = new System.Drawing.Point(292, 525);
+            this.btn_DelDependency.Name = "btn_DelDependency";
+            this.btn_DelDependency.Size = new System.Drawing.Size(135, 39);
+            this.btn_DelDependency.TabIndex = 19;
+            this.btn_DelDependency.UseVisualStyleBackColor = true;
+            this.btn_DelDependency.Click += new System.EventHandler(this.btn_DelDependency_Click);
+            // 
+            // lv_Dependencies
+            // 
+            this.lv_Dependencies.CheckBoxes = true;
+            this.lv_Dependencies.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader6,
+            this.columnHeader7});
+            this.lv_Dependencies.FullRowSelect = true;
+            this.lv_Dependencies.GridLines = true;
+            this.lv_Dependencies.HideSelection = false;
+            this.lv_Dependencies.Location = new System.Drawing.Point(12, 20);
+            this.lv_Dependencies.Name = "lv_Dependencies";
+            this.lv_Dependencies.Size = new System.Drawing.Size(415, 484);
+            this.lv_Dependencies.TabIndex = 0;
+            this.lv_Dependencies.UseCompatibleStateImageBehavior = false;
+            this.lv_Dependencies.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "ID";
+            this.columnHeader5.Width = 78;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Type";
+            this.columnHeader6.Width = 119;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Job Dependency";
+            this.columnHeader7.Width = 212;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.cb_DepJobs);
+            this.groupBox6.Controls.Add(this.label18);
+            this.groupBox6.Controls.Add(this.label19);
+            this.groupBox6.Controls.Add(this.btn_AddDependency);
+            this.groupBox6.Controls.Add(this.cb_DepTypes);
+            this.groupBox6.Location = new System.Drawing.Point(21, 22);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(359, 190);
+            this.groupBox6.TabIndex = 6;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Add New";
+            // 
+            // cb_DepJobs
+            // 
+            this.cb_DepJobs.FormattingEnabled = true;
+            this.cb_DepJobs.Location = new System.Drawing.Point(113, 91);
+            this.cb_DepJobs.Name = "cb_DepJobs";
+            this.cb_DepJobs.Size = new System.Drawing.Size(238, 23);
+            this.cb_DepJobs.TabIndex = 33;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(27, 98);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(67, 15);
+            this.label18.TabIndex = 32;
+            this.label18.Text = "Job Name:";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(58, 39);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(36, 15);
+            this.label19.TabIndex = 31;
+            this.label19.Text = "Type:";
+            // 
+            // btn_AddDependency
+            // 
+            this.btn_AddDependency.BackColor = System.Drawing.Color.Transparent;
+            this.btn_AddDependency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_AddDependency.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_AddDependency.Image = global::ETL_System_Client.Properties.Resources.create;
+            this.btn_AddDependency.Location = new System.Drawing.Point(216, 140);
+            this.btn_AddDependency.Name = "btn_AddDependency";
+            this.btn_AddDependency.Size = new System.Drawing.Size(135, 39);
+            this.btn_AddDependency.TabIndex = 30;
+            this.btn_AddDependency.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_AddDependency.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_AddDependency.UseVisualStyleBackColor = false;
+            this.btn_AddDependency.Click += new System.EventHandler(this.btn_AddDependency_Click);
+            // 
+            // cb_DepTypes
+            // 
+            this.cb_DepTypes.FormattingEnabled = true;
+            this.cb_DepTypes.Location = new System.Drawing.Point(113, 36);
+            this.cb_DepTypes.Name = "cb_DepTypes";
+            this.cb_DepTypes.Size = new System.Drawing.Size(238, 23);
+            this.cb_DepTypes.TabIndex = 3;
             // 
             // tp_Catalogue
             // 
@@ -814,8 +950,8 @@ namespace ETL_System {
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this.btn_clear);
             this.groupBox1.Controls.Add(this.lv_JobsList);
+            this.groupBox1.Controls.Add(this.btn_clear);
             this.groupBox1.Controls.Add(this.btn_searchjob);
             this.groupBox1.Controls.Add(this.tb_Search);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -825,6 +961,29 @@ namespace ETL_System {
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Jobs List";
+            // 
+            // lv_JobsList
+            // 
+            this.lv_JobsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader4});
+            this.lv_JobsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lv_JobsList.FullRowSelect = true;
+            this.lv_JobsList.GridLines = true;
+            this.lv_JobsList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.lv_JobsList.HideSelection = false;
+            this.lv_JobsList.Location = new System.Drawing.Point(6, 92);
+            this.lv_JobsList.Name = "lv_JobsList";
+            this.lv_JobsList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lv_JobsList.Size = new System.Drawing.Size(212, 658);
+            this.lv_JobsList.TabIndex = 9;
+            this.lv_JobsList.UseCompatibleStateImageBehavior = false;
+            this.lv_JobsList.View = System.Windows.Forms.View.Details;
+            this.lv_JobsList.SelectedIndexChanged += new System.EventHandler(this.lv_JobsList_SelectedIndexChanged_1);
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Jobs";
+            this.columnHeader4.Width = 208;
             // 
             // btn_clear
             // 
@@ -836,28 +995,6 @@ namespace ETL_System {
             this.btn_clear.TabIndex = 8;
             this.btn_clear.Text = "clear";
             this.btn_clear.UseVisualStyleBackColor = true;
-            // 
-            // lv_JobsList
-            // 
-            this.lv_JobsList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.lv_JobsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.jobs_col});
-            this.lv_JobsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lv_JobsList.GridLines = true;
-            this.lv_JobsList.Location = new System.Drawing.Point(6, 91);
-            this.lv_JobsList.Name = "lv_JobsList";
-            this.lv_JobsList.Size = new System.Drawing.Size(214, 659);
-            this.lv_JobsList.TabIndex = 5;
-            this.lv_JobsList.UseCompatibleStateImageBehavior = false;
-            this.lv_JobsList.View = System.Windows.Forms.View.List;
-            this.lv_JobsList.SelectedIndexChanged += new System.EventHandler(this.lv_JobsList_SelectedIndexChanged);
-            // 
-            // jobs_col
-            // 
-            this.jobs_col.Text = "JOBS";
-            this.jobs_col.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.jobs_col.Width = 214;
             // 
             // btn_searchjob
             // 
@@ -993,6 +1130,10 @@ namespace ETL_System {
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.tp_Dependencies.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.tp_Catalogue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -1010,7 +1151,6 @@ namespace ETL_System {
         public System.Windows.Forms.TabPage tabPage1;
         public System.Windows.Forms.TabPage tp_Catalogue;
         public System.Windows.Forms.GroupBox groupBox1;
-        public System.Windows.Forms.ListView lv_JobsList;
         public System.Windows.Forms.TextBox tb_Search;
         public System.Windows.Forms.Button btn_searchjob;
         public System.Windows.Forms.Button btn_clear;
@@ -1076,7 +1216,6 @@ namespace ETL_System {
         public GroupBox groupBox2;
         public ComboBox cb_ScheduleType;
         public DateTimePicker dtp_Schedule;
-        public ColumnHeader jobs_col;
         public Button button1;
         public ColumnHeader columnHeader1;
         public ColumnHeader columnHeader2;
@@ -1086,6 +1225,20 @@ namespace ETL_System {
         public Button btn_AddSchedule;
         public TextBox tb_Checkpoint;
         public Label label17;
+        public ListView lv_JobsList;
+        public ColumnHeader columnHeader4;
+        public GroupBox groupBox5;
+        public Button btn_DelDependency;
+        public ListView lv_Dependencies;
+        public ColumnHeader columnHeader5;
+        public ColumnHeader columnHeader6;
+        public ColumnHeader columnHeader7;
+        public GroupBox groupBox6;
+        public ComboBox cb_DepJobs;
+        public Label label18;
+        public Label label19;
+        public Button btn_AddDependency;
+        public ComboBox cb_DepTypes;
     }
 }
 

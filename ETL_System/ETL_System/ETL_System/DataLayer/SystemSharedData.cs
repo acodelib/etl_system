@@ -11,7 +11,7 @@ namespace ETL_System {
            
         public static string app_db_connstring;        
         public static Dictionary<int?, ScheduleType> schedule_types;
-        public static Dictionary<int, DependencyType> dependency_types;
+        public static Dictionary<int?, DependencyType> dependency_types;
         public static Dictionary<int, string> user_roles;
 
         public static bool catalogue_scan_flag;
