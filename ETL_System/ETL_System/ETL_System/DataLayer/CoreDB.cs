@@ -119,8 +119,8 @@ namespace ETL_System {
                         is_executing = false,
                         is_queued = false,
                         is_active = (bool)r["is_active"],
-                        is_paused = (bool)r["is_paused"]
-
+                        is_paused = (bool)r["is_paused"],
+                        checkpoint_type = (int)r["checkpoint_type"]
                     };
 
                     //add Dependencies
@@ -204,7 +204,8 @@ namespace ETL_System {
             r["notifications_list"]         = new_job.notifiactions_list;
             r["is_failed"]                  = new_job.is_failed;
             r["is_active"]                  = new_job.is_active;
-            r["is_paused"]                  = new_job.is_paused;            
+            r["is_paused"]                  = new_job.is_paused;
+            r["checkpoint_type"]            = new_job.checkpoint_type;
 
             using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {                                                                        
                     var builder = new SqlCommandBuilder(db_adapter);
@@ -270,6 +271,7 @@ namespace ETL_System {
                 r["notifications_list"]             = target_job.notifiactions_list;
                 r["is_active"]                      = target_job.is_active;
                 r["is_paused"]                      = target_job.is_paused;
+                r["checkpoint_type"]                = target_job.checkpoint_type;
             //r["job_type_id"] = new_job.type_name;//(int)job_types.Select($"type_name = {new_job.type_name}")[0]["job_type_id"];
 
             
@@ -530,9 +532,7 @@ namespace ETL_System {
                 }      
             }                
         }      
-
-       
-            
+                  
         
     }
 }

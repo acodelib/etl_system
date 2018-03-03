@@ -77,7 +77,7 @@ namespace ETL_System
             
             string tl = null;
             */
-           //   etl_system_manager.deployDBScript();
+              //etl_system_manager.deployDBScript();
             //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";            
             //etl_system_manager.deployDBScript(cp + "Scripts\\DB_Creation.sql");
             //etl_system_manager.registerExecutionFolderToConfig("C:\\thefolder", null);

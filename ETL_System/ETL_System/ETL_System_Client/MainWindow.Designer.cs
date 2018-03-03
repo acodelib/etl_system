@@ -36,6 +36,8 @@ namespace ETL_System {
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btn_Create = new System.Windows.Forms.Button();
             this.gb_General = new System.Windows.Forms.GroupBox();
+            this.cb_CheckppointType = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.tb_Checkpoint = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.tb_Id = new System.Windows.Forms.TextBox();
@@ -164,7 +166,7 @@ namespace ETL_System {
             // 
             this.tslb_Response.Name = "tslb_Response";
             this.tslb_Response.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tslb_Response.Size = new System.Drawing.Size(95, 19);
+            this.tslb_Response.Size = new System.Drawing.Size(118, 19);
             this.tslb_Response.Text = "toolStripStatusLabel2";
             this.tslb_Response.Visible = false;
             this.tslb_Response.Click += new System.EventHandler(this.tslb_Response_Click);
@@ -257,6 +259,8 @@ namespace ETL_System {
             // 
             // gb_General
             // 
+            this.gb_General.Controls.Add(this.cb_CheckppointType);
+            this.gb_General.Controls.Add(this.label20);
             this.gb_General.Controls.Add(this.tb_Checkpoint);
             this.gb_General.Controls.Add(this.label17);
             this.gb_General.Controls.Add(this.tb_Id);
@@ -277,22 +281,43 @@ namespace ETL_System {
             this.gb_General.Controls.Add(this.tb_LatencyAlert);
             this.gb_General.Location = new System.Drawing.Point(10, 16);
             this.gb_General.Name = "gb_General";
-            this.gb_General.Size = new System.Drawing.Size(758, 343);
+            this.gb_General.Size = new System.Drawing.Size(758, 284);
             this.gb_General.TabIndex = 28;
             this.gb_General.TabStop = false;
             this.gb_General.Text = "General";
             // 
+            // cb_CheckppointType
+            // 
+            this.cb_CheckppointType.FormattingEnabled = true;
+            this.cb_CheckppointType.Items.AddRange(new object[] {
+            "Data-Int",
+            "Timestamp"});
+            this.cb_CheckppointType.Location = new System.Drawing.Point(130, 185);
+            this.cb_CheckppointType.Name = "cb_CheckppointType";
+            this.cb_CheckppointType.Size = new System.Drawing.Size(127, 23);
+            this.cb_CheckppointType.TabIndex = 6;
+            this.cb_CheckppointType.SelectedIndexChanged += new System.EventHandler(this.cb_CheckppointType_SelectedIndexChanged);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(27, 191);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(100, 15);
+            this.label20.TabIndex = 33;
+            this.label20.Text = "Checkpoint Type:";
+            // 
             // tb_Checkpoint
             // 
-            this.tb_Checkpoint.Location = new System.Drawing.Point(627, 232);
+            this.tb_Checkpoint.Location = new System.Drawing.Point(350, 187);
             this.tb_Checkpoint.Name = "tb_Checkpoint";
-            this.tb_Checkpoint.Size = new System.Drawing.Size(117, 21);
-            this.tb_Checkpoint.TabIndex = 6;
+            this.tb_Checkpoint.Size = new System.Drawing.Size(139, 21);
+            this.tb_Checkpoint.TabIndex = 7;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(553, 235);
+            this.label17.Location = new System.Drawing.Point(276, 191);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(71, 15);
             this.label17.TabIndex = 31;
@@ -330,11 +355,11 @@ namespace ETL_System {
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(91, 90);
+            this.label3.Location = new System.Drawing.Point(68, 88);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(36, 15);
+            this.label3.Size = new System.Drawing.Size(59, 15);
             this.label3.TabIndex = 27;
-            this.label3.Text = "Type:";
+            this.label3.Text = "Job Type:";
             // 
             // tb_Name
             // 
@@ -388,7 +413,7 @@ namespace ETL_System {
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 301);
+            this.label8.Location = new System.Drawing.Point(16, 251);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(122, 15);
             this.label8.TabIndex = 15;
@@ -403,10 +428,10 @@ namespace ETL_System {
             // 
             // tb_Notifications
             // 
-            this.tb_Notifications.Location = new System.Drawing.Point(136, 298);
+            this.tb_Notifications.Location = new System.Drawing.Point(144, 248);
             this.tb_Notifications.Name = "tb_Notifications";
-            this.tb_Notifications.Size = new System.Drawing.Size(608, 21);
-            this.tb_Notifications.TabIndex = 7;
+            this.tb_Notifications.Size = new System.Drawing.Size(600, 21);
+            this.tb_Notifications.TabIndex = 8;
             // 
             // label7
             // 
@@ -445,7 +470,7 @@ namespace ETL_System {
             this.gb_Status.Controls.Add(this.label12);
             this.gb_Status.Controls.Add(this.tb_FailedAttempts);
             this.gb_Status.Controls.Add(this.label5);
-            this.gb_Status.Location = new System.Drawing.Point(142, 381);
+            this.gb_Status.Location = new System.Drawing.Point(148, 319);
             this.gb_Status.Name = "gb_Status";
             this.gb_Status.Size = new System.Drawing.Size(483, 148);
             this.gb_Status.TabIndex = 25;
@@ -460,7 +485,7 @@ namespace ETL_System {
             this.btn_Activation.Location = new System.Drawing.Point(276, 65);
             this.btn_Activation.Name = "btn_Activation";
             this.btn_Activation.Size = new System.Drawing.Size(75, 23);
-            this.btn_Activation.TabIndex = 11;
+            this.btn_Activation.TabIndex = 10;
             this.btn_Activation.Text = "Deactivate";
             this.btn_Activation.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btn_Activation.UseVisualStyleBackColor = true;
@@ -473,7 +498,7 @@ namespace ETL_System {
             this.btn_Pausing.Location = new System.Drawing.Point(276, 105);
             this.btn_Pausing.Name = "btn_Pausing";
             this.btn_Pausing.Size = new System.Drawing.Size(75, 23);
-            this.btn_Pausing.TabIndex = 13;
+            this.btn_Pausing.TabIndex = 12;
             this.btn_Pausing.Text = "Pause";
             this.btn_Pausing.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btn_Pausing.UseVisualStyleBackColor = true;
@@ -486,7 +511,7 @@ namespace ETL_System {
             this.tb_IsFailed.Name = "tb_IsFailed";
             this.tb_IsFailed.ReadOnly = true;
             this.tb_IsFailed.Size = new System.Drawing.Size(69, 21);
-            this.tb_IsFailed.TabIndex = 8;
+            this.tb_IsFailed.TabIndex = 9;
             this.tb_IsFailed.Text = "NO";
             this.tb_IsFailed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -964,6 +989,8 @@ namespace ETL_System {
             // 
             // lv_JobsList
             // 
+            this.lv_JobsList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lv_JobsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader4});
             this.lv_JobsList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -975,7 +1002,7 @@ namespace ETL_System {
             this.lv_JobsList.Name = "lv_JobsList";
             this.lv_JobsList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.lv_JobsList.Size = new System.Drawing.Size(212, 658);
-            this.lv_JobsList.TabIndex = 9;
+            this.lv_JobsList.TabIndex = 0;
             this.lv_JobsList.UseCompatibleStateImageBehavior = false;
             this.lv_JobsList.View = System.Windows.Forms.View.Details;
             this.lv_JobsList.SelectedIndexChanged += new System.EventHandler(this.lv_JobsList_SelectedIndexChanged_1);
@@ -1239,6 +1266,8 @@ namespace ETL_System {
         public Label label19;
         public Button btn_AddDependency;
         public ComboBox cb_DepTypes;
+        public ComboBox cb_CheckppointType;
+        public Label label20;
     }
 }
 

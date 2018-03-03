@@ -14,13 +14,19 @@ namespace ETL_System
     public partial class MainWindow : Form
     {
         public ClientManager manager;
+        public string lv_Jobs_selection_cycle;
 
         public MainWindow() {
             InitializeComponent();
+            this.lv_Jobs_selection_cycle = "Xstarted";
+            //some hose keeping
             foreach (Control c in tc_Job.Controls) {
                 if (c.Name != "tp_Definition")
                     tc_Job.Controls.Remove(c);
             }
+            cb_CheckppointType.SelectedIndex = 1;
+
+            //fire up the manager
             manager = new ClientManager(this);
         }
 
@@ -183,10 +189,18 @@ namespace ETL_System
         }
 
         private void lv_JobsList_SelectedIndexChanged_1(object sender, EventArgs e) {
-            if (tc_Main.SelectedTab == tabPage1) {               
-                manager.initETLJobDefinitionTab();
-                //ListViewItem i = lv_JobsList.SelectedItems[];
-                //i.BackColor = System.Drawing.Color.Aquamarine;
+            if (tc_Main.SelectedTab == tabPage1) {
+
+                //1.check for unfocused selection
+                if (lv_JobsList.SelectedItems.Count == 0) 
+                    return;
+                //2.escape in selection cycle
+                if(this.lv_Jobs_selection_cycle == "Xexit") {
+                    this.lv_Jobs_selection_cycle = "Xstarted";
+                    return;
+                }                                
+                //3.load etl definitin in ETL tabl
+                manager.initETLJobDefinitionTab();                               
             }
         }
 
@@ -200,6 +214,10 @@ namespace ETL_System
 
         private void btn_DelDependency_Click(object sender, EventArgs e) {
             manager.deleteDependency();
+        }
+
+        private void cb_CheckppointType_SelectedIndexChanged(object sender, EventArgs e) {
+
         }
     }
 }

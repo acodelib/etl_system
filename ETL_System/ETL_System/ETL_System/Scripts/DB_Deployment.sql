@@ -18,7 +18,8 @@ CREATE TABLE dbo.Jobs (
 	notifications_list   varchar(4096),
 	is_failed            bit    ,
 	is_active            bit	,
-	is_paused            bit
+	is_paused            bit    ,
+	checkpoint_type      int
 	CONSTRAINT Pk_Jobs_job_id PRIMARY KEY  ( job_id )
  );
 
@@ -140,9 +141,9 @@ CREATE TABLE dbo.Jobs (
 
 
  INSERT INTO dbo.Jobs
- SELECT 1,11,1,NULL,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,0,20,NULL,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com',0,0,0
+ SELECT 1,11,1,NULL,'2018-01-12 20:00:00','dummy job','dummy_job.bat',5,0,0,20,NULL,'2018-01-11 22:00:00','andrei_gurguta@yahoo.com',0,0,0,0
  UNION ALL
- SELECT 2,12,2,NULL,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,0,20,2134324,NULL,'andrei_gurguta@yahoo.com',0,0,0;
+ SELECT 2,12,2,NULL,'2018-01-12 20:00:00','dummy job 1','dummy_job_1.bat',5,0,0,20,2134324,NULL,'andrei_gurguta@yahoo.com',0,0,0,0;
 
  INSERT INTO dbo.DependencyTypes
  SELECT 'Data','Resolves Checkpoints for jobs that need to run prior to the target Job'

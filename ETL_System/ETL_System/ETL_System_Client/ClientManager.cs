@@ -6,7 +6,16 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
+
 namespace ETL_System {
+    public static class ExtensionMethods {
+        public static void DoubleBuffered(this DataGridView dgv, bool setting) {
+            Type dgvType = dgv.GetType();
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            pi.SetValue(dgv, setting, null);
+        }
+    }
     public class ClientManager {
 
         //======================================= FIELDS ===========================================
@@ -25,6 +34,7 @@ namespace ETL_System {
 
         public MsgEngine message_engine;
         private MainWindow parent;
+        DataTable t;
 
         //======================================= CONSTRUCTORS =======================================
         public ClientManager(MainWindow parent) {
@@ -68,29 +78,50 @@ namespace ETL_System {
             m.msg_type = MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY;
             m.header["user"] = this_user;
             m.session_channel = this_user.this_sessions_id;
-            JobsCatalogueDisplay c;
+            JobsCatalogueDisplay c;            
             try {
                 Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     c = (JobsCatalogueDisplay)r.attachement;
-                    parent.dgv_Catalogue.DataSource = c.data;
+                    parent.dgv_Catalogue.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    t = c.data;
+                    
+                    //some performance optimisations:                    
+                    parent.dgv_Catalogue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;                    
+                    parent.dgv_Catalogue.EditMode = DataGridViewEditMode.EditProgrammatically;
+                    parent.dgv_Catalogue.EnableHeadersVisualStyles = false;
+                    parent.dgv_Catalogue.DoubleBuffered(true);
+
+                    parent.dgv_Catalogue.DataSource = t;
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
             } catch (Exception e) {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
             }
-        }
-
+        }   
+         
         public void refreshTasksListRoutine(Dictionary<int, string> jobs) {
             if (jobs != null) {
+                if (parent.lv_JobsList.SelectedItems.Count > 0) {                
+                    parent.lv_Jobs_selection_cycle = parent.lv_JobsList.SelectedItems[0].Text;
+                }
                 parent.lv_JobsList.Items.Clear();
-                parent.cb_DepJobs.Items.Clear();
+                parent.cb_DepJobs.Items.Clear();                
                 foreach (int id in jobs.Keys) {
                     ListViewItem l = new ListViewItem(jobs[id]);
+                    
                     parent.lv_JobsList.Items.Add(l);
                     parent.cb_DepJobs.Items.Add(jobs[id]);
                 }
                 ClientManager.jobs = jobs;
+                if (parent.lv_Jobs_selection_cycle != "Xstarted")
+                    foreach (ListViewItem i in parent.lv_JobsList.Items)
+                        if (i.Text == parent.lv_Jobs_selection_cycle) {
+                            parent.lv_Jobs_selection_cycle = "Xexit";
+                            i.Focused = true;
+                            i.Selected = true;
+                            i.Focused = true;
+                        }                
             }
         }
         public void cleanSchedules() {
@@ -119,25 +150,27 @@ namespace ETL_System {
                     this.cleanDependencies();
                     //2.Populate controls with data from message
                     j = (Job)r.attachement;
-                    parent.tb_Id.Text = j.job_id.ToString();
-                    parent.tb_Name.Text = j.name;
-                    parent.tb_Executable.Text = j.executable_name;
-                    parent.tb_MaxAttempts.Text = j.max_try_count.ToString();
-                    parent.tb_LatencyAlert.Text = j.latency_alert_seconds.ToString();
-                    parent.tb_DelaySecs.Text = j.delay_seconds.ToString();
-                    parent.tb_Notifications.Text = j.notifiactions_list;
-                    parent.tb_IsFailed.Text = j.is_failed == false ? "NO" : "YES";
-                    parent.tb_FailedAttempts.Text = j.current_failed_count.ToString();
-                    parent.tb_isActive.Text = j.is_active == true ? "YES" : "NO";
-                    parent.tb_IsPaused.Text = j.is_paused == true ? "YES" : "NO";
-                    parent.cb_Type.SelectedIndex = j.job_type_id == 1 ? 0 : 1;
+                    parent.tb_Id.Text               = j.job_id.ToString();
+                    parent.tb_Name.Text             = j.name;
+                    parent.tb_Executable.Text       = j.executable_name;
+                    parent.tb_MaxAttempts.Text      = j.max_try_count.ToString();
+                    parent.tb_LatencyAlert.Text     = j.latency_alert_seconds.ToString();
+                    parent.tb_DelaySecs.Text        = j.delay_seconds.ToString();
+                    parent.tb_Notifications.Text    = j.notifiactions_list;
+                    parent.tb_IsFailed.Text         = j.is_failed == false ? "NO" : "YES";
+                    parent.tb_FailedAttempts.Text   = j.current_failed_count.ToString();
+                    parent.tb_isActive.Text         = j.is_active == true ? "YES" : "NO";
+                    parent.tb_IsPaused.Text         = j.is_paused == true ? "YES" : "NO";
+                    parent.cb_Type.SelectedIndex    = j.job_type_id == 1 ? 0 : 1;
+                    parent.cb_CheckppointType.SelectedIndex = j.checkpoint_type == 1 ? 0 : 1;
+                    parent.tb_Checkpoint.Text = j.checkpoint_type == 1 ? j.data_chceckpoint.ToString() : String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", j.time_checkpoint);
 
-                    parent.tb_Who.Text = j.last_job_change.login;
-                    parent.tb_When.Text = j.last_job_change.change_timestamp.ToString();
+                    parent.tb_Who.Text              = j.last_job_change.login;
+                    parent.tb_When.Text             = j.last_job_change.change_timestamp.ToString();
 
-                    parent.tb_IsFailed.BackColor = parent.tb_IsFailed.Text == "NO" ? System.Drawing.Color.Chartreuse : System.Drawing.Color.Red;
-                    parent.btn_Activation.Text = parent.tb_isActive.Text == "NO" ? "Activate" : "Deactivate";
-                    parent.btn_Pausing.Text = parent.tb_IsPaused.Text == "NO" ? "Pause" : "Un-Pause";
+                    parent.tb_IsFailed.BackColor    = parent.tb_IsFailed.Text == "NO" ? System.Drawing.Color.Chartreuse : System.Drawing.Color.Red;
+                    parent.btn_Activation.Text      = parent.tb_isActive.Text == "NO" ? "Activate" : "Deactivate";
+                    parent.btn_Pausing.Text         = parent.tb_IsPaused.Text == "NO" ? "Pause" : "Un-Pause";
 
                     //3.populate either Schedules or Dependencies
                     if (j.job_type_id == 1) {
@@ -166,9 +199,8 @@ namespace ETL_System {
             }
             catch (Exception e) {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
-            }
+            }           
 
-            //3.Apply visual rules
         }
         public void createJob() {
             //1.first check to see that job is not in the view
@@ -190,18 +222,21 @@ namespace ETL_System {
             try {
                 j = new Job(this_user) {
 
-                    job_type_id = parent.cb_Type.Text == "Schedule" ? 1 : 2,
-                    last_instance_id = 0,
-                    type_name = parent.cb_Type.Text,
-                    name = ln,
-                    executable_name = parent.tb_Executable.Text,
-                    max_try_count = Int32.Parse(parent.tb_MaxAttempts.Text),
-                    delay_seconds = Int32.Parse(parent.tb_DelaySecs.Text),
-                    latency_alert_seconds = Int32.Parse(parent.tb_LatencyAlert.Text),
-                    notifiactions_list = parent.tb_Notifications.Text,
-                    is_failed = false,
-                    is_active = parent.tb_isActive.Text == "YES" ? true : false,
-                    is_paused = parent.tb_IsPaused.Text == "YES" ? true : false,
+                    job_type_id                     = parent.cb_Type.Text == "Schedule" ? 1 : 2,
+                    last_instance_id                = 0,
+                    type_name                       = parent.cb_Type.Text,
+                    name                            = ln,
+                    executable_name                 = parent.tb_Executable.Text,
+                    max_try_count                   = Int32.Parse(parent.tb_MaxAttempts.Text),
+                    delay_seconds                   = Int32.Parse(parent.tb_DelaySecs.Text),
+                    latency_alert_seconds           = Int32.Parse(parent.tb_LatencyAlert.Text),
+                    notifiactions_list              = parent.tb_Notifications.Text,
+                    is_failed                       = false,
+                    is_active                       = parent.tb_isActive.Text == "YES" ? true : false,
+                    is_paused                       = parent.tb_IsPaused.Text == "YES" ? true : false,
+                    checkpoint_type                 = parent.cb_CheckppointType.SelectedIndex == 0 ? 1 : 2,
+                    data_chceckpoint                = parent.cb_CheckppointType.SelectedIndex == 0 ? (long?)Int64.Parse(parent.tb_Checkpoint.Text) : null,
+                    time_checkpoint                 = parent.cb_CheckppointType.SelectedIndex == 1 ? (DateTime?)DateTime.Parse(parent.tb_Checkpoint.Text) : null
                 };
             } catch (System.FormatException e) {
                 MessageBox.Show("Please make sure that #Max Attempts,Latency Alert Seconds and Delay Seconds are valid numbers.");
@@ -262,7 +297,9 @@ namespace ETL_System {
                     is_failed = false,
                     is_active = parent.tb_isActive.Text == "YES" ? true : false,
                     is_paused = parent.tb_IsPaused.Text == "YES" ? true : false,
-
+                    checkpoint_type         = parent.cb_CheckppointType.SelectedIndex == 0 ? 1 : 2,
+                    data_chceckpoint        = parent.cb_CheckppointType.SelectedIndex == 0 ? (long?)Int64.Parse(parent.tb_Checkpoint.Text) : null,
+                    time_checkpoint         = parent.cb_CheckppointType.SelectedIndex == 1 ? (DateTime?)DateTime.Parse(parent.tb_Checkpoint.Text) : null
                 };
             }
             catch (System.FormatException e) {

@@ -102,6 +102,7 @@ Andrei Gurguta]]></comment>
 			<column name="is_failed" type="int" jt="4" />
 			<column name="is_active" type="bit" jt="-7" />
 			<column name="is_paused" type="bit" jt="-7" />
+			<column name="checkpoint_type" type="int" jt="4" />
 			<index name="Pk_Jobs_job_id" unique="PRIMARY_KEY" >
 				<column name="job_id" />
 			</index>
@@ -147,9 +148,9 @@ Andrei Gurguta]]></comment>
 		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="615" y="225" />
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
-		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
 		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="375" y="720" />
 		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="345" y="570" />
 		<entity schema="ETL_System" name="User" color="c1d8ee" x="660" y="510" />
+		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
 	</layout>
 </project>

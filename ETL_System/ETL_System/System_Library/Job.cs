@@ -24,10 +24,12 @@ namespace ETL_System{
         public bool      is_failed;
         public bool      is_active;
         public bool      is_paused;
+        public int       checkpoint_type;
 
         public string   type_name;
         public bool     is_executing;
         public bool     is_queued;
+        
         
         public Dictionary<int, Schedule> schedules;
         public Dictionary<int, Dependency> dependencies;
