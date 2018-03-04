@@ -7,6 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
+using Microsoft.Msagl.Drawing;
+using Microsoft.Msagl.GraphViewerGdi;
+using Microsoft.Msagl.Core.Layout;
+using Microsoft.Msagl.Core.Geometry;
 
 namespace ETL_System {
     public static class ExtensionMethods {
@@ -99,7 +103,105 @@ namespace ETL_System {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
             }
         }   
-         
+
+        public DataTable requestDependencyCatalogue() {
+            Message m = new Message();
+            m.msg_type = MsgTypes.REQUEST_DEPENDENCY_CATALOGUE;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            DependencyCatalogueDisplay c;
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    c = (DependencyCatalogueDisplay)r.attachement;                                        
+                    this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
+                    return c.data;
+                }else {
+                    MessageBox.Show(r.body);
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
+            }
+            return null;
+        }
+
+        public void rederDependencyGraphView(string selected_item) {
+            DataTable local_table = this.requestDependencyCatalogue();
+            Graph graph = new Graph("graph");
+            graph.Directed = true;
+            graph.Attr.LayerDirection = LayerDirection.LR;
+            string selected_job_name;
+            int selected_job_id = 0;
+            
+
+            //1.Get the id of the selected job in lv_jobs
+            //selected_job_name = parent.lv_JobsList.SelectedItems[0].Text;
+            selected_job_name = selected_item;
+            foreach (int key in ClientManager.jobs.Keys)
+                if (jobs[key] == selected_job_name) {
+                    selected_job_id = key;
+                    break;
+            }
+
+            if(parent.cb_RenderType.Text == "All") {
+                leftRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+                rightRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+            }
+
+            if (parent.cb_RenderType.Text == "Only Left") {
+                leftRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);                
+            }
+
+            if (parent.cb_RenderType.Text == "Only Right") {             
+                rightRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+            }
+
+            parent.gViewer.Graph = graph;
+        }
+
+        private void leftRecursiveScanAndRender (DataTable tbl, int job_id, int this_depth,int max_depth,GViewer gViewer, Graph graph) {
+            DataRow[] rows = tbl.Select($"job_id = '{job_id}'");
+            string right_name = jobs[job_id];
+            string left_name;
+            
+            //anchor:
+            if (rows.Length < 1 || this_depth >= max_depth)
+                return;
+
+            //base set;
+            this_depth++;
+
+
+            for (int i = 0;i< rows.Length; i++) {
+                left_name = jobs[(int)rows[i]["depending_job_id"]];
+                graph.AddEdge(left_name,right_name);                
+                leftRecursiveScanAndRender(tbl, (int)rows[i]["depending_job_id"], this_depth, max_depth, gViewer, graph);
+            }
+        }
+
+        private void rightRecursiveScanAndRender(DataTable tbl, int job_id, int this_depth, int max_depth, GViewer gViewer, Graph graph) {
+            DataRow[] rows = tbl.Select($"depending_job_id = '{job_id}'");
+            string right_name;
+            string left_name = jobs[job_id];
+            int target_job_id;
+
+            //anchor:
+            if (rows.Length < 1 || this_depth >= max_depth)
+                return;
+
+            //base set;
+            this_depth++;
+
+
+            for (int i = 0; i < rows.Length; i++) {
+                target_job_id = (int)rows[i]["job_id"];
+                right_name = jobs[target_job_id];
+                graph.AddEdge( left_name,right_name);                
+                rightRecursiveScanAndRender(tbl, target_job_id, this_depth, max_depth, gViewer, graph);
+            }
+        }
+
         public void refreshTasksListRoutine(Dictionary<int, string> jobs) {
             if (jobs != null) {
                 if (parent.lv_JobsList.SelectedItems.Count > 0) {                
@@ -124,6 +226,7 @@ namespace ETL_System {
                         }                
             }
         }
+
         public void cleanSchedules() {
             parent.lv_Schedules.Items.Clear();
 
@@ -202,6 +305,7 @@ namespace ETL_System {
             }           
 
         }
+
         public void createJob() {
             //1.first check to see that job is not in the view
             string ln = parent.tb_Name.Text;
@@ -595,6 +699,8 @@ namespace ETL_System {
             }
 
         }
+
+
      
 
         //---------------------------------------Static------------------------------------------------

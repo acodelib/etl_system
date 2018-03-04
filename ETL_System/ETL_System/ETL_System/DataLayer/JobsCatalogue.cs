@@ -219,5 +219,9 @@ namespace ETL_System {
                 jobs_list.Add(j.job_id,j.name);
             return jobs_list;
         }
+        public DataTable produceDependencyDisplay() {
+            DataTable view = this.data_layer.getDependencyDisplay();
+            return view;
+        }
     }
 }

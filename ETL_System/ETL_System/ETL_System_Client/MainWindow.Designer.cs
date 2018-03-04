@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Microsoft.Msagl.GraphViewerGdi;
 
 namespace ETL_System {
     partial class MainWindow {
@@ -104,6 +105,12 @@ namespace ETL_System {
             this.dgv_Catalogue = new System.Windows.Forms.DataGridView();
             this.tp_Queue = new System.Windows.Forms.TabPage();
             this.tp_Graph = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.cb_RenderType = new System.Windows.Forms.ComboBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.nud_Depth = new System.Windows.Forms.NumericUpDown();
+            this.label21 = new System.Windows.Forms.Label();
+            this.gViewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             this.tp_Admin = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lv_JobsList = new System.Windows.Forms.ListView();
@@ -138,6 +145,9 @@ namespace ETL_System {
             this.groupBox6.SuspendLayout();
             this.tp_Catalogue.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).BeginInit();
+            this.tp_Graph.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_Depth)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -953,6 +963,8 @@ namespace ETL_System {
             // 
             // tp_Graph
             // 
+            this.tp_Graph.Controls.Add(this.groupBox7);
+            this.tp_Graph.Controls.Add(this.gViewer);
             this.tp_Graph.Location = new System.Drawing.Point(4, 25);
             this.tp_Graph.Name = "tp_Graph";
             this.tp_Graph.Padding = new System.Windows.Forms.Padding(3);
@@ -960,6 +972,120 @@ namespace ETL_System {
             this.tp_Graph.TabIndex = 3;
             this.tp_Graph.Text = "Dependency Graph";
             this.tp_Graph.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox7.Controls.Add(this.cb_RenderType);
+            this.groupBox7.Controls.Add(this.label22);
+            this.groupBox7.Controls.Add(this.nud_Depth);
+            this.groupBox7.Controls.Add(this.label21);
+            this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.groupBox7.Location = new System.Drawing.Point(7, 6);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(99, 696);
+            this.groupBox7.TabIndex = 4;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "View Settings";
+            // 
+            // cb_RenderType
+            // 
+            this.cb_RenderType.FormattingEnabled = true;
+            this.cb_RenderType.Items.AddRange(new object[] {
+            "All",
+            "Only Left",
+            "Only Right"});
+            this.cb_RenderType.Location = new System.Drawing.Point(6, 60);
+            this.cb_RenderType.Name = "cb_RenderType";
+            this.cb_RenderType.Size = new System.Drawing.Size(84, 23);
+            this.cb_RenderType.TabIndex = 1;
+            this.cb_RenderType.SelectedIndex = 0;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label22.Location = new System.Drawing.Point(6, 105);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(43, 15);
+            this.label22.TabIndex = 5;
+            this.label22.Text = "Depth:";
+            // 
+            // nud_Depth
+            // 
+            this.nud_Depth.Location = new System.Drawing.Point(6, 130);
+            this.nud_Depth.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.nud_Depth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nud_Depth.Name = "nud_Depth";
+            this.nud_Depth.Size = new System.Drawing.Size(81, 21);
+            this.nud_Depth.TabIndex = 4;
+            this.nud_Depth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(3, 39);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(76, 15);
+            this.label21.TabIndex = 3;
+            this.label21.Text = "Render type:";
+            // 
+            // gViewer
+            // 
+            this.gViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gViewer.ArrowheadLength = 10D;
+            this.gViewer.AsyncLayout = false;
+            this.gViewer.AutoScroll = true;
+            this.gViewer.BackColor = System.Drawing.Color.White;
+            this.gViewer.BackwardEnabled = false;
+            this.gViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.gViewer.BuildHitTree = true;
+            this.gViewer.CurrentLayoutMethod = Microsoft.Msagl.GraphViewerGdi.LayoutMethod.UseSettingsOfTheGraph;
+            this.gViewer.EdgeInsertButtonVisible = true;
+            this.gViewer.FileName = "";
+            this.gViewer.ForwardEnabled = false;
+            this.gViewer.Graph = null;
+            this.gViewer.InsertingEdge = false;
+            this.gViewer.LayoutAlgorithmSettingsButtonVisible = true;
+            this.gViewer.LayoutEditingEnabled = true;
+            this.gViewer.Location = new System.Drawing.Point(112, 6);
+            this.gViewer.LooseOffsetForRouting = 0.25D;
+            this.gViewer.MouseHitDistance = 0.05D;
+            this.gViewer.Name = "gViewer";
+            this.gViewer.NavigationVisible = true;
+            this.gViewer.NeedToCalculateLayout = true;
+            this.gViewer.OffsetForRelaxingInRouting = 0.6D;
+            this.gViewer.PaddingForEdgeRouting = 8D;
+            this.gViewer.PanButtonPressed = false;
+            this.gViewer.SaveAsImageEnabled = true;
+            this.gViewer.SaveAsMsaglEnabled = true;
+            this.gViewer.SaveButtonVisible = true;
+            this.gViewer.SaveGraphButtonVisible = true;
+            this.gViewer.SaveInVectorFormatEnabled = true;
+            this.gViewer.Size = new System.Drawing.Size(948, 696);
+            this.gViewer.TabIndex = 3;
+            this.gViewer.TightOffsetForRouting = 0.125D;
+            this.gViewer.ToolBarIsVisible = true;
+            this.gViewer.Transform = ((Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation)(resources.GetObject("gViewer.Transform")));
+            this.gViewer.UndoRedoButtonsVisible = true;
+            this.gViewer.WindowZoomButtonPressed = false;
+            this.gViewer.ZoomF = 1D;
+            this.gViewer.ZoomWindowThreshold = 0.05D;
             // 
             // tp_Admin
             // 
@@ -1163,6 +1289,10 @@ namespace ETL_System {
             this.groupBox6.PerformLayout();
             this.tp_Catalogue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).EndInit();
+            this.tp_Graph.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_Depth)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.menuStrip.ResumeLayout(false);
@@ -1268,6 +1398,12 @@ namespace ETL_System {
         public ComboBox cb_DepTypes;
         public ComboBox cb_CheckppointType;
         public Label label20;
+        public GViewer gViewer;
+        public GroupBox groupBox7;
+        public ComboBox cb_RenderType;
+        public Label label22;
+        public NumericUpDown nud_Depth;
+        public Label label21;
     }
 }
 

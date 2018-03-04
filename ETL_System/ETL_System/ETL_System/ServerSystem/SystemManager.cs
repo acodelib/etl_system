@@ -383,7 +383,22 @@ namespace ETL_System {
                         outcome.msg_type = MsgTypes.REPLY_FAIL;
                         outcome.body = $"Failed to retrieve Job. Original system message: {e.Message}";
                         return outcome;
-                    }                    
+                    }
+                case MsgTypes.REQUEST_DEPENDENCY_CATALOGUE:
+                    try {
+                        //>>>>>>>> HERE TO ADD SYS_CHANGE_ID comparison <<<<<
+                        MsgAttachment att = new DependencyCatalogueDisplay(this.jobs_catalogue.sys_change_id, this.jobs_catalogue.produceDependencyDisplay());
+                        outcome.attachement = att;
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to retrieve Dependency Catalogue. Original system message: {e.Message}";
+                        return outcome;
+                    }
                 default:
                     outcome.msg_type = MsgTypes.REPLY_FAIL;
                     outcome.body = $"Unknown COMMAND TYPE";

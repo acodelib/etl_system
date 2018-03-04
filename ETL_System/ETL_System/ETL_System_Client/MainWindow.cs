@@ -202,6 +202,19 @@ namespace ETL_System
                 //3.load etl definitin in ETL tabl
                 manager.initETLJobDefinitionTab();                               
             }
+            
+            if(tc_Main.SelectedTab == tp_Graph) {
+                //1.check for unfocused selection
+                if (lv_JobsList.SelectedItems.Count == 0)
+                    return;
+                //2.escape in selection cycle
+                if (this.lv_Jobs_selection_cycle == "Xexit") {
+                    this.lv_Jobs_selection_cycle = "Xstarted";
+                    return;
+                }
+                //load graph view
+                manager.rederDependencyGraphView(lv_JobsList.SelectedItems[0].Text);
+            }
         }
 
         private void button1_Click_1(object sender, EventArgs e) {

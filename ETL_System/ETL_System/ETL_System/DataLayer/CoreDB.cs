@@ -449,11 +449,20 @@ namespace ETL_System {
             fill_query = "Select * from ETL_System.dbo.JobsCatalogueDisplay";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
                 DataSet ds = new DataSet();
-                db_adapter.Fill(ds = new DataSet(), "JobsView");
-                //ds.Tables["JobsView"].Columns.Add("State", typeof(string));                
+                db_adapter.Fill(ds = new DataSet(), "JobsView");                
                 return ds.Tables["JobsView"];
             }    
             
+        }
+
+        public DataTable getDependencyDisplay() {
+            string fill_query;
+            fill_query = "SELECT jd.*,j.data_chceckpoint,j.time_checkpoint,j.is_active,j.is_failed,j.is_paused FROM ETL_System.dbo.JobDependency jd JOIN ETL_System.dbo.Jobs j on j.job_id = jd.depending_job_id";
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
+                DataSet ds = new DataSet();
+                db_adapter.Fill(ds = new DataSet(), "DependencyCatalogue");                
+                return ds.Tables["DependencyCatalogue"];
+            }
         }
 
         public DataRow validateUserLineExists(string user, string pass) {
