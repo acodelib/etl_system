@@ -1000,7 +1000,7 @@ namespace ETL_System {
             this.cb_RenderType.Name = "cb_RenderType";
             this.cb_RenderType.Size = new System.Drawing.Size(84, 23);
             this.cb_RenderType.TabIndex = 1;
-            this.cb_RenderType.SelectedIndex = 0;
+            this.cb_RenderType.SelectedIndexChanged += new System.EventHandler(this.cb_RenderType_SelectedIndexChanged);
             // 
             // label22
             // 
@@ -1033,6 +1033,7 @@ namespace ETL_System {
             0,
             0,
             0});
+            this.nud_Depth.ValueChanged += new System.EventHandler(this.nud_Depth_ValueChanged);
             // 
             // label21
             // 

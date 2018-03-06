@@ -143,21 +143,24 @@ namespace ETL_System {
                     selected_job_id = key;
                     break;
             }
+            try {
+                if (parent.cb_RenderType.Text == "All") {
+                    leftRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+                    rightRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+                }
 
-            if(parent.cb_RenderType.Text == "All") {
-                leftRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
-                rightRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+                if (parent.cb_RenderType.Text == "Only Left") {
+                    leftRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+                }
+
+                if (parent.cb_RenderType.Text == "Only Right") {
+                    rightRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
+                }
+
+                parent.gViewer.Graph = graph;
+            }catch(Exception e) {
+                MessageBox.Show($"The system encoutered a problem. Original system error:{e.Message}");
             }
-
-            if (parent.cb_RenderType.Text == "Only Left") {
-                leftRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);                
-            }
-
-            if (parent.cb_RenderType.Text == "Only Right") {             
-                rightRecursiveScanAndRender(local_table, selected_job_id, 0, Int32.Parse(parent.nud_Depth.Value.ToString()), parent.gViewer, graph);
-            }
-
-            parent.gViewer.Graph = graph;
         }
 
         private void leftRecursiveScanAndRender (DataTable tbl, int job_id, int this_depth,int max_depth,GViewer gViewer, Graph graph) {

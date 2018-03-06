@@ -15,10 +15,13 @@ namespace ETL_System
     {
         public ClientManager manager;
         public string lv_Jobs_selection_cycle;
+        public string lv_Jobs_selected_text;
 
         public MainWindow() {
             InitializeComponent();
             this.lv_Jobs_selection_cycle = "Xstarted";
+            this.lv_Jobs_selected_text = "";
+            
             //some hose keeping
             foreach (Control c in tc_Job.Controls) {
                 if (c.Name != "tp_Definition")
@@ -72,7 +75,10 @@ namespace ETL_System
             if (tc_Main.SelectedTab == tp_Catalogue) {
                 if (ClientManager.login_active) {
                     manager.requestCatalogue();
-                }
+                }            
+            }
+            if(tc_Main.SelectedTab == tp_Graph) {
+                this.cb_RenderType.SelectedIndex = 0;
             }
         }
 
@@ -189,31 +195,27 @@ namespace ETL_System
         }
 
         private void lv_JobsList_SelectedIndexChanged_1(object sender, EventArgs e) {
-            if (tc_Main.SelectedTab == tabPage1) {
+            //1.check for unfocused selection
+            if (lv_JobsList.SelectedItems.Count == 0)
+                return;
+            //2.escape in selection cycle
+            if (this.lv_Jobs_selection_cycle == "Xexit") {
+                this.lv_Jobs_selection_cycle = "Xstarted";
+                return;
+            }
 
-                //1.check for unfocused selection
-                if (lv_JobsList.SelectedItems.Count == 0) 
-                    return;
-                //2.escape in selection cycle
-                if(this.lv_Jobs_selection_cycle == "Xexit") {
-                    this.lv_Jobs_selection_cycle = "Xstarted";
-                    return;
-                }                                
-                //3.load etl definitin in ETL tabl
+            //3.keep the data
+            this.lv_Jobs_selected_text = lv_JobsList.SelectedItems[0].Text;
+
+            //4.React
+            if (tc_Main.SelectedTab == tabPage1) {           
+                //ETL details tabl
                 manager.initETLJobDefinitionTab();                               
             }
             
-            if(tc_Main.SelectedTab == tp_Graph) {
-                //1.check for unfocused selection
-                if (lv_JobsList.SelectedItems.Count == 0)
-                    return;
-                //2.escape in selection cycle
-                if (this.lv_Jobs_selection_cycle == "Xexit") {
-                    this.lv_Jobs_selection_cycle = "Xstarted";
-                    return;
-                }
+            if(tc_Main.SelectedTab == tp_Graph) {              
                 //load graph view
-                manager.rederDependencyGraphView(lv_JobsList.SelectedItems[0].Text);
+                manager.rederDependencyGraphView(this.lv_Jobs_selected_text);
             }
         }
 
@@ -231,6 +233,16 @@ namespace ETL_System
 
         private void cb_CheckppointType_SelectedIndexChanged(object sender, EventArgs e) {
 
+        }
+
+        private void cb_RenderType_SelectedIndexChanged(object sender, EventArgs e) {
+            if (this.lv_Jobs_selected_text != "" && this.lv_Jobs_selected_text != null)
+                manager.rederDependencyGraphView(this.lv_Jobs_selected_text);
+        }
+
+        private void nud_Depth_ValueChanged(object sender, EventArgs e) {
+            if (this.lv_Jobs_selected_text != "" && this.lv_Jobs_selected_text != null)
+                manager.rederDependencyGraphView(this.lv_Jobs_selected_text);
         }
     }
 }

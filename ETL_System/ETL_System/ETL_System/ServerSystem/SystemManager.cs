@@ -63,7 +63,7 @@ namespace ETL_System {
                     LogManager.writeStartEvent("Jobs Catalogue is initialised", this._path_to_log);
 
                     this.jobs_queue         = new JobsQueue();
-//                    Console.WriteLine("Jobs Queue is initialised");
+                    Console.WriteLine("Jobs Queue is initialised, STARTED successfully");
                     LogManager.writeStartEvent("Jobs Queue is initialised", this._path_to_log);
                     this.queue_manager      = new QueueManager(jobs_catalogue, jobs_queue, 10);
                     this.session_manager    = new SessionManager(this.data_layer);
