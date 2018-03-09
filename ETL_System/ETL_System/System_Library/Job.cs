@@ -77,7 +77,7 @@ namespace ETL_System{
     }
 
     [Serializable]
-    public struct Schedule {
+    public class Schedule {
         public int? job_schedule_id;
         public int? job_id;
         public int? schedule_type_id;

@@ -11,7 +11,9 @@ namespace ETL_System {
         private Dictionary<int, Job> queued;
         private System.Object _locker = new System.Object();
         //=====================================CONSTRUCTORS
-
+        public JobsQueue() {
+            this.queued = new Dictionary<int, Job>();
+        }
 
         //=====================================METHODS
         public void enqueueJob(Job job) {            
@@ -41,6 +43,7 @@ namespace ETL_System {
             return null;
         }
         
+
     }
 
 

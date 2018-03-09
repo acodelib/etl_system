@@ -286,6 +286,21 @@ namespace ETL_System {
                 
         }
 
+        public void updateNextExecution(int schedule_id, DateTime next_execution) {
+            DataRow r;
+            lock (_locker) {
+                r = etl_database.Tables["JobSchedules"].Select($"job_schedule_id = {schedule_id}")[0];
+
+                r["next_execution"] = next_execution;
+
+                using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.JobSchedules", SystemSharedData.app_db_connstring)) {
+                    var builder = new SqlCommandBuilder(db_adapter);
+                    DataRow[] target = { r };
+                    db_adapter.Update(target);
+                }
+            }
+        }
+
         public Dictionary<int,Schedule> addSingleScheduleToJob(Job j,User changer, bool record_system_change = true) {
             DataRow r;
             Schedule sch = j.schedules[0];
@@ -323,8 +338,7 @@ namespace ETL_System {
                 });
             }
             return s;
-        }
-        
+        }        
       
         public Dictionary<int, Schedule> removeSchedulesFromJob(Job j, User changer, bool record_system_change = true) {
             List<DataRow> deleted_rows = new List<DataRow>();

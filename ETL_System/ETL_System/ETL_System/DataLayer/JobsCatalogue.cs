@@ -59,7 +59,7 @@ namespace ETL_System {
         public string deleteJob(string job_name,User changer) {
             lock (_locker) {
                 if (!jobs_collection.ContainsKey(job_name) || jobs_collection[job_name].is_queued)
-                    return "Can't remove job. Job either doesn't exists or is executing.";
+                    throw new Exception( "Can't remove job. Job either doesn't exists or is executing.");
                 this.jobs_collection.Remove(job_name);
             }
             this.data_layer.deleteJob(job_name,changer); // change audit not implemented currently for delete           
@@ -75,7 +75,7 @@ namespace ETL_System {
                 foreach (var k in jobs_collection.Values) {
                     if (k.job_id == target_job.job_id) {
                         if (k.is_queued)
-                            return "Can't change job, it is executing or about to execute!";
+                            throw new Exception("Can't remove job. Job either doesn't exists or is executing.");
                         searcher = true;
                         named_changed = k.name;
                         break;
@@ -201,6 +201,18 @@ namespace ETL_System {
         private int refreshJobsCollection() {
             data_layer.fillJobsCollection(this.jobs_collection);
             return 1;
+        }
+
+        public void jobUpdateCheckpoint(string job_name, long data_checkpoint, DateTime time_checkpoint) {
+        }
+
+        public void jobUpdateNextExecution(string job_name,int schedule_id, DateTime next_execution) {
+            Schedule s;
+            //lock (_locker) {
+                s = jobs_collection[job_name].schedules[schedule_id];
+                s.next_execution = next_execution;
+                this.data_layer.updateNextExecution(schedule_id, next_execution);
+            //}
         }
 
         public DataTable produceDisplay() {              

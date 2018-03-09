@@ -37,7 +37,7 @@ namespace ETL_System
 
             //User u = etl_system_manager.session_manager.validateLogin(m);
             string p = "fff";
-            //etl_system_manager.startQueueing();
+            etl_system_manager.startQueueing();
             /*
             User u = new User { user_id = 1, login = "admin" };
             etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_bobo", u);

@@ -79,7 +79,9 @@ namespace ETL_System {
             }
             return null;
         }
-        public void pauseQueue() { }
+        public void pauseQueue() {
+
+        }
         public string startQueueing() {
             SystemSharedData.catalogue_scan_flag = true;
             this.queue_manager.startWork();
