@@ -104,6 +104,7 @@ namespace ETL_System {
             this.tp_Catalogue = new System.Windows.Forms.TabPage();
             this.dgv_Catalogue = new System.Windows.Forms.DataGridView();
             this.tp_Queue = new System.Windows.Forms.TabPage();
+            this.dgv_Queue = new System.Windows.Forms.DataGridView();
             this.tp_Graph = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.cb_RenderType = new System.Windows.Forms.ComboBox();
@@ -145,6 +146,8 @@ namespace ETL_System {
             this.groupBox6.SuspendLayout();
             this.tp_Catalogue.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).BeginInit();
+            this.tp_Queue.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_Queue)).BeginInit();
             this.tp_Graph.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_Depth)).BeginInit();
@@ -952,6 +955,7 @@ namespace ETL_System {
             // 
             // tp_Queue
             // 
+            this.tp_Queue.Controls.Add(this.dgv_Queue);
             this.tp_Queue.Location = new System.Drawing.Point(4, 25);
             this.tp_Queue.Name = "tp_Queue";
             this.tp_Queue.Padding = new System.Windows.Forms.Padding(3);
@@ -960,6 +964,19 @@ namespace ETL_System {
             this.tp_Queue.Text = "Queue";
             this.tp_Queue.UseVisualStyleBackColor = true;
             this.tp_Queue.Click += new System.EventHandler(this.tp_Queue_Click);
+            // 
+            // dgv_Queue
+            // 
+            this.dgv_Queue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgv_Queue.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dgv_Queue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_Queue.GridColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dgv_Queue.Location = new System.Drawing.Point(161, 52);
+            this.dgv_Queue.Name = "dgv_Queue";
+            this.dgv_Queue.RowHeadersVisible = false;
+            this.dgv_Queue.Size = new System.Drawing.Size(711, 601);
+            this.dgv_Queue.TabIndex = 0;
             // 
             // tp_Graph
             // 
@@ -1290,6 +1307,8 @@ namespace ETL_System {
             this.groupBox6.PerformLayout();
             this.tp_Catalogue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).EndInit();
+            this.tp_Queue.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_Queue)).EndInit();
             this.tp_Graph.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
@@ -1405,6 +1424,7 @@ namespace ETL_System {
         public Label label22;
         public NumericUpDown nud_Depth;
         public Label label21;
+        public DataGridView dgv_Queue;
     }
 }
 

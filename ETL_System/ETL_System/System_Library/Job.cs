@@ -26,9 +26,10 @@ namespace ETL_System{
         public bool      is_paused;
         public int       checkpoint_type;
 
-        public string   type_name;
-        public bool     is_executing;
-        public bool     is_queued;
+        public string    type_name;
+        public bool      is_executing;
+        public DateTime? queue_timestamp;
+        public bool      is_queued;
         
         
         public Dictionary<int, Schedule> schedules;

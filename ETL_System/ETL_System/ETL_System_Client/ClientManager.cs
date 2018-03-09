@@ -100,9 +100,37 @@ namespace ETL_System {
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
             } catch (Exception e) {
-                MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
+                MessageBox.Show($"Problems while loading the Catalogue.\nOriginal system error:{e.Message}");
             }
         }   
+
+        public void requestQueue() {
+            Message m = new Message();
+            m.msg_type = MsgTypes.REQUEST_JOB_QUEUE_DISPLAY;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            JobsQueueDisplay c;
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    c = (JobsQueueDisplay)r.attachement;
+                    parent.dgv_Queue.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    t = c.data;
+
+                    //some performance optimisations:                    
+                    parent.dgv_Queue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                    parent.dgv_Queue.EditMode = DataGridViewEditMode.EditProgrammatically;
+                    parent.dgv_Queue.EnableHeadersVisualStyles = false;
+                    parent.dgv_Queue.DoubleBuffered(true);
+
+                    parent.dgv_Queue.DataSource = t;
+                    this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Problems while loading the Queue.\nOriginal system error:{e.Message}");
+            }
+        }
 
         public DataTable requestDependencyCatalogue() {
             Message m = new Message();

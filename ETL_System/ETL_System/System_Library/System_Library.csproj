@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DependencyCatalogueDisplay.cs" />
     <Compile Include="JobsCatalogueDisplay.cs" />
+    <Compile Include="JobsQueueDisplay.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="MsgAttachment.cs" />

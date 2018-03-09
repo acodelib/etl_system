@@ -208,11 +208,11 @@ namespace ETL_System {
 
         public void jobUpdateNextExecution(string job_name,int schedule_id, DateTime next_execution) {
             Schedule s;
-            //lock (_locker) {
+            lock (_locker) {
                 s = jobs_collection[job_name].schedules[schedule_id];
                 s.next_execution = next_execution;
                 this.data_layer.updateNextExecution(schedule_id, next_execution);
-            //}
+            }
         }
 
         public DataTable produceDisplay() {              

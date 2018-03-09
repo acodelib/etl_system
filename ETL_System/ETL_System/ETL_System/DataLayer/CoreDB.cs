@@ -101,26 +101,26 @@ namespace ETL_System {
             try {
                 foreach (DataRow r in jobs.Rows) {
                     Job j = new Job() {
-                        job_id = (int)r["job_id"],
-                        last_instance_id = (int)r["last_instance_id"],
-                        job_type_id = (int)r["job_type_id"],
-                        last_instance_timestamp = (DateTime?)(r["last_instance_timestamp"] == DBNull.Value ? null : r["last_instance_timestamp"]),
-                        name = (string)r["name"],
-                        executable_name = (string)r["executable_name"],
-                        max_try_count = (int)r["max_try_count"],
-                        current_failed_count = (int)r["current_failed_count"],
-                        is_failed = (bool)r["is_failed"],
-                        delay_seconds = (int)r["delay_seconds"],
-                        latency_alert_seconds = (int)r["latency_alert_seconds"],
-                        data_chceckpoint = (long?)(r["data_chceckpoint"] == DBNull.Value ? null : r["data_chceckpoint"]),
-                        time_checkpoint = (DateTime?)(r["time_checkpoint"] == DBNull.Value ? null : r["time_checkpoint"]),
-                        notifiactions_list = (string)r["notifications_list"],
-                        type_name = job_types.Select($"job_type_id = {(int)r["job_type_id"]}").Count() > 0 ? (string)job_types.Select($"job_type_id = {(int)r["job_type_id"]}")[0]["type_name"] : null,
-                        is_executing = false,
-                        is_queued = false,
-                        is_active = (bool)r["is_active"],
-                        is_paused = (bool)r["is_paused"],
-                        checkpoint_type = (int)r["checkpoint_type"]
+                        job_id                      = (int)r["job_id"],
+                        last_instance_id            = (int)r["last_instance_id"],
+                        job_type_id                 = (int)r["job_type_id"],
+                        last_instance_timestamp     = (DateTime?)(r["last_instance_timestamp"] == DBNull.Value ? null : r["last_instance_timestamp"]),
+                        name                        = (string)r["name"],
+                        executable_name             = (string)r["executable_name"],
+                        max_try_count               = (int)r["max_try_count"],
+                        current_failed_count        = (int)r["current_failed_count"],
+                        is_failed                   = (bool)r["is_failed"],
+                        delay_seconds               = (int)r["delay_seconds"],
+                        latency_alert_seconds       = (int)r["latency_alert_seconds"],
+                        data_chceckpoint            = (long?)(r["data_chceckpoint"] == DBNull.Value ? null : r["data_chceckpoint"]),
+                        time_checkpoint             = (DateTime?)(r["time_checkpoint"] == DBNull.Value ? null : r["time_checkpoint"]),
+                        notifiactions_list          = (string)r["notifications_list"],
+                        type_name                   = job_types.Select($"job_type_id = {(int)r["job_type_id"]}").Count() > 0 ? (string)job_types.Select($"job_type_id = {(int)r["job_type_id"]}")[0]["type_name"] : null,
+                        is_executing                = false,
+                        is_queued                   = false,
+                        is_active                   = (bool)r["is_active"],
+                        is_paused                   = (bool)r["is_paused"],
+                        checkpoint_type             = (int)r["checkpoint_type"]
                     };
 
                     //add Dependencies

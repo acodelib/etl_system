@@ -80,6 +80,9 @@ namespace ETL_System
             if(tc_Main.SelectedTab == tp_Graph) {
                 this.cb_RenderType.SelectedIndex = 0;
             }
+            if(tc_Main.SelectedTab == tp_Queue) {
+                manager.requestQueue();
+            }
         }
 
         private void tc_Job_Selected(object sender, EventArgs e) {

@@ -42,6 +42,7 @@ namespace ETL_System{
                                         if (DateTime.Now >= local_dt_operator.AddSeconds(-5) && DateTime.Now <= local_dt_operator.AddSeconds(SystemSharedData.schedule_types[s.schedule_type_id].execution_window_seconds)) {
                                             //2.add to queue
                                             this.queue.enqueueJob(j);
+                                            j.queue_timestamp = DateTime.Now;
                                             local_dt_operator = local_dt_operator.AddSeconds(SystemSharedData.schedule_types[s.schedule_type_id].frequency_seconds);
                                             catalogue.jobUpdateNextExecution(j.name, s.job_schedule_id ?? 0, local_dt_operator);
                                         }
