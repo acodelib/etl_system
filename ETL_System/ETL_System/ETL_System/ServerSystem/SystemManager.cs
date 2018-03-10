@@ -18,12 +18,14 @@ namespace ETL_System {
         public string path_to_log { get { return _path_to_log; } }
         public string path_to_config { get { return _path_to_config; } }
 
-        public JobsCatalogue    jobs_catalogue;
-        public CoreDB           data_layer;
-        public QueueManager     queue_manager;
-        public JobsQueue        jobs_queue;
-        public SessionManager   session_manager;
-        public CommsManager     the_msg_handler;
+        public JobsCatalogue        jobs_catalogue;
+        public CoreDB               data_layer;
+        public QueueManager         queue_manager;
+        public JobsQueue            jobs_queue;
+        public SessionManager       session_manager;
+        public CommsManager         the_msg_handler;
+        public WorkersController    workers_manager;
+        public NotificationsManager emailer;
 
 
         //==================================CONSTRUCTORS
@@ -68,6 +70,9 @@ namespace ETL_System {
                     LogManager.writeStartEvent("Jobs Queue is initialised", this._path_to_log);
                     this.queue_manager      = new QueueManager(jobs_catalogue, jobs_queue, 10);
                     this.session_manager    = new SessionManager(this.data_layer);
+                    this.emailer            = new NotificationsManager();
+                    this.workers_manager    = new WorkersController(2,8, jobs_queue, emailer);
+                    
                 }
                 //Launch the CommsManager                
                 this.the_msg_handler = new CommsManager(this,this.session_manager);
@@ -89,7 +94,11 @@ namespace ETL_System {
             Console.WriteLine("Queueing Service started OK.");
             return "Queueing Service started OK.";
         }
-
+        public void startETLWorkers() {
+            SystemSharedData.workers_start_flag = true;
+            this.workers_manager.startWorkers();
+            Console.WriteLine("Execution Engine started OK.");
+        }
                 ///////
         public string registerDBConnString(string conn_string, string file_path) {
             StringBuilder return_message = new StringBuilder();            

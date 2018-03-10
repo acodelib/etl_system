@@ -28,6 +28,8 @@ namespace ETL_System{
 
         public string    type_name;
         public bool      is_executing;
+        public DateTime? executing_timestamp;
+        public string    executor;
         public DateTime? queue_timestamp;
         public bool      is_queued;
         

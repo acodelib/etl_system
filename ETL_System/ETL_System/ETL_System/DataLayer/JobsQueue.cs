@@ -26,19 +26,21 @@ namespace ETL_System {
         }
 
         public void dequeueJob(int job_id) {
-            lock (_locker) {
-                this.queued.Remove(job_id);
+            lock (_locker) {                
                 this.queued[job_id].is_queued       = false;
                 this.queued[job_id].queue_timestamp = null;
+                this.queued.Remove(job_id);
             }
         }
 
-        public Job provideJobToRun() {            
-            foreach(int jid in this.queued.Keys) {
-                lock (_locker) {
-                    if (!this.queued[jid].is_executing) {
-                        this.queued[jid].is_executing = true;               
-                        return this.queued[jid];
+        public Job provideJobToRun() {
+            if (this.queued.Count > 0) {
+                foreach (int jid in this.queued.Keys) {
+                    lock (_locker) {
+                        if (!this.queued[jid].is_executing) {
+                            this.queued[jid].is_executing = true;
+                            return this.queued[jid];
+                        }
                     }
                 }
             }
@@ -51,9 +53,10 @@ namespace ETL_System {
 
             queue_display.Columns.Add("Job ID", typeof(Int32));
             queue_display.Columns.Add("Job Name", typeof(String));            
-            queue_display.Columns.Add("Queued @", typeof(DateTime));
+            queue_display.Columns.Add("Queued @", typeof(String));
             queue_display.Columns.Add("Status", typeof(String));
             queue_display.Columns.Add("Executing Since", typeof(string));
+            queue_display.Columns.Add("Executor Worker", typeof(string));
 
             foreach(Job j in this.queued.Values) {
                 DataRow r = queue_display.NewRow();
@@ -61,7 +64,8 @@ namespace ETL_System {
                 r["Job Name"] = j.name;
                 r["Queued @"] = j.queue_timestamp;
                 r["Status"] = j.is_executing ? "EXECUTING" : "QUEUED";
-                r["Executing Since"] = j.last_instance_timestamp;
+                r["Executing Since"] = j.executing_timestamp;
+                r["Executor Worker"] = j.executor;
                 queue_display.Rows.Add(r);
             }
             return queue_display;       

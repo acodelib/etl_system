@@ -4,9 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETL_System.JobsSystem
+namespace ETL_System
 {
-    class WorkersController
-    {
+    public class WorkersController {
+        public Dictionary<string, ETLWorker> workers;
+        public int work_force;
+
+        public WorkersController() { }
+
+        public WorkersController(int size,int run_frequency, JobsQueue queue, NotificationsManager mailer) {
+            workers = new Dictionary<string, ETLWorker>();
+            for(int i = 1;i<= size; i++) {
+                ETLWorker e = new ETLWorker(queue, mailer,run_frequency);
+                e.name = $"Worker_no_{i}";
+                workers.Add(e.name, e);
+            }
+        }
+
+        public void startWorkers() {
+            foreach(ETLWorker w in this.workers.Values) {
+                w.startExecutionRoutine();
+            }
+        }
+        
     }
 }
