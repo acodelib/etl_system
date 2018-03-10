@@ -110,19 +110,19 @@ namespace ETL_System {
                     var configs = new List<string>(lines);
                     if (configs != null) {
                         for(int i = 0; i< configs.Count; i++) {
-                            if (configs[i].IndexOf(":") > 0) {
-                                string[] key_val = configs[i].Split(':');
+                            if (configs[i].IndexOf("~") > 0) {
+                                string[] key_val = configs[i].Split('~');
                                 if (key_val[0] == "ConnectionString") {                                    
-                                    configs[i] = "ConnectionString:" + conn_string;
+                                    configs[i] = "ConnectionString~" + conn_string;
                                     found = true;
                                 }
                             }
                         }
                         if (!found)                            
-                           configs.Add( "ConnectionString:" + conn_string);
+                           configs.Add( "ConnectionString~" + conn_string);
                     }
                     else
-                        configs.Add("ConnectionString:" + conn_string);
+                        configs.Add("ConnectionString~" + conn_string);
 
                     //3.assign conn_string to file
                     using (StreamWriter file_writer = File.CreateText(path_to_work_with)) {
@@ -142,10 +142,11 @@ namespace ETL_System {
 
             string[] configs = File.ReadAllLines(path);
             for (int i=0;i<configs.Length;i++) {
-                string[] key_val = configs[i].Split(':');
-                if(key_val[0] == config_name)
-                conn_str = key_val[1] ;
-                break;
+                string[] key_val = configs[i].Split('~');
+                if (key_val[0] == config_name) {
+                    conn_str = key_val[1];
+                    break;
+                }
             }            
             return conn_str;
         }
@@ -170,19 +171,19 @@ namespace ETL_System {
                     var configs = new List<string>(lines);
                     if (configs != null) {
                         for (int i = 0; i < configs.Count; i++) {
-                            if (configs[i].IndexOf(":") > 0) {
-                                string[] key_val = configs[i].Split(':');
+                            if (configs[i].IndexOf("~") > 0) {
+                                string[] key_val = configs[i].Split('~');
                                 if (key_val[0] == config_name) {
-                                    configs[i] = config_name +":" + config_value;
+                                    configs[i] = config_name +"~" + config_value;
                                     found = true;
                                 }
                             }
                         }
                         if (!found)
-                            configs.Add(config_name + ":" + config_value);
+                            configs.Add(config_name + "~" + config_value);
                     }
                     else
-                        configs.Add(config_name + ":" + config_value);
+                        configs.Add(config_name + "~" + config_value);
 
                     //3.assign conn_string to file
                     using (StreamWriter file_writer = File.CreateText(path_to_work_with)) {

@@ -34,7 +34,7 @@ namespace UnitTest_ETLSystem {
             using (StreamReader file_reader = File.OpenText(target_file)) {
                 string input = null;
                 while ((input = file_reader.ReadLine()) != null) {
-                    Assert.AreEqual("ConnectionString:testing a connection string", input);
+                    Assert.AreEqual("ConnectionString~testing a connection string", input);
                 }
             }
 
