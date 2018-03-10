@@ -59,6 +59,7 @@ namespace ETL_System {
                     this.data_layer     = new CoreDB(SystemSharedData.app_db_connstring);
                     this.jobs_catalogue = new JobsCatalogue(this.data_layer);
                     SystemSharedData.initKeyGenerators();
+                    SystemSharedData.jobs_folder = this.readConfigFromFile(this._path_to_config, "ExecutionPath");
                     //Console.WriteLine("Jobs Catalogue is initialised");
                     LogManager.writeStartEvent("Jobs Catalogue is initialised", this._path_to_log);
 
@@ -200,6 +201,7 @@ namespace ETL_System {
         public void registerExecutionFolderToConfig(string path,string config_path) {
             string path_to_work_with = (config_path == null) ? this._path_to_config : config_path;
             this.addOrChangeConfigToFile("ExecutionPath", path, this.path_to_config);
+            SystemSharedData.jobs_folder = path;
         }
 
         public string deployDBScript (string db_creation_path = null,string db_deployment_path = null,string db_view_path = null) {

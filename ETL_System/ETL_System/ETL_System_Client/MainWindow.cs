@@ -94,7 +94,7 @@ namespace ETL_System
             if (tc_Job.SelectedTab == tp_Dependencies) {
                 cb_DepTypes.Items.Clear();
                 foreach (DependencyType s in ClientManager.dependency_types.Values)
-                    cb_DepTypes.Items.Add(s.name);
+                    cb_DepTypes.Items.Add(s.name);                
             }
         }
 

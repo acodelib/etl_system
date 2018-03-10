@@ -82,7 +82,7 @@ namespace ETL_System {
                     }
                 }
                 if (!(searcher || jobs_collection.ContainsKey(target_job.name)))
-                    return "Job doesn't exists.";                
+                    throw new Exception("Job doesn't exists.");                
 
                 //if integrity check passes then do updates:
                 this.jobs_collection.Remove(named_changed);
@@ -234,6 +234,9 @@ namespace ETL_System {
         public DataTable produceDependencyDisplay() {
             DataTable view = this.data_layer.getDependencyDisplay();
             return view;
+        }
+        public DataTable produceDependencyIndex() {
+            return this.data_layer.getDependencyIndex();
         }
     }
 }

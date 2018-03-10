@@ -124,7 +124,8 @@ namespace ETL_System {
                     };
 
                     //add Dependencies
-                    if (j.type_name == "Dependency" && etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
+                    //if (j.type_name == "Dependency" &&
+                    if(etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}").Count() > 0) {
                         Dictionary<int, Dependency> s = new Dictionary<int, Dependency>();
                         foreach (DataRow rw in etl_database.Tables["JobDependency"].Select($"job_id = {j.job_id}")) {
                             s.Add((int)rw["job_dependency_id"], new Dependency {
@@ -137,7 +138,8 @@ namespace ETL_System {
                         j.setDependencies(s);
                     }               
                     //add Schedules
-                    if (j.type_name == "Schedule" && etl_database.Tables["JobSchedules"].Select($"job_id = {j.job_id}").Count() > 0) {
+                    //if (j.type_name == "Schedule" &&
+                      if( etl_database.Tables["JobSchedules"].Select($"job_id = {j.job_id}").Count() > 0) {
                         Dictionary<int, Schedule> s = new Dictionary<int, Schedule>();
                         foreach (DataRow rw in etl_database.Tables["JobSchedules"].Select($"job_id = {j.job_id}")) {
                             s.Add((int)rw["job_schedule_id"], new Schedule {
@@ -485,6 +487,9 @@ namespace ETL_System {
             return null;            
         }
 
+        public DataTable getDependencyIndex() {
+            return this.etl_database.Tables["JobDependency"];
+        }
 
         //===================== HELPER METHODS
         public static string checkDBConnStringIsValid(string conn_string) {

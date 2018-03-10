@@ -972,10 +972,10 @@ namespace ETL_System {
             this.dgv_Queue.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgv_Queue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Queue.GridColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.dgv_Queue.Location = new System.Drawing.Point(161, 52);
+            this.dgv_Queue.Location = new System.Drawing.Point(22, 13);
             this.dgv_Queue.Name = "dgv_Queue";
             this.dgv_Queue.RowHeadersVisible = false;
-            this.dgv_Queue.Size = new System.Drawing.Size(711, 601);
+            this.dgv_Queue.Size = new System.Drawing.Size(857, 608);
             this.dgv_Queue.TabIndex = 0;
             // 
             // tp_Graph

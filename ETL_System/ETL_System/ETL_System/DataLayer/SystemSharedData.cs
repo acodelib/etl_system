@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 namespace ETL_System {
    public class SystemSharedData {       
            
-        public static string app_db_connstring;        
+        public static string app_db_connstring;
+        public static string jobs_folder;
+
         public static Dictionary<int?, ScheduleType> schedule_types;
         public static Dictionary<int?, DependencyType> dependency_types;
         public static Dictionary<int, string> user_roles;

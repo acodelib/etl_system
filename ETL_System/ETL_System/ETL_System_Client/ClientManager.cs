@@ -389,6 +389,8 @@ namespace ETL_System {
                     //5.refresh list view
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
+                else
+                    MessageBox.Show(r.body);
             }
             catch (Exception e) {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
@@ -453,6 +455,8 @@ namespace ETL_System {
                     //5.refresh list view
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
+                else
+                    MessageBox.Show(r.body);
             }
             catch (Exception e) {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
@@ -494,6 +498,8 @@ namespace ETL_System {
                     //5.refresh list view
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
+                else
+                    MessageBox.Show(r.body);
             }
             catch (Exception e) {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");

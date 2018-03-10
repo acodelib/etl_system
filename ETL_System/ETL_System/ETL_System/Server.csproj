@@ -50,11 +50,11 @@
     <Compile Include="DataLayer\JobsQueue.cs" />
     <Compile Include="DataLayer\SystemJob.cs" />
     <Compile Include="DataLayer\SystemSharedData.cs" />
+    <Compile Include="JobsSystem\ETLWorker.cs" />
     <Compile Include="JobsSystem\QueueController.cs" />
     <Compile Include="JobsSystem\WorkersController.cs" />
     <Compile Include="ServerSystem\CommsManager.cs" />
     <Compile Include="JobsSystem\NotificationsManager.cs" />
-    <Compile Include="ServerSystem\ETLWorker.cs" />
     <Compile Include="ServerSystem\LogManager.cs" />
     <Compile Include="ServerSystem\QueueManager.cs" />
     <Compile Include="ServerSystem\SessionManager.cs" />
