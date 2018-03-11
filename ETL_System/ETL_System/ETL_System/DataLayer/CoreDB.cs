@@ -238,9 +238,10 @@ namespace ETL_System {
             }
         }
 
-        public void updateJob(Job target_job,User changer) {
+        public Dictionary<int, object> updateJob(Job target_job,User changer) {
             DataTable job_types = etl_database.Tables["JobTypes"];
             DataRow r;
+            Dictionary<int, object> ret = new Dictionary<int, object>();
 
             object lit = null;  // care for nullable inserts
             object dc = null;
@@ -284,8 +285,43 @@ namespace ETL_System {
                 }
             }
             string sql = $"INSERT INTO ETL_System.dbo.JobChanges SELECT {target_job.sys_change_id},{target_job.job_id},{changer.user_id},'{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", target_job.last_job_change.change_timestamp)}'";
-            runCustomSQLCommand(sql, SystemSharedData.app_db_connstring);         
-                
+            runCustomSQLCommand(sql, SystemSharedData.app_db_connstring);
+
+            //3.now return a fresh copy of the schedules
+            Dictionary<int, Schedule> scd = new Dictionary<int, Schedule>();
+            etl_database.Tables["JobSchedules"].Reset();
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.JobSchedules", this.connection_string)) {
+                db_adapter.Fill(this.etl_database, "JobSchedules");
+            }
+            foreach (DataRow rw in etl_database.Tables["JobSchedules"].Select($"job_id = {target_job.job_id}")) {
+                scd.Add((int)rw["job_schedule_id"], new Schedule {
+                    job_schedule_id = (int)rw["job_schedule_id"],
+                    job_id = (int)rw["job_id"],
+                    schedule_type_id = (int)rw["schedule_type_id"],
+                    next_execution = (DateTime)rw["next_execution"]
+                });
+            }
+            ret.Add(1,scd);
+
+            //4. and a fresh copy of the schedules
+            Dictionary<int, Dependency> dep = new Dictionary<int, Dependency>();
+            etl_database.Tables["JobDependency"].Reset();
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.JobDependency", this.connection_string)) {
+                db_adapter.Fill(this.etl_database, "JobDependency");
+            }
+            foreach (DataRow rw in etl_database.Tables["JobDependency"].Select($"job_id = {target_job.job_id}")) {
+                dep.Add((int)rw["job_dependency_id"], new Dependency {
+                    job_dependency_id = (int)rw["job_dependency_id"],
+                    job_id = (int)rw["job_id"],
+                    dependency_type_id = (int)rw["dependency_type_id"],
+                    depending_job_id = (int)rw["depending_job_id"]
+                });
+            }
+            ret.Add(2,dep);
+
+            return ret;
+          
+
         }
 
         public void updateNextExecution(int schedule_id, DateTime next_execution) {
@@ -303,9 +339,10 @@ namespace ETL_System {
             }
         }
 
-        public Dictionary<int,Schedule> addSingleScheduleToJob(Job j,User changer, bool record_system_change = true) {
+        public Dictionary<int, Schedule> addSingleScheduleToJob(Job j,User changer, bool record_system_change = true) {
             DataRow r;
-            Schedule sch = j.schedules[0];
+            Schedule sch = j.schedules[0];          
+
             lock (_locker) {
                 r = etl_database.Tables["JobSchedules"].NewRow();
                // r["job_schedule_id"] = sch.job_schedule_id;
@@ -325,7 +362,7 @@ namespace ETL_System {
                 runCustomSQLCommand(sql, SystemSharedData.app_db_connstring);
             }
 
-            //now return a fresh copy of the schedules
+            //3.now return a fresh copy of the schedules
             Dictionary<int, Schedule> s = new Dictionary<int, Schedule>();
             etl_database.Tables["JobSchedules"].Reset();            
             using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.JobSchedules", this.connection_string)) {
@@ -489,6 +526,54 @@ namespace ETL_System {
 
         public DataTable getDependencyIndex() {
             return this.etl_database.Tables["JobDependency"];
+        }
+
+        public void recordJobInstance(Job j,bool outcome_success, JobInstance ji) {
+            int instance_id = SystemSharedData.getJobInstancesKey();
+
+            //1.Update Job
+            DataRow r;
+            lock (_locker) {
+                r = etl_database.Tables["Jobs"].Select($"job_id = {j.job_id}")[0];
+                if(j.checkpoint_type == 1 && outcome_success)
+                    r["data_chceckpoint"] = ji.new_data_checkpoint;
+                if (j.checkpoint_type == 2 && outcome_success)
+                    r["time_checkpoint"] = ji.new_time_checkpoint;
+
+                r["last_instance_timestamp"] = j.executing_timestamp;
+                r["current_failed_count"] = j.current_failed_count;
+                r["is_failed"] = j.is_failed;
+                r["is_paused"] = j.is_paused;
+
+                using (SqlDataAdapter db_adapter = new SqlDataAdapter("Select * from ETL_System.dbo.Jobs", SystemSharedData.app_db_connstring)) {
+                    var builder = new SqlCommandBuilder(db_adapter);
+                    DataRow[] target = { r };
+                    db_adapter.Update(target);
+                }
+            }
+            //2.write job instance -> better to do a Connected Layer aproach here rather than disconected since this will be potentially a big table; this prevents memmory overhead;
+            object odc = null;
+            object ndc = null;
+            if (ji.old_data_checkpoint == null) odc = "NULL"; // DBNull.Value;
+            else odc = ji.old_data_checkpoint;
+            if (ji.new_data_checkpoint == null) ndc = "NULL";//DBNull.Value;
+            else ndc = ji.new_data_checkpoint;
+
+            string insert_statement = $@"INSERT INTO ETL_System.dbo.JobInstances 
+                                         SELECT {instance_id},{j.job_id},'{ji.result}','{ji.worker}',
+                                                '{j.executing_timestamp}','{DateTime.Now}','{ji.old_time_checkpoint}','{ji.new_time_checkpoint}',
+                                                 {odc},{ndc},{ji.rows_inserted},{ji.rows_updated},{ji.rows_deleted},
+                                                 '{j.executable_name}','system';                                                
+                                        ";
+            string clean_insert_statement = insert_statement.Replace(@"\", @"\\");
+
+            runCustomSQLCommand(clean_insert_statement, SystemSharedData.app_db_connstring);
+            //3.write output
+            insert_statement = $@"  INSERT INTO ETL_System.dbo.JobInstanceOutput
+                                    SELECT {instance_id},{j.job_id},'{ji.output}','{ji.error}',{ji.exit_code}
+                                    ";
+            clean_insert_statement = insert_statement.Replace(@"\", @"\\");
+            runCustomSQLCommand(clean_insert_statement, SystemSharedData.app_db_connstring);
         }
 
         //===================== HELPER METHODS

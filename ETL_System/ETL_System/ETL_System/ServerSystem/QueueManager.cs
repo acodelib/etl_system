@@ -80,7 +80,7 @@ namespace ETL_System{
                                         target_job = this.catalogue.jobs_collection[bookmark_search[d.depending_job_id ?? 0]]; //get info about depending job
 
                                         //some preliminary checks:
-                                        if (target_job.is_paused || 
+                                        if (target_job.is_paused || target_job.is_queued || target_job.is_executing ||
                                             target_job.current_failed_count >= target_job.max_try_count) { //1.check if any of the dependencies are paused, which blocks the whole chain
                                             pass = false;
                                             break;
@@ -90,14 +90,14 @@ namespace ETL_System{
                                         if (d.dependency_type_id >= 1) {
                                             if (j.data_chceckpoint != null) {
                                                 //value dependencies:                                            
-                                                if (target_job.data_chceckpoint <= j.data_chceckpoint) {
+                                                if (target_job.data_chceckpoint < j.data_chceckpoint) {
                                                     pass = false;
                                                     break;
                                                 }
                                             }
                                             else {
                                                 //timestamp dependencies:                                            
-                                                if (target_job.time_checkpoint <= j.time_checkpoint) {
+                                                if (target_job.time_checkpoint < j.time_checkpoint) {
                                                     pass = false;
                                                     break;
                                                 }
@@ -110,15 +110,15 @@ namespace ETL_System{
                                             target_job = this.catalogue.jobs_collection[bookmark_search[(int)r["job_id"]]];
                                             if (!target_job.is_active)
                                                 continue;
-                                            if (target_job.is_paused || target_job.is_queued) {
+                                            if (target_job.is_paused || target_job.is_queued || target_job.is_executing) {
                                                 pass = false;
                                                 break;
                                             }
-                                            if (target_job.data_chceckpoint != null && target_job.data_chceckpoint <= j.data_chceckpoint) {
+                                            if (target_job.data_chceckpoint != null && target_job.data_chceckpoint < j.data_chceckpoint) {
                                                 pass = false;
                                                 break;
                                             }
-                                            if (target_job.time_checkpoint != null && target_job.time_checkpoint <= j.time_checkpoint) {
+                                            if (target_job.time_checkpoint != null && target_job.time_checkpoint < j.time_checkpoint) {
                                                 pass = false;
                                                 break;
                                             }

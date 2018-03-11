@@ -577,7 +577,6 @@ namespace ETL_System {
             // 
             this.tb_FailedAttempts.Location = new System.Drawing.Point(324, 26);
             this.tb_FailedAttempts.Name = "tb_FailedAttempts";
-            this.tb_FailedAttempts.ReadOnly = true;
             this.tb_FailedAttempts.Size = new System.Drawing.Size(69, 21);
             this.tb_FailedAttempts.TabIndex = 9;
             // 

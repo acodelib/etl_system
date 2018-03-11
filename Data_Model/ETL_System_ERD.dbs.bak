@@ -41,24 +41,40 @@ Andrei Gurguta]]></comment>
 				<fk_column name="dependency_type_id" pk="dependency_type_id" />
 			</fk>
 		</table>
+		<table name="JobInstanceOutput" >
+			<column name="job_instance_id" type="int" jt="4" mandatory="y" />
+			<column name="job_id" type="int" jt="4" />
+			<column name="output" type="varchar(max)" jt="12" />
+			<column name="error" type="int" jt="4" />
+			<column name="exit_code" type="int" jt="4" />
+			<index name="Pk_JobInstanceOutput_job_instance_id" unique="PRIMARY_KEY" >
+				<column name="job_instance_id" />
+			</index>
+		</table>
 		<table name="JobInstances" >
 			<column name="job_instance_id" type="int" jt="4" mandatory="y" autoincrement="y" />
 			<column name="job_id" type="int" jt="4" />
 			<column name="result" type="varchar" length="128" jt="12" />
+			<column name="worker" type="varchar" length="128" jt="12" />
 			<column name="start_timestamp" type="datetime" jt="93" />
 			<column name="end_timestamp" type="datetime" jt="93" />
-			<column name="from_time_checkpoint" type="timestamp" jt="93" />
-			<column name="to_time_checkpoint" type="timestamp" jt="93" />
+			<column name="from_time_checkpoint" type="datetime" jt="93" />
+			<column name="to_time_checkpoint" type="datetime" jt="93" />
 			<column name="from_data_checkpoint" type="bigint" jt="-5" />
 			<column name="to_data_chcekpoint" type="bigint" jt="-5" />
+			<column name="rows_inserted" type="int" jt="4" />
+			<column name="rows_updated" type="int" jt="4" />
+			<column name="rows_deleted" type="int" jt="4" />
 			<column name="job_execution_path" type="varchar" length="2048" jt="12" />
-			<column name="worker" type="int" jt="4" />
 			<column name="started_by" type="int" jt="4" />
 			<index name="Pk_JobInstances_job_instance_id" unique="PRIMARY_KEY" >
 				<column name="job_instance_id" />
 			</index>
 			<fk name="Fk_JobInstances_Jobs" virtual="y" to_schema="ETL_System" to_table="Jobs" >
 				<fk_column name="job_id" pk="job_id" />
+			</fk>
+			<fk name="Fk_JobInstances_JobInstanceOutput" virtual="y" to_schema="ETL_System" to_table="JobInstanceOutput" >
+				<fk_column name="job_instance_id" pk="job_instance_id" />
 			</fk>
 		</table>
 		<table name="JobSchedules" >
@@ -102,6 +118,7 @@ Andrei Gurguta]]></comment>
 			<column name="is_failed" type="int" jt="4" />
 			<column name="is_active" type="bit" jt="-7" />
 			<column name="is_paused" type="bit" jt="-7" />
+			<column name="checkpoint_type" type="int" jt="4" />
 			<index name="Pk_Jobs_job_id" unique="PRIMARY_KEY" >
 				<column name="job_id" />
 			</index>
@@ -141,15 +158,16 @@ Andrei Gurguta]]></comment>
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_135c844" show_relation="columns" >
-		<entity schema="ETL_System" name="JobTypes" color="c1d8ee" x="60" y="60" />
-		<entity schema="ETL_System" name="JobDependency" color="c1d8ee" x="330" y="45" />
-		<entity schema="ETL_System" name="DependencyTypes" color="c1d8ee" x="630" y="60" />
-		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="615" y="225" />
+		<entity schema="ETL_System" name="JobDependency" color="c1d8ee" x="345" y="45" />
+		<entity schema="ETL_System" name="DependencyTypes" color="c1d8ee" x="645" y="60" />
+		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="60" y="510" />
+		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="345" y="210" />
+		<entity schema="ETL_System" name="JobInstanceOutput" color="c1d8ee" x="660" y="615" />
+		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="60" y="630" />
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
-		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="45" y="510" />
-		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="330" y="210" />
-		<entity schema="ETL_System" name="User" color="c1d8ee" x="600" y="510" />
-		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="375" y="720" />
-		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="345" y="570" />
+		<entity schema="ETL_System" name="JobTypes" color="c1d8ee" x="45" y="60" />
+		<entity schema="ETL_System" name="User" color="c1d8ee" x="345" y="615" />
+		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="510" y="645" />
+		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="630" y="225" />
 	</layout>
 </project>

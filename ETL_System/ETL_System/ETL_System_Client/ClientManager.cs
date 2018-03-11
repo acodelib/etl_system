@@ -272,8 +272,8 @@ namespace ETL_System {
             Message m = new Message();
             m.msg_type = MsgTypes.REQUEST_JOB;
             m.header["user"] = this_user;
-            m.session_channel = this_user.this_sessions_id;
-            m.body = parent.lv_JobsList.SelectedItems[0].Text;
+            m.session_channel = this_user.this_sessions_id;            
+            m.body = parent.lv_Jobs_selected_text;
             Message r;
             Job j;
             try {
@@ -371,7 +371,8 @@ namespace ETL_System {
                     is_paused                       = parent.tb_IsPaused.Text == "YES" ? true : false,
                     checkpoint_type                 = parent.cb_CheckppointType.SelectedIndex == 0 ? 1 : 2,
                     data_chceckpoint                = parent.cb_CheckppointType.SelectedIndex == 0 ? (long?)Int64.Parse(parent.tb_Checkpoint.Text) : null,
-                    time_checkpoint                 = parent.cb_CheckppointType.SelectedIndex == 1 ? (DateTime?)DateTime.Parse(parent.tb_Checkpoint.Text) : null
+                    time_checkpoint                 = parent.cb_CheckppointType.SelectedIndex == 1 ? (DateTime?)DateTime.Parse(parent.tb_Checkpoint.Text) : null,
+                    current_failed_count            = Int32.Parse(parent.tb_FailedAttempts.Text)
                 };
             } catch (System.FormatException e) {
                 MessageBox.Show("Please make sure that #Max Attempts,Latency Alert Seconds and Delay Seconds are valid numbers.");
@@ -421,22 +422,23 @@ namespace ETL_System {
             //3.instantiate and fill in a job
             try {
                 j = new Job(this_user) {
-                    job_id = Int32.Parse(parent.tb_Id.Text),
-                    job_type_id = parent.cb_Type.Text == "Schedule" ? 1 : 2,
-                    last_instance_id = 0,
-                    type_name = parent.cb_Type.Text,
+                    job_id                  = Int32.Parse(parent.tb_Id.Text),
+                    job_type_id             = parent.cb_Type.Text == "Schedule" ? 1 : 2,
+                    last_instance_id        = 0,
+                    type_name               = parent.cb_Type.Text,
                     name = ln,
-                    executable_name = parent.tb_Executable.Text,
-                    max_try_count = Int32.Parse(parent.tb_MaxAttempts.Text),
-                    delay_seconds = Int32.Parse(parent.tb_DelaySecs.Text),
-                    latency_alert_seconds = Int32.Parse(parent.tb_LatencyAlert.Text),
-                    notifiactions_list = parent.tb_Notifications.Text,
-                    is_failed = false,
-                    is_active = parent.tb_isActive.Text == "YES" ? true : false,
-                    is_paused = parent.tb_IsPaused.Text == "YES" ? true : false,
+                    executable_name         = parent.tb_Executable.Text,
+                    max_try_count           = Int32.Parse(parent.tb_MaxAttempts.Text),
+                    delay_seconds           = Int32.Parse(parent.tb_DelaySecs.Text),
+                    latency_alert_seconds   = Int32.Parse(parent.tb_LatencyAlert.Text),
+                    notifiactions_list      = parent.tb_Notifications.Text,
+                    is_failed               = false,
+                    is_active               = parent.tb_isActive.Text == "YES" ? true : false,
+                    is_paused               = parent.tb_IsPaused.Text == "YES" ? true : false,
                     checkpoint_type         = parent.cb_CheckppointType.SelectedIndex == 0 ? 1 : 2,
                     data_chceckpoint        = parent.cb_CheckppointType.SelectedIndex == 0 ? (long?)Int64.Parse(parent.tb_Checkpoint.Text) : null,
-                    time_checkpoint         = parent.cb_CheckppointType.SelectedIndex == 1 ? (DateTime?)DateTime.Parse(parent.tb_Checkpoint.Text) : null
+                    time_checkpoint         = parent.cb_CheckppointType.SelectedIndex == 1 ? (DateTime?)DateTime.Parse(parent.tb_Checkpoint.Text) : null,
+                    current_failed_count    = Int32.Parse(parent.tb_FailedAttempts.Text)
                 };
             }
             catch (System.FormatException e) {

@@ -12,10 +12,10 @@ namespace ETL_System
 
         public WorkersController() { }
 
-        public WorkersController(int size,int run_frequency, JobsQueue queue, NotificationsManager mailer) {
+        public WorkersController(int size,int run_frequency, JobsQueue queue, NotificationsManager mailer,CoreDB data_layer) {
             workers = new Dictionary<string, ETLWorker>();
             for(int i = 1;i<= size; i++) {
-                ETLWorker e = new ETLWorker(queue, mailer,run_frequency);
+                ETLWorker e = new ETLWorker(queue, mailer,data_layer,run_frequency);
                 e.name = $"Worker_no_{i}";
                 workers.Add(e.name, e);
             }

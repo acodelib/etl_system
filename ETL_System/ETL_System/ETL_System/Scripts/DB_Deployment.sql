@@ -24,19 +24,31 @@ CREATE TABLE dbo.Jobs (
  );
 
  CREATE TABLE dbo.JobInstances ( 
-	job_instance_id      int NOT NULL  IDENTITY,
+	job_instance_id      int NOT NULL,
 	job_id               int    ,
-	result               varchar(128),
+	result               varchar(128)    ,
+	worker               varchar(128)    ,
 	start_timestamp      datetime    ,
 	end_timestamp        datetime    ,
 	from_time_checkpoint datetime    ,
 	to_time_checkpoint   datetime    ,
 	from_data_checkpoint bigint    ,
 	to_data_chcekpoint   bigint    ,
+	rows_inserted        int    ,
+	rows_updated         int    ,
+	rows_deleted         int    ,
 	job_execution_path   varchar(2048)    ,
-	worker               int    ,
-	started_by           int    ,
+	started_by           varchar(128)   ,
 	CONSTRAINT Pk_JobInstances_job_instance_id PRIMARY KEY  ( job_instance_id )
+ );
+
+ CREATE TABLE dbo.JobInstanceOutput ( 
+	job_instance_id      int NOT NULL   ,
+	job_id               int    ,
+	output               varchar(max)    ,
+	error                varchar(max)    ,
+	exit_code            int    ,
+	CONSTRAINT Pk_JobInstanceOutput_job_instance_id PRIMARY KEY  ( job_instance_id )
  );
 
  CREATE TABLE dbo.JobSchedules ( 
@@ -108,6 +120,7 @@ CREATE TABLE dbo.Jobs (
  ------------------------
  CREATE NONCLUSTERED INDEX IX_jobinstances_jid  ON ETL_System.dbo.JobInstances (job_id); 
  CREATE NONCLUSTERED INDEX IX_jobchanges_jid    ON ETL_System.dbo.JobChanges (job_id); 
+ CREATE NONCLUSTERED INDEX IX_joboutput_jid		ON ETL_System.dbo.JobInstanceOutput (job_id); 
 
 
 

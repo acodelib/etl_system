@@ -90,7 +90,9 @@ namespace ETL_System {
                 target_job.setLastJobChange(changer.login, null);
                 this.jobs_collection.Add(target_job.name,target_job);
             }
-            this.data_layer.updateJob(target_job,changer);
+            Dictionary<int,object> sd = this.data_layer.updateJob(target_job,changer);
+            target_job.setSchedules((Dictionary<int,Schedule>)sd[1]);
+            target_job.setDependencies((Dictionary<int,Dependency>)sd[2]);
             this._sys_change_id = this.getCurrentSysChangeId();
             return "Job Update success!";
         }

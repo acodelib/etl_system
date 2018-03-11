@@ -83,6 +83,10 @@ namespace ETL_System
             if(tc_Main.SelectedTab == tp_Queue) {
                 manager.requestQueue();
             }
+            if (tc_Main.SelectedTab == tabPage1) {
+                //ETL details tabl
+                manager.initETLJobDefinitionTab();
+            }
         }
 
         private void tc_Job_Selected(object sender, EventArgs e) {
@@ -201,14 +205,16 @@ namespace ETL_System
             //1.check for unfocused selection
             if (lv_JobsList.SelectedItems.Count == 0)
                 return;
-            //2.escape in selection cycle
+            //2.keep the data
+            this.lv_Jobs_selected_text = lv_JobsList.SelectedItems[0].Text;
+
+            //3.escape in selection cycle
             if (this.lv_Jobs_selection_cycle == "Xexit") {
                 this.lv_Jobs_selection_cycle = "Xstarted";
                 return;
             }
 
-            //3.keep the data
-            this.lv_Jobs_selected_text = lv_JobsList.SelectedItems[0].Text;
+            
 
             //4.React
             if (tc_Main.SelectedTab == tabPage1) {           

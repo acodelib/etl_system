@@ -20,7 +20,8 @@ namespace ETL_System {
         public static bool workers_start_flag;
 
         private static int jobs_key_sequence;
-        private static int changes_key_sequence;        
+        private static int changes_key_sequence;
+        private static int job_instances_key_sequence;      
 
 
         //================ METHODS
@@ -33,6 +34,10 @@ namespace ETL_System {
             return ++changes_key_sequence;
         }
 
+        public static int getJobInstancesKey() {
+            return ++job_instances_key_sequence;
+        }
+
         public static void initKeyGenerators() {
             //jobs:
             string sql = "SELECT ISNULL(max(job_id),0) FROM ETL_SYSTEM.dbo.Jobs";
@@ -41,6 +46,10 @@ namespace ETL_System {
             //job changes
             sql = "SELECT ISNULL(max(sys_change_id),0) FROM ETL_SYSTEM.dbo.JobChanges";
             changes_key_sequence = CoreDB.runIntCustomScalarSQLCommand(sql, app_db_connstring);
+
+            //job changes
+            sql = "SELECT ISNULL(max(job_instance_id),0) FROM ETL_SYSTEM.dbo.JobInstances";
+            job_instances_key_sequence = CoreDB.runIntCustomScalarSQLCommand(sql, app_db_connstring);
         }
 
         public static string GetSHA1HashData(string data) {            

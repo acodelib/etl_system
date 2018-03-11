@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,20 +13,27 @@ namespace ETL_System {
 
         private JobsQueue jobs_queue;
         private Job target_job;
+        private CoreDB data_layer;
         private int job_instance_id;
         private bool exec_result;
+        private JobInstance job_instance;
+
         private NotificationsManager notifier;
         private int work_frequency;
+        string output; // should convert to string builder in future build
+        string error;
+        int exit_code;
 
         private System.Object _locker = new System.Object();  // local critical zone lockingc
 
         //================================ CONSTRUCTOR ==========================================
         public ETLWorker() { }
 
-        public ETLWorker(JobsQueue the_queue,NotificationsManager the_mailer,int frequency) {
+        public ETLWorker(JobsQueue the_queue,NotificationsManager the_mailer,CoreDB data_layer,int frequency) {
             this.jobs_queue = the_queue;
             this.notifier = the_mailer;
             this.work_frequency = frequency;
+            this.data_layer = data_layer;         
         }
 
 
@@ -34,11 +42,16 @@ namespace ETL_System {
             Thread t = new Thread(fetchAndExecuteCycle);
             t.Start();
         }
+     
 
         private void fetchAndExecuteCycle() {
-            Thread.Sleep(2000);
+            Thread.Sleep(2357);
             Console.WriteLine($"Worker {this.name} started.");
+            this.job_instance = new JobInstance();
             string exec_path;
+            this.output = null;
+            this.error = null;
+            this.exit_code = 0;
             while (1 == 1) {
                 //fetch job
                 this.target_job = this.jobs_queue.provideJobToRun();
@@ -47,43 +60,166 @@ namespace ETL_System {
                         //record start
                         recordStart(this.target_job);
                         //set execution path
-                        exec_path = SystemSharedData.jobs_folder + @"\" + this.target_job.executable_name;
-                        lock (_locker) {
-                            target_job.executing_timestamp = DateTime.Now;
-                            target_job.executor = this.name;
-                        }
-                        //execute
-                        //receive execution output
-                        //catch execution error
+                        exec_path = SystemSharedData.jobs_folder + @"\" + this.target_job.executable_name;                        
+                        //execute job file and read outputs async
+                        this.asyncExecuteJobFile(exec_path);
+                        //throw new Exception("testing error output catch");
+                        
                     }
                     catch (Exception e) {
-
-                    }
-                    //record end with message output                    
+                        this.error = e.Message;
+                    }                    
                     Thread.Sleep(5000); //dev simulate some work;
-                    this.recordEnd(target_job);
+                    Console.WriteLine("OUTPUT: "+ this.output);
+                    Console.WriteLine("ERROR: " + this.error);
+                    Console.WriteLine(this.exit_code.ToString());
+
+                    //check the outcome of the job and record Job Instance
+                    if (this.exit_code != 0)
+                        this.recordEnd(false);
+                    else
+                        this.recordEnd(true);
+                    
+                    // this.recordEnd();
+
                     //send notification if case;
                 }
                 Console.WriteLine($"{this.name} did some work, going for more...");
                 Thread.Sleep(this.work_frequency * 1000);
             }
             
-        }       
+        }               
+
+        private void asyncExecuteJobFile(string exec_path) {
+            var process_context = new ProcessStartInfo("cmd.exe", "/c " + exec_path);
+            process_context.CreateNoWindow = true;
+            process_context.UseShellExecute = false;
+            process_context.RedirectStandardError = true;
+            process_context.RedirectStandardOutput = true;
+            var exec = Process.Start(process_context);
+            //receive execution output
+            exec.OutputDataReceived += new DataReceivedEventHandler(this.asyncCatchOutputEvent);
+            exec.BeginOutputReadLine();
+            //catch execution error
+            exec.ErrorDataReceived += new DataReceivedEventHandler(this.asyncCatchErrorEvent);
+            exec.BeginErrorReadLine();
+
+            exec.WaitForExit();
+            exit_code = exec.ExitCode;
+            exec.Close();
+        }
+
+        private void asyncCatchOutputEvent(object sender, DataReceivedEventArgs e) {
+            this.output = this.output + e.Data + "\n";
+        }
+
+        private void asyncCatchErrorEvent(object sender, DataReceivedEventArgs e) {
+            this.error = this.error + e.Data + "\n";
+        }
+
+        private void parseOutput() {
+            string[] key_val = this.output.Split('@');
+            
+            for (int i = 0;i< key_val.Length; i++) {
+                switch (key_val[i]) {
+                    case "{checkpoint}":
+                        if (this.target_job.checkpoint_type == 1) {
+                            this.job_instance.old_data_checkpoint = target_job.data_chceckpoint;
+                            this.job_instance.new_data_checkpoint = long.Parse(key_val[i + 1].Replace("{", "").Replace("}", "").Replace("\n", ""));
+                        }
+                        if (this.target_job.checkpoint_type == 2) {
+                            this.job_instance.old_time_checkpoint = target_job.time_checkpoint;
+                            this.job_instance.new_time_checkpoint = DateTime.Parse(key_val[i + 1].Replace("{", "").Replace("}", "").Replace("\n", ""));
+                        }
+                        break;
+                    case "{rows_inserted}":
+                        this.job_instance.rows_inserted =Int32.Parse(key_val[i + 1].Replace("{", "").Replace("}", "").Replace("\n", ""));
+                        break;
+                    case "{rows_updated}":
+                        this.job_instance.rows_updated = Int32.Parse(key_val[i + 1].Replace("{", "").Replace("}", "").Replace("\n", ""));
+                        break;
+                    case "{rows_deleted}":
+                        this.job_instance.rows_deleted = Int32.Parse(key_val[i + 1].Replace("{", "").Replace("}", "").Replace("\n", ""));
+                        break;
+                }                    
+            }
+        }
+
+        private void generateJobInstanceDetail() {
+
+        }
 
         private void recordStart(Job j) {
             lock (_locker) {
                 j.is_executing = true;
+                j.executing_timestamp = DateTime.Now;
+                j.executor = this.name;
             }
         }
-        private void recordEnd(Job j) {
+
+        private void recordEnd(bool outcome_success) {
+            this.parseOutput();
+            target_job.last_instance_timestamp = target_job.executing_timestamp;
+            //1.DATA management:
+            if (outcome_success) {  // record routine for successfull cases                
+                lock (_locker) {
+                    if (target_job.checkpoint_type == 1)
+                        target_job.data_chceckpoint = this.job_instance.new_data_checkpoint;
+                    if (target_job.checkpoint_type == 2)
+                        target_job.time_checkpoint = this.job_instance.new_time_checkpoint;
+                    target_job.current_failed_count = 0;
+                }
+            }
+            else {
+                lock (_locker) {
+                    target_job.current_failed_count++;
+                    if (target_job.max_try_count <= target_job.current_failed_count) {
+                        target_job.is_failed = true;
+                        target_job.is_paused = true;
+                    }
+                }
+            }
+
+            this.job_instance.result = outcome_success ? "success" : "fail";
+            this.job_instance.worker = this.name;
+            this.job_instance.output = this.output.Replace(@"'", "");
+            this.output = null;
+            this.job_instance.error = this.error.Replace(@"'", "");
+            this.error = null;
+
+            this.data_layer.recordJobInstance(target_job, outcome_success, this.job_instance);
+
+            //finalize and dequeue
             lock (_locker) {
-                j.is_executing = false;
-                j.executing_timestamp = null;
-                j.executor = null;
-                this.target_job = null;
+                this.target_job.is_executing = false;
+                this.jobs_queue.dequeueJob(this.target_job.job_id);
+                this.target_job.executing_timestamp = null;
+                this.target_job.executor = null;                
+                this.target_job = null;                
             }
-            this.jobs_queue.dequeueJob(j.job_id);
+            
+            
         }
-        private void asyncNotification() { }
+        private void asyncNotification() {
+
+        }
+    }
+
+    public class JobInstance {
+        public string result;
+        public string worker;
+        public DateTime start_timestamp;
+        public DateTime end_timestamp;
+        public long? old_data_checkpoint;
+        public long? new_data_checkpoint;
+        public DateTime? old_time_checkpoint;
+        public DateTime? new_time_checkpoint;
+        public int rows_inserted;
+        public int rows_updated;
+        public int rows_deleted;
+        public string output;
+        public string error;
+        public int exit_code;
+                 
     }
 }

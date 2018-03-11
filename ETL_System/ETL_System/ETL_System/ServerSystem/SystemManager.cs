@@ -71,7 +71,7 @@ namespace ETL_System {
                     this.queue_manager      = new QueueManager(jobs_catalogue, jobs_queue, 10);
                     this.session_manager    = new SessionManager(this.data_layer);
                     this.emailer            = new NotificationsManager();
-                    this.workers_manager    = new WorkersController(2,8, jobs_queue, emailer);
+                    this.workers_manager    = new WorkersController(4,8, jobs_queue, emailer,data_layer);
                     
                 }
                 //Launch the CommsManager                
