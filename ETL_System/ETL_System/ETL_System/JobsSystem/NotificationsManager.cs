@@ -20,9 +20,9 @@ namespace ETL_System
         //======================================  CONSTRUCTOR =============================================================
         public NotificationsManager() {
             user_name = "cocasect@gmail.com";
-            password = "3Ricss0n!21";
+            password = "3ricss0n!21";
             smtp = "smtp.gmail.com";
-            port = 587;
+            port = 465;
             msg_outcome = "success";
             
         }        
@@ -30,11 +30,11 @@ namespace ETL_System
         //======================================  METHODS =================================================================
         public void sendEmailMessage() { }
 
-        
+
         public void sendErrorEmailMessage(string to, string job_about, string error_details) {
-            MailMessage mail_message = new MailMessage();
-            NetworkCredential email_login = new System.Net.NetworkCredential();
-            SmtpClient smtp_client = new SmtpClient();
+            NetworkCredential email_login   = new System.Net.NetworkCredential();
+            MailMessage mail_message        = new MailMessage();
+            SmtpClient smtp_client          = new SmtpClient();            
 
             email_login.UserName = user_name;
             email_login.Password = password;
@@ -51,10 +51,9 @@ namespace ETL_System
             smtp_client.EnableSsl = true;
             smtp_client.UseDefaultCredentials = true;
             smtp_client.Credentials = email_login;
-            smtp_client.Port = this.port;            
+            smtp_client.Port = this.port;
             smtp_client.SendCompleted += new SendCompletedEventHandler(failureListener);
-            smtp_client.SendAsync(mail_message, new object());                       
-            
+            smtp_client.SendAsync(mail_message, new object());         
         }
         /*       
 

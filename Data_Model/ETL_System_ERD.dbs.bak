@@ -45,7 +45,7 @@ Andrei Gurguta]]></comment>
 			<column name="job_instance_id" type="int" jt="4" mandatory="y" />
 			<column name="job_id" type="int" jt="4" />
 			<column name="output" type="varchar(max)" jt="12" />
-			<column name="error" type="int" jt="4" />
+			<column name="error" type="varchar(max)" jt="12" />
 			<column name="exit_code" type="int" jt="4" />
 			<index name="Pk_JobInstanceOutput_job_instance_id" unique="PRIMARY_KEY" >
 				<column name="job_instance_id" />
@@ -66,7 +66,7 @@ Andrei Gurguta]]></comment>
 			<column name="rows_updated" type="int" jt="4" />
 			<column name="rows_deleted" type="int" jt="4" />
 			<column name="job_execution_path" type="varchar" length="2048" jt="12" />
-			<column name="started_by" type="int" jt="4" />
+			<column name="started_by" type="varchar" length="128" jt="12" />
 			<index name="Pk_JobInstances_job_instance_id" unique="PRIMARY_KEY" >
 				<column name="job_instance_id" />
 			</index>
@@ -162,12 +162,12 @@ Andrei Gurguta]]></comment>
 		<entity schema="ETL_System" name="DependencyTypes" color="c1d8ee" x="645" y="60" />
 		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="60" y="510" />
 		<entity schema="ETL_System" name="Jobs" color="c1d8ee" x="345" y="210" />
-		<entity schema="ETL_System" name="JobInstanceOutput" color="c1d8ee" x="660" y="615" />
 		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="60" y="630" />
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="JobTypes" color="c1d8ee" x="45" y="60" />
 		<entity schema="ETL_System" name="User" color="c1d8ee" x="345" y="615" />
 		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="510" y="645" />
 		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="630" y="225" />
+		<entity schema="ETL_System" name="JobInstanceOutput" color="c1d8ee" x="660" y="615" />
 	</layout>
 </project>
