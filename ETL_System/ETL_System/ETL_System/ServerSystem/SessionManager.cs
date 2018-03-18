@@ -10,7 +10,7 @@ namespace ETL_System
 {
     public class SessionManager    {
         //====================== FIELDS
-        private Dictionary<Guid, User> sessions_table;
+        public Dictionary<Guid, User> sessions_table;
         private CoreDB data_layer;
 
 

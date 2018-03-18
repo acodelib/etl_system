@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.Data;
 
 namespace ETL_System {
     public class SystemManager {
@@ -238,7 +239,40 @@ namespace ETL_System {
             return null;
         }
 
-                           ////////// CLIENT REQUESTS //////
+
+                           /////////////// ADMIN /////////////
+        public Message returnAdminConsole() {
+            Message output = new Message();
+
+            //prepare users view:
+            DataTable users = this.data_layer.adminGetUsers();
+            users.Columns.Remove("password");
+            DataColumn status = new DataColumn("status", typeof(string));
+            status.DefaultValue = "disconected";
+            users.Columns.Add(status);
+            foreach(User u in session_manager.sessions_table.Values) {
+                DataRow r = users.Select($"user_id = {u.user_id}")[0];
+                r["status"] = "connected";
+            }
+            output.header["admin_users"] = users;
+
+
+
+            return output;
+        }
+
+        public void decodeAdminCommand(Message msg, User user) {
+            switch (msg.body) {
+                case ("new_user"):
+                    this.data_layer.adminAddUser((User)msg.header["new_user"], (string)msg.header["hidden_pass"]);
+                    break;
+                case ("delete_user"):
+                    this.data_layer.adminDeleteUser((List<int>)msg.header["user_delete_list"]);
+                    break;
+            }
+        }
+
+        ////////// CLIENT REQUESTS ////////
         public Dictionary<int,string> pipeTasksRawList() {
             return this.jobs_catalogue.produceJobsList();
         }
@@ -252,9 +286,53 @@ namespace ETL_System {
                 result = this.executeMgmtCommand(msg, (User)msg.header["user"]);
                 return result;
             }
-            return null;
-            
+            if (msg.msg_type >= (MsgTypes)22 && msg.msg_type <= (MsgTypes)23) {
+                result = this.resolveAdminMessage(msg, (User)msg.header["user"]);
+                return result;
+            }
+            return null;            
         }
+
+        public Message resolveAdminMessage(Message msg, User user_context) {
+            Message outcome = new Message();
+            MsgTypes msgtype = msg.msg_type;
+
+            switch (msgtype) {
+                case MsgTypes.ADMIN_REQUEST:
+                    try {
+                        outcome = this.returnAdminConsole();
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to retrieve admin dashboard. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.ADMIN_COMMAND:
+                    try {
+                        this.decodeAdminCommand(msg,user_context);
+                        outcome = this.returnAdminConsole();
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to retrieve admin dashboard. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                default:
+                    outcome.msg_type = MsgTypes.REPLY_FAIL;
+                    outcome.body = $"Unknown COMMAND TYPE";
+                    return outcome;
+
+            }
+        }
+
         public Message executeMgmtCommand(Message msg, User user_context) {
             Message outcome = new Message();
             MsgTypes msgtype = msg.msg_type;   

@@ -139,15 +139,15 @@ namespace ETL_System {
             this.label26 = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.cb_UserIsActive = new System.Windows.Forms.CheckBox();
             this.label25 = new System.Windows.Forms.Label();
             this.tb_NewUserPass = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.btn_NewUser = new System.Windows.Forms.Button();
             this.label23 = new System.Windows.Forms.Label();
-            this.tb_NewUserRole = new System.Windows.Forms.ComboBox();
+            this.cb_NewUserRole = new System.Windows.Forms.ComboBox();
             this.tb_NewUserName = new System.Windows.Forms.TextBox();
             this.btn_DelUser = new System.Windows.Forms.Button();
-            this.lv_Users = new System.Windows.Forms.ListView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lv_JobsList = new System.Windows.Forms.ListView();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -164,6 +164,12 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
+            this.lv_Users = new System.Windows.Forms.ListView();
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -200,9 +206,9 @@ namespace ETL_System {
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslb_Status,
             this.tslb_Response});
-            this.statusStrip.Location = new System.Drawing.Point(0, 876);
+            this.statusStrip.Location = new System.Drawing.Point(0, 808);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1857, 24);
+            this.statusStrip.Size = new System.Drawing.Size(1796, 24);
             this.statusStrip.TabIndex = 3;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -238,7 +244,7 @@ namespace ETL_System {
             this.tc_Main.Location = new System.Drawing.Point(238, 56);
             this.tc_Main.Name = "tc_Main";
             this.tc_Main.SelectedIndex = 0;
-            this.tc_Main.Size = new System.Drawing.Size(1607, 815);
+            this.tc_Main.Size = new System.Drawing.Size(1546, 747);
             this.tc_Main.TabIndex = 7;
             this.tc_Main.SelectedIndexChanged += new System.EventHandler(this.tc_Main_Selected);
             // 
@@ -248,7 +254,7 @@ namespace ETL_System {
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1599, 786);
+            this.tabPage1.Size = new System.Drawing.Size(1538, 718);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "ETL Job";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -266,7 +272,7 @@ namespace ETL_System {
             this.tc_Job.Location = new System.Drawing.Point(6, 6);
             this.tc_Job.Name = "tc_Job";
             this.tc_Job.SelectedIndex = 0;
-            this.tc_Job.Size = new System.Drawing.Size(1593, 777);
+            this.tc_Job.Size = new System.Drawing.Size(1532, 709);
             this.tc_Job.TabIndex = 2;
             this.tc_Job.SelectedIndexChanged += new System.EventHandler(this.tc_Job_Selected);
             // 
@@ -277,7 +283,7 @@ namespace ETL_System {
             this.tp_Definition.Location = new System.Drawing.Point(4, 24);
             this.tp_Definition.Name = "tp_Definition";
             this.tp_Definition.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Definition.Size = new System.Drawing.Size(1585, 749);
+            this.tp_Definition.Size = new System.Drawing.Size(1524, 681);
             this.tp_Definition.TabIndex = 0;
             this.tp_Definition.Text = "Definition";
             this.tp_Definition.UseVisualStyleBackColor = true;
@@ -664,7 +670,7 @@ namespace ETL_System {
             this.gb_Changes.Controls.Add(this.tb_When);
             this.gb_Changes.Controls.Add(this.label9);
             this.gb_Changes.Controls.Add(this.tb_Who);
-            this.gb_Changes.Location = new System.Drawing.Point(1351, 639);
+            this.gb_Changes.Location = new System.Drawing.Point(1290, 571);
             this.gb_Changes.Name = "gb_Changes";
             this.gb_Changes.Size = new System.Drawing.Size(228, 104);
             this.gb_Changes.TabIndex = 16;
@@ -710,7 +716,7 @@ namespace ETL_System {
             this.tp_JobInstances.Location = new System.Drawing.Point(4, 24);
             this.tp_JobInstances.Name = "tp_JobInstances";
             this.tp_JobInstances.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_JobInstances.Size = new System.Drawing.Size(1585, 749);
+            this.tp_JobInstances.Size = new System.Drawing.Size(1524, 681);
             this.tp_JobInstances.TabIndex = 3;
             this.tp_JobInstances.Text = "History";
             this.tp_JobInstances.UseVisualStyleBackColor = true;
@@ -722,7 +728,7 @@ namespace ETL_System {
             this.tp_Schedules.Location = new System.Drawing.Point(4, 24);
             this.tp_Schedules.Name = "tp_Schedules";
             this.tp_Schedules.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Schedules.Size = new System.Drawing.Size(1585, 749);
+            this.tp_Schedules.Size = new System.Drawing.Size(1524, 681);
             this.tp_Schedules.TabIndex = 1;
             this.tp_Schedules.Text = "Schedules";
             this.tp_Schedules.UseVisualStyleBackColor = true;
@@ -853,7 +859,7 @@ namespace ETL_System {
             this.tp_Dependencies.Location = new System.Drawing.Point(4, 24);
             this.tp_Dependencies.Name = "tp_Dependencies";
             this.tp_Dependencies.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Dependencies.Size = new System.Drawing.Size(1585, 749);
+            this.tp_Dependencies.Size = new System.Drawing.Size(1524, 681);
             this.tp_Dependencies.TabIndex = 2;
             this.tp_Dependencies.Text = "Dependencies";
             this.tp_Dependencies.UseVisualStyleBackColor = true;
@@ -982,7 +988,7 @@ namespace ETL_System {
             this.tp_Catalogue.Location = new System.Drawing.Point(4, 25);
             this.tp_Catalogue.Name = "tp_Catalogue";
             this.tp_Catalogue.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Catalogue.Size = new System.Drawing.Size(1599, 786);
+            this.tp_Catalogue.Size = new System.Drawing.Size(1538, 718);
             this.tp_Catalogue.TabIndex = 1;
             this.tp_Catalogue.Text = "Catalogue";
             this.tp_Catalogue.UseVisualStyleBackColor = true;
@@ -1000,7 +1006,8 @@ namespace ETL_System {
             this.dgv_Catalogue.Name = "dgv_Catalogue";
             this.dgv_Catalogue.ReadOnly = true;
             this.dgv_Catalogue.RowHeadersVisible = false;
-            this.dgv_Catalogue.Size = new System.Drawing.Size(1040, 629);
+            this.dgv_Catalogue.ShowRowErrors = false;
+            this.dgv_Catalogue.Size = new System.Drawing.Size(1498, 699);
             this.dgv_Catalogue.TabIndex = 0;
             // 
             // tp_Queue
@@ -1009,7 +1016,7 @@ namespace ETL_System {
             this.tp_Queue.Location = new System.Drawing.Point(4, 25);
             this.tp_Queue.Name = "tp_Queue";
             this.tp_Queue.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Queue.Size = new System.Drawing.Size(1599, 786);
+            this.tp_Queue.Size = new System.Drawing.Size(1538, 718);
             this.tp_Queue.TabIndex = 2;
             this.tp_Queue.Text = "Queue";
             this.tp_Queue.UseVisualStyleBackColor = true;
@@ -1025,7 +1032,7 @@ namespace ETL_System {
             this.dgv_Queue.Location = new System.Drawing.Point(22, 13);
             this.dgv_Queue.Name = "dgv_Queue";
             this.dgv_Queue.RowHeadersVisible = false;
-            this.dgv_Queue.Size = new System.Drawing.Size(857, 631);
+            this.dgv_Queue.Size = new System.Drawing.Size(852, 699);
             this.dgv_Queue.TabIndex = 0;
             // 
             // tp_Graph
@@ -1035,7 +1042,7 @@ namespace ETL_System {
             this.tp_Graph.Location = new System.Drawing.Point(4, 25);
             this.tp_Graph.Name = "tp_Graph";
             this.tp_Graph.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Graph.Size = new System.Drawing.Size(1599, 786);
+            this.tp_Graph.Size = new System.Drawing.Size(1538, 718);
             this.tp_Graph.TabIndex = 3;
             this.tp_Graph.Text = "Dependency Graph";
             this.tp_Graph.UseVisualStyleBackColor = true;
@@ -1051,7 +1058,7 @@ namespace ETL_System {
             this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.groupBox7.Location = new System.Drawing.Point(7, 6);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(99, 719);
+            this.groupBox7.Size = new System.Drawing.Size(99, 706);
             this.groupBox7.TabIndex = 4;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "View Settings";
@@ -1145,7 +1152,7 @@ namespace ETL_System {
             this.gViewer.SaveButtonVisible = true;
             this.gViewer.SaveGraphButtonVisible = true;
             this.gViewer.SaveInVectorFormatEnabled = true;
-            this.gViewer.Size = new System.Drawing.Size(953, 719);
+            this.gViewer.Size = new System.Drawing.Size(1420, 706);
             this.gViewer.TabIndex = 3;
             this.gViewer.TightOffsetForRouting = 0.125D;
             this.gViewer.ToolBarIsVisible = true;
@@ -1164,7 +1171,7 @@ namespace ETL_System {
             this.tp_Admin.Location = new System.Drawing.Point(4, 25);
             this.tp_Admin.Name = "tp_Admin";
             this.tp_Admin.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Admin.Size = new System.Drawing.Size(1599, 786);
+            this.tp_Admin.Size = new System.Drawing.Size(1538, 718);
             this.tp_Admin.TabIndex = 4;
             this.tp_Admin.Text = "Administer";
             this.tp_Admin.UseVisualStyleBackColor = true;
@@ -1324,7 +1331,7 @@ namespace ETL_System {
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.button2.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
-            this.button2.Location = new System.Drawing.Point(645, 138);
+            this.button2.Location = new System.Drawing.Point(645, 126);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(74, 39);
             this.button2.TabIndex = 41;
@@ -1336,7 +1343,7 @@ namespace ETL_System {
             // 
             this.tb_EmailPass.Location = new System.Drawing.Point(526, 27);
             this.tb_EmailPass.Name = "tb_EmailPass";
-            this.tb_EmailPass.Size = new System.Drawing.Size(190, 23);
+            this.tb_EmailPass.Size = new System.Drawing.Size(193, 23);
             this.tb_EmailPass.TabIndex = 40;
             // 
             // tb_Smtp
@@ -1398,9 +1405,9 @@ namespace ETL_System {
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.lv_Users);
             this.groupBox8.Controls.Add(this.groupBox9);
             this.groupBox8.Controls.Add(this.btn_DelUser);
-            this.groupBox8.Controls.Add(this.lv_Users);
             this.groupBox8.Location = new System.Drawing.Point(737, 39);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(741, 381);
@@ -1410,12 +1417,13 @@ namespace ETL_System {
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.cb_UserIsActive);
             this.groupBox9.Controls.Add(this.label25);
             this.groupBox9.Controls.Add(this.tb_NewUserPass);
             this.groupBox9.Controls.Add(this.label24);
             this.groupBox9.Controls.Add(this.btn_NewUser);
             this.groupBox9.Controls.Add(this.label23);
-            this.groupBox9.Controls.Add(this.tb_NewUserRole);
+            this.groupBox9.Controls.Add(this.cb_NewUserRole);
             this.groupBox9.Controls.Add(this.tb_NewUserName);
             this.groupBox9.Location = new System.Drawing.Point(492, 19);
             this.groupBox9.Name = "groupBox9";
@@ -1424,10 +1432,23 @@ namespace ETL_System {
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Add new";
             // 
+            // cb_UserIsActive
+            // 
+            this.cb_UserIsActive.AutoSize = true;
+            this.cb_UserIsActive.Checked = global::ETL_System_Client.Properties.Settings.Default.Checked;
+            this.cb_UserIsActive.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_UserIsActive.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ETL_System_Client.Properties.Settings.Default, "Checked", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cb_UserIsActive.Location = new System.Drawing.Point(22, 231);
+            this.cb_UserIsActive.Name = "cb_UserIsActive";
+            this.cb_UserIsActive.Size = new System.Drawing.Size(87, 21);
+            this.cb_UserIsActive.TabIndex = 43;
+            this.cb_UserIsActive.Text = "Is Active?";
+            this.cb_UserIsActive.UseVisualStyleBackColor = true;
+            // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(7, 87);
+            this.label25.Location = new System.Drawing.Point(7, 101);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(73, 17);
             this.label25.TabIndex = 37;
@@ -1435,15 +1456,16 @@ namespace ETL_System {
             // 
             // tb_NewUserPass
             // 
-            this.tb_NewUserPass.Location = new System.Drawing.Point(6, 106);
+            this.tb_NewUserPass.Location = new System.Drawing.Point(6, 120);
             this.tb_NewUserPass.Name = "tb_NewUserPass";
+            this.tb_NewUserPass.PasswordChar = '*';
             this.tb_NewUserPass.Size = new System.Drawing.Size(204, 23);
             this.tb_NewUserPass.TabIndex = 36;
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(7, 146);
+            this.label24.Location = new System.Drawing.Point(7, 160);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(41, 17);
             this.label24.TabIndex = 35;
@@ -1456,34 +1478,38 @@ namespace ETL_System {
             this.btn_NewUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_NewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btn_NewUser.Image = global::ETL_System_Client.Properties.Resources.create;
-            this.btn_NewUser.Location = new System.Drawing.Point(116, 300);
+            this.btn_NewUser.Location = new System.Drawing.Point(136, 300);
             this.btn_NewUser.Name = "btn_NewUser";
             this.btn_NewUser.Size = new System.Drawing.Size(74, 39);
             this.btn_NewUser.TabIndex = 31;
             this.btn_NewUser.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btn_NewUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btn_NewUser.UseVisualStyleBackColor = false;
+            this.btn_NewUser.Click += new System.EventHandler(this.btn_NewUser_Click);
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(7, 23);
+            this.label23.Location = new System.Drawing.Point(7, 37);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(49, 17);
             this.label23.TabIndex = 34;
             this.label23.Text = "Name:";
             // 
-            // tb_NewUserRole
+            // cb_NewUserRole
             // 
-            this.tb_NewUserRole.FormattingEnabled = true;
-            this.tb_NewUserRole.Location = new System.Drawing.Point(6, 169);
-            this.tb_NewUserRole.Name = "tb_NewUserRole";
-            this.tb_NewUserRole.Size = new System.Drawing.Size(204, 24);
-            this.tb_NewUserRole.TabIndex = 33;
+            this.cb_NewUserRole.FormattingEnabled = true;
+            this.cb_NewUserRole.Items.AddRange(new object[] {
+            "admin",
+            "developer"});
+            this.cb_NewUserRole.Location = new System.Drawing.Point(6, 183);
+            this.cb_NewUserRole.Name = "cb_NewUserRole";
+            this.cb_NewUserRole.Size = new System.Drawing.Size(204, 24);
+            this.cb_NewUserRole.TabIndex = 33;
             // 
             // tb_NewUserName
             // 
-            this.tb_NewUserName.Location = new System.Drawing.Point(6, 42);
+            this.tb_NewUserName.Location = new System.Drawing.Point(6, 56);
             this.tb_NewUserName.Name = "tb_NewUserName";
             this.tb_NewUserName.Size = new System.Drawing.Size(204, 23);
             this.tb_NewUserName.TabIndex = 32;
@@ -1498,14 +1524,7 @@ namespace ETL_System {
             this.btn_DelUser.Size = new System.Drawing.Size(74, 39);
             this.btn_DelUser.TabIndex = 30;
             this.btn_DelUser.UseVisualStyleBackColor = true;
-            // 
-            // lv_Users
-            // 
-            this.lv_Users.Location = new System.Drawing.Point(20, 22);
-            this.lv_Users.Name = "lv_Users";
-            this.lv_Users.Size = new System.Drawing.Size(453, 291);
-            this.lv_Users.TabIndex = 0;
-            this.lv_Users.UseCompatibleStateImageBehavior = false;
+            this.btn_DelUser.Click += new System.EventHandler(this.btn_DelUser_Click);
             // 
             // groupBox1
             // 
@@ -1518,7 +1537,7 @@ namespace ETL_System {
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.groupBox1.Location = new System.Drawing.Point(12, 41);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(224, 834);
+            this.groupBox1.Size = new System.Drawing.Size(224, 766);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Jobs List";
@@ -1537,7 +1556,7 @@ namespace ETL_System {
             this.lv_JobsList.Location = new System.Drawing.Point(6, 92);
             this.lv_JobsList.Name = "lv_JobsList";
             this.lv_JobsList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lv_JobsList.Size = new System.Drawing.Size(212, 736);
+            this.lv_JobsList.Size = new System.Drawing.Size(212, 668);
             this.lv_JobsList.TabIndex = 0;
             this.lv_JobsList.UseCompatibleStateImageBehavior = false;
             this.lv_JobsList.View = System.Windows.Forms.View.Details;
@@ -1588,7 +1607,7 @@ namespace ETL_System {
             this.ts_NewJob});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1857, 38);
+            this.menuStrip.Size = new System.Drawing.Size(1796, 38);
             this.menuStrip.TabIndex = 8;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -1663,12 +1682,60 @@ namespace ETL_System {
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
             // 
+            // lv_Users
+            // 
+            this.lv_Users.CheckBoxes = true;
+            this.lv_Users.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader10,
+            this.columnHeader11,
+            this.columnHeader12});
+            this.lv_Users.FullRowSelect = true;
+            this.lv_Users.GridLines = true;
+            this.lv_Users.HideSelection = false;
+            this.lv_Users.Location = new System.Drawing.Point(11, 24);
+            this.lv_Users.Name = "lv_Users";
+            this.lv_Users.Size = new System.Drawing.Size(462, 280);
+            this.lv_Users.TabIndex = 35;
+            this.lv_Users.UseCompatibleStateImageBehavior = false;
+            this.lv_Users.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "ID";
+            this.columnHeader8.Width = 40;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Login";
+            this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader9.Width = 137;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "Role";
+            this.columnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader10.Width = 62;
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "Is Active?";
+            this.columnHeader11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader11.Width = 75;
+            // 
+            // columnHeader12
+            // 
+            this.columnHeader12.Text = "Status";
+            this.columnHeader12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader12.Width = 143;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1857, 900);
+            this.ClientSize = new System.Drawing.Size(1796, 832);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tc_Main);
             this.Controls.Add(this.statusStrip);
@@ -1826,41 +1893,47 @@ namespace ETL_System {
         public NumericUpDown nud_Depth;
         public Label label21;
         public DataGridView dgv_Queue;
-        private GroupBox groupBox9;
-        private Label label24;
-        private Label label23;
-        private ComboBox tb_NewUserRole;
+        public GroupBox groupBox9;
+        public Label label24;
+        public Label label23;
+        public ComboBox cb_NewUserRole;
         public Button btn_NewUser;
-        private TextBox tb_NewUserName;
-        private GroupBox groupBox8;
+        public TextBox tb_NewUserName;
+        public GroupBox groupBox8;
         public Button btn_DelUser;
-        private ListView lv_Users;
-        private Label label25;
-        private TextBox tb_NewUserPass;
-        private TabPage tp_JobInstances;
-        private GroupBox groupBox10;
-        private Label label29;
-        private Label label28;
-        private Label label27;
-        private Label label26;
-        private TextBox tb_EmailPass;
-        private TextBox tb_Smtp;
-        private TextBox tb_Port;
-        private TextBox tb_EmailUser;
+        public Label label25;
+        public TextBox tb_NewUserPass;
+        public TabPage tp_JobInstances;
+        public GroupBox groupBox10;
+        public Label label29;
+        public Label label28;
+        public Label label27;
+        public Label label26;
+        public TextBox tb_EmailPass;
+        public TextBox tb_Smtp;
+        public TextBox tb_Port;
+        public TextBox tb_EmailUser;
         public Button button2;
-        private CheckBox cb_SSL;
-        private GroupBox groupBox11;
+        public CheckBox cb_SSL;
+        public GroupBox groupBox11;
         public Button button3;
-        private TextBox textBox4;
-        private TextBox textBox3;
-        private TextBox textBox1;
-        private Label label34;
-        private Label label33;
-        private Label label32;
-        private Label label31;
-        private TextBox textBox2;
-        private Label label30;
-        private TextBox tb_ConnectionString;
+        public TextBox textBox4;
+        public TextBox textBox3;
+        public TextBox textBox1;
+        public Label label34;
+        public Label label33;
+        public Label label32;
+        public Label label31;
+        public TextBox textBox2;
+        public Label label30;
+        public TextBox tb_ConnectionString;
+        public CheckBox cb_UserIsActive;
+        public ListView lv_Users;
+        public ColumnHeader columnHeader8;
+        public ColumnHeader columnHeader9;
+        public ColumnHeader columnHeader10;
+        private ColumnHeader columnHeader11;
+        private ColumnHeader columnHeader12;
     }
 }
 

@@ -89,6 +89,10 @@ namespace ETL_System
                 //ETL details tabl
                 manager.initETLJobDefinitionTab();
             }
+
+            if(tc_Main.SelectedTab == tp_Admin) {
+                manager.requestAdminData();
+            }
         }
 
         private void tc_Job_Selected(object sender, EventArgs e) {
@@ -267,6 +271,14 @@ namespace ETL_System
 
         private void groupBox10_Enter(object sender, EventArgs e) {
 
+        }
+
+        private void btn_NewUser_Click(object sender, EventArgs e) {
+            manager.adminAddUser();
+        }
+
+        private void btn_DelUser_Click(object sender, EventArgs e) {
+            manager.adminDeleteUser();
         }
     }
 }

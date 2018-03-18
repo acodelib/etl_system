@@ -122,6 +122,137 @@ namespace ETL_System {
             }
         }
 
+        private void adminPageRoutine(Message r) {
+            DataTable au;
+            //populate users list view
+            au = (DataTable)r.header["admin_users"];
+            foreach (DataRow rw in au.Rows) {
+                ListViewItem i = new ListViewItem(((int)rw["user_id"]).ToString());
+                i.SubItems.Add((string)rw["login"]);
+                i.SubItems.Add((int)rw["role_id"] == 1 ? "admin" : "user");
+                i.SubItems.Add(((bool)rw["is_active"]).ToString());
+                i.SubItems.Add((string)rw["status"]);
+                parent.lv_Users.Items.Add(i);
+            }
+        }
+
+
+        public void requestAdminData() {
+            
+            Message m = new Message();
+            m.msg_type = MsgTypes.ADMIN_REQUEST;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if(r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    
+                    parent.lv_Users.Items.Clear();
+                    this.adminPageRoutine(r);
+                }
+                else
+                    MessageBox.Show(r.body);
+            } catch (Exception e) {
+                MessageBox.Show($"Problems while loading the Catalogue.\nOriginal system error:{e.Message}");
+            }
+        }
+
+        public void adminAddUser() {            
+            Message m = new Message();
+
+
+            //1.make sure all details are filled in
+            if (parent.tb_NewUserName.Text == "" || parent.tb_NewUserPass.Text == "" || parent.cb_NewUserRole.Text == "") {
+                MessageBox.Show("Please fill in New User details before creating a new user");
+                return;
+            }
+
+            //2.check to see user name does not already exist
+            foreach(ListViewItem i in parent.lv_Users.Items) {
+                if(i.SubItems[1].Text == parent.tb_NewUserName.Text) {
+                    MessageBox.Show("User Login NAME already exists. Please use a different one.");
+                    return;
+                }
+            }
+
+            //3.make sure the user wants to do this action
+            if (MessageBox.Show("A new new user will be created. Continue?", "", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            //3.create user and add to message
+            User u = new User() {
+                login = parent.tb_NewUserName.Text,
+                role = parent.cb_NewUserRole.Text,
+            };
+            m.header["new_user"] = u;
+            m.header["hidden_pass"] = GetSHA1HashData(parent.tb_NewUserPass.Text);
+            m.body = "new_user";
+            m.msg_type = MsgTypes.ADMIN_COMMAND;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+
+            //4.Send message
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    parent.lv_Users.Items.Clear();
+                    this.adminPageRoutine(r);
+                }
+                else
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Problems while loading the Catalogue.\nOriginal system error:{e.Message}");
+            }
+
+        }
+
+        public void adminDeleteUser() {
+            List<int> users_to_delete = new List<int>();
+            Message m = new Message();
+            //1.first check if any item is selected and a job is created
+            if (parent.lv_Users.CheckedItems.Count == 0) {
+                MessageBox.Show("Please use the checkboxes for deleting users");
+                return;
+            }
+
+            //make sure isn't connected
+
+
+            //2.loop through items and fill in the Users list
+            foreach (ListViewItem i in parent.lv_Users.Items) {
+                if (i.Checked) {
+                    if (i.SubItems[4].Text == "connected") {
+                        MessageBox.Show("Can't delete users while they are connected. Try again.");
+                        return;
+                    }
+                    users_to_delete.Add(Int32.Parse(i.Text));
+                }
+            }
+
+            //3.add list and prepare message                        
+            m.msg_type = MsgTypes.ADMIN_COMMAND;
+            m.body = "delete_user";            
+            m.header["user_delete_list"] = users_to_delete;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+
+            //4.Send message
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    parent.lv_Users.Items.Clear();
+                    this.adminPageRoutine(r);
+                }
+                else
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Problems while loading the Catalogue.\nOriginal system error:{e.Message}");
+            }
+        }
+
         public void requestCatalogue() {            
             Message m = new Message();
             m.msg_type = MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY;
@@ -144,6 +275,8 @@ namespace ETL_System {
                     parent.dgv_Catalogue.DataSource = t;
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
+                else
+                    MessageBox.Show(r.body);
             } catch (Exception e) {
                 MessageBox.Show($"Problems while loading the Catalogue.\nOriginal system error:{e.Message}");
             }
@@ -171,6 +304,8 @@ namespace ETL_System {
                     parent.dgv_Queue.DataSource = t;
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
+                else
+                    MessageBox.Show(r.body);
             }
             catch (Exception e) {
                 MessageBox.Show($"Problems while loading the Queue.\nOriginal system error:{e.Message}");
@@ -610,8 +745,9 @@ namespace ETL_System {
 
 
             //1.first check if any item is selected and a job is created
-            if (parent.lv_Schedules.CheckedItems.Count == 0)
+            if (parent.lv_Schedules.CheckedItems.Count == 0) {
                 MessageBox.Show("Please use the checkboxes for deleting schedules");
+            }
 
             if (parent.tb_Id.Text == "") {
                 MessageBox.Show("No job is selected");

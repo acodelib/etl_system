@@ -140,6 +140,7 @@ Andrei Gurguta]]></comment>
 			<column name="role_id" type="int" jt="4" />
 			<column name="login" type="varchar" length="256" jt="12" mandatory="y" />
 			<column name="password" type="varchar" length="256" jt="12" />
+			<column name="last_conn_timestamp" type="datetime" jt="93" />
 			<column name="is_active" type="bit" jt="-7" />
 			<index name="Pk_User_user_id" unique="PRIMARY_KEY" >
 				<column name="user_id" />
@@ -164,10 +165,10 @@ Andrei Gurguta]]></comment>
 		<entity schema="ETL_System" name="JobChanges" color="c1d8ee" x="60" y="630" />
 		<entity schema="ETL_System" name="JobSchedules" color="c1d8ee" x="60" y="270" />
 		<entity schema="ETL_System" name="JobTypes" color="c1d8ee" x="45" y="60" />
-		<entity schema="ETL_System" name="User" color="c1d8ee" x="345" y="615" />
-		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="510" y="645" />
 		<entity schema="ETL_System" name="JobInstances" color="c1d8ee" x="630" y="225" />
 		<entity schema="ETL_System" name="JobInstanceOutput" color="c1d8ee" x="660" y="615" />
 		<entity schema="ETL_System" name="ScheduleTypes" color="c1d8ee" x="60" y="480" />
+		<entity schema="ETL_System" name="UserRoles" color="c1d8ee" x="540" y="630" />
+		<entity schema="ETL_System" name="User" color="c1d8ee" x="330" y="615" />
 	</layout>
 </project>
