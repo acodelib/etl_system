@@ -78,6 +78,12 @@ namespace ETL_System
 
                             client_socket.Send(reply.encodeToBytes());
                         }
+                        else if(message.msg_type == MsgTypes.TRY_DISCONECT && session_manager.validateSession(message.session_channel)) {
+                            session_manager.clearSessionOnLogout(message.session_channel);
+                            reply = new Message();
+                            reply.msg_type = MsgTypes.REPLY_SUCCESS;
+                            client_socket.Send(reply.encodeToBytes());
+                        }
                         //else validate the session and let the System manager resolve it
                         else {
                             if (session_manager.validateSession(message.session_channel)) {

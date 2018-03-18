@@ -160,14 +160,21 @@ namespace ETL_System {
         private void recordEnd(bool outcome_success) {
             this.parseOutput();
             target_job.last_instance_timestamp = target_job.executing_timestamp;
+
+
             //1.DATA management:
             if (outcome_success) {  // record routine for successfull cases                
                 lock (_locker) {
                     if (target_job.checkpoint_type == 1)
                         target_job.data_chceckpoint = this.job_instance.new_data_checkpoint;
                     if (target_job.checkpoint_type == 2)
-                        target_job.time_checkpoint = this.job_instance.new_time_checkpoint;
-                    target_job.current_failed_count = 0;
+                        target_job.time_checkpoint = this.job_instance.new_time_checkpoint;                   
+                    if (target_job.current_failed_count > 0) {
+                        notifier.sendRecoveryEmailMessage(target_job.notifiactions_list, target_job.name);
+                        target_job.current_failed_count = 0;
+                    }
+
+                    target_job.is_failed = false;
                 }
             }
             else {
@@ -175,10 +182,13 @@ namespace ETL_System {
                     target_job.current_failed_count++;
                     if (target_job.max_try_count <= target_job.current_failed_count) {
                         target_job.is_failed = true;
-                        target_job.is_paused = true;
+                        target_job.is_paused = true;                        
                     }
+                    notifier.sendErrorEmailMessage(target_job.notifiactions_list, target_job.name, this.error);
                 }
             }
+
+
 
             this.job_instance.result = outcome_success ? "success" : "fail";
             this.job_instance.worker = this.name;
@@ -186,6 +196,7 @@ namespace ETL_System {
             this.output = null;
             this.job_instance.error = this.error.Replace(@"'", "");
             this.error = null;
+
 
             this.data_layer.recordJobInstance(target_job, outcome_success, this.job_instance);
 

@@ -41,9 +41,9 @@
             // 
             this.tb_Server.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.tb_Server.Location = new System.Drawing.Point(124, 42);
-            this.tb_Server.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_Server.Margin = new System.Windows.Forms.Padding(4);
             this.tb_Server.Name = "tb_Server";
-            this.tb_Server.Size = new System.Drawing.Size(143, 22);
+            this.tb_Server.Size = new System.Drawing.Size(174, 22);
             this.tb_Server.TabIndex = 0;
             // 
             // contextMenuStrip1
@@ -55,7 +55,7 @@
             // 
             this.tb_UserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.tb_UserName.Location = new System.Drawing.Point(124, 96);
-            this.tb_UserName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_UserName.Margin = new System.Windows.Forms.Padding(4);
             this.tb_UserName.Name = "tb_UserName";
             this.tb_UserName.Size = new System.Drawing.Size(437, 22);
             this.tb_UserName.TabIndex = 2;
@@ -64,7 +64,7 @@
             // 
             this.tb_Pass.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.tb_Pass.Location = new System.Drawing.Point(124, 144);
-            this.tb_Pass.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_Pass.Margin = new System.Windows.Forms.Padding(4);
             this.tb_Pass.Name = "tb_Pass";
             this.tb_Pass.PasswordChar = '*';
             this.tb_Pass.Size = new System.Drawing.Size(437, 22);
@@ -108,7 +108,7 @@
             this.btn_Login.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btn_Login.Location = new System.Drawing.Point(451, 174);
-            this.btn_Login.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_Login.Margin = new System.Windows.Forms.Padding(4);
             this.btn_Login.Name = "btn_Login";
             this.btn_Login.Size = new System.Drawing.Size(110, 28);
             this.btn_Login.TabIndex = 7;
@@ -119,7 +119,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(281, 49);
+            this.label4.Location = new System.Drawing.Point(314, 49);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(35, 16);
@@ -129,10 +129,10 @@
             // tb_Port
             // 
             this.tb_Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.tb_Port.Location = new System.Drawing.Point(321, 43);
-            this.tb_Port.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_Port.Location = new System.Drawing.Point(357, 43);
+            this.tb_Port.Margin = new System.Windows.Forms.Padding(4);
             this.tb_Port.Name = "tb_Port";
-            this.tb_Port.Size = new System.Drawing.Size(110, 22);
+            this.tb_Port.Size = new System.Drawing.Size(74, 22);
             this.tb_Port.TabIndex = 1;
             // 
             // button1
@@ -140,7 +140,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.button1.Location = new System.Drawing.Point(451, 39);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(110, 28);
             this.button1.TabIndex = 10;
@@ -165,7 +165,7 @@
             this.Controls.Add(this.tb_UserName);
             this.Controls.Add(this.tb_Server);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login Credentials";

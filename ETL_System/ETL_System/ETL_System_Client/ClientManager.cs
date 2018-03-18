@@ -70,6 +70,10 @@ namespace ETL_System {
                     parent.tslb_Response.Text = $"Last server reply:{r.body} @({r.timestamp})";
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                     this.parent.tp_Definition.Select();
+                    if(ClientManager.this_user.role != "admin" && parent.tc_Main.Controls.Contains(parent.tp_Admin))
+                        this.parent.tc_Main.Controls.Remove(parent.tp_Admin);
+                    if (ClientManager.this_user.role == "admin" && !parent.tc_Main.Controls.Contains(parent.tp_Admin))
+                        this.parent.tc_Main.Controls.Add(parent.tp_Admin);
                 }
             } catch (Exception e) {
                 MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
@@ -77,7 +81,48 @@ namespace ETL_System {
 
         }
 
-        public void requestCatalogue() {
+        public void logoutProcedure() {
+            Message m = new Message();
+            m.msg_type = MsgTypes.TRY_DISCONECT;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if(r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    ClientManager.login_active = false;
+
+                    // and now some cleanup:
+                    foreach (Control c in parent.gb_General.Controls) {
+                        if (c.GetType() == typeof(TextBox))
+                            c.Text = "";
+                    }
+                    foreach (Control c in parent.gb_Status.Controls) {
+                        if (c.GetType() == typeof(TextBox))
+                            c.Text = "";
+                    }
+                    foreach (Control c in parent.gb_Changes.Controls) {
+                        if (c.GetType() == typeof(TextBox))
+                            c.Text = "";
+                    }
+                    this.cleanSchedules();
+                    this.cleanDependencies();
+                    parent.lv_JobsList.Items.Clear();
+                    parent.dgv_Catalogue.DataSource = null;
+                    parent.dgv_Queue.DataSource = null;
+                    parent.tslb_Status.Text = "Disconected";
+                    parent.tslb_Response.Visible = false;
+                    parent.gViewer.Graph = null; 
+
+                }
+                else {
+                    MessageBox.Show("Problems during logout. Try again.");
+                }
+            }catch(Exception e) {
+                MessageBox.Show("There was a communications problem. Try again.");
+            }
+        }
+
+        public void requestCatalogue() {            
             Message m = new Message();
             m.msg_type = MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY;
             m.header["user"] = this_user;
@@ -432,7 +477,7 @@ namespace ETL_System {
                     delay_seconds           = Int32.Parse(parent.tb_DelaySecs.Text),
                     latency_alert_seconds   = Int32.Parse(parent.tb_LatencyAlert.Text),
                     notifiactions_list      = parent.tb_Notifications.Text,
-                    is_failed               = false,
+                    is_failed               = parent.tb_IsFailed.Text == "NO"? true:false,
                     is_active               = parent.tb_isActive.Text == "YES" ? true : false,
                     is_paused               = parent.tb_IsPaused.Text == "YES" ? true : false,
                     checkpoint_type         = parent.cb_CheckppointType.SelectedIndex == 0 ? 1 : 2,

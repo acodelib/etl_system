@@ -89,7 +89,10 @@ namespace ETL_System
         REPLY_SUCCESS = 17,
         REPLY_FAIL = 18,
         SERVER_ERROR = 19,
-        SERVER_WARNING = 20
+        SERVER_WARNING = 20,
+        TRY_DISCONECT = 21,
+        ADMIN_REQUEST = 22,
+        ADMIN_COMMAND = 23
     }
       
 

@@ -22,11 +22,10 @@ namespace ETL_System
             this.lv_Jobs_selection_cycle = "Xstarted";
             this.lv_Jobs_selected_text = "";
             
-            //some hose keeping
-            foreach (Control c in tc_Job.Controls) {
-                if (c.Name != "tp_Definition")
-                    tc_Job.Controls.Remove(c);
-            }
+            //some hose keeping                         
+            tc_Job.Controls.Remove(tp_Schedules);
+            tc_Job.Controls.Remove(tp_Dependencies);
+            
             cb_CheckppointType.SelectedIndex = 1;
 
             //fire up the manager
@@ -71,7 +70,10 @@ namespace ETL_System
         }
 
         
-        private void tc_Main_Selected(object sender,EventArgs e) {          
+        private void tc_Main_Selected(object sender,EventArgs e) {
+            if (ClientManager.login_active == false)
+                return;
+
             if (tc_Main.SelectedTab == tp_Catalogue) {
                 if (ClientManager.login_active) {
                     manager.requestCatalogue();
@@ -90,7 +92,10 @@ namespace ETL_System
         }
 
         private void tc_Job_Selected(object sender, EventArgs e) {
-            if(tc_Job.SelectedTab == tp_Schedules) {
+            if (ClientManager.login_active == false)
+                return;
+
+            if (tc_Job.SelectedTab == tp_Schedules) {
                 cb_ScheduleType.Items.Clear();
                 foreach (ScheduleType s in ClientManager.schedulte_types.Values)
                     cb_ScheduleType.Items.Add(s.schedule_type_name);
@@ -117,11 +122,10 @@ namespace ETL_System
         }
 
         private void cb_Type_SelectedIndexChanged(object sender, EventArgs e) {
-            foreach (Control c in tc_Job.Controls) {
-                if (c.Name != "tp_Definition")
-                    tc_Job.Controls.Remove(c);
-            }
-            if(cb_Type.SelectedIndex == 0)
+            tc_Job.Controls.Remove(tp_Schedules);
+            tc_Job.Controls.Remove(tp_Dependencies);
+
+            if (cb_Type.SelectedIndex == 0)
                 tc_Job.Controls.Add(this.tp_Schedules);
             else
                 tc_Job.Controls.Add(this.tp_Dependencies);
@@ -215,7 +219,6 @@ namespace ETL_System
             }
 
             
-
             //4.React
             if (tc_Main.SelectedTab == tabPage1) {           
                 //ETL details tabl
@@ -252,6 +255,18 @@ namespace ETL_System
         private void nud_Depth_ValueChanged(object sender, EventArgs e) {
             if (this.lv_Jobs_selected_text != "" && this.lv_Jobs_selected_text != null)
                 manager.rederDependencyGraphView(this.lv_Jobs_selected_text);
+        }
+
+        private void ts_Logout_Click(object sender, EventArgs e) {
+            manager.logoutProcedure();
+        }
+
+        private void label24_Click(object sender, EventArgs e) {
+
+        }
+
+        private void groupBox10_Enter(object sender, EventArgs e) {
+
         }
     }
 }

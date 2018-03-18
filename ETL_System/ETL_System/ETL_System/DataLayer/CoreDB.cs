@@ -558,10 +558,11 @@ namespace ETL_System {
             else odc = ji.old_data_checkpoint;
             if (ji.new_data_checkpoint == null) ndc = "NULL";//DBNull.Value;
             else ndc = ji.new_data_checkpoint;
-
+            
             string insert_statement = $@"INSERT INTO ETL_System.dbo.JobInstances 
                                          SELECT {instance_id},{j.job_id},'{ji.result}','{ji.worker}',
-                                                '{j.executing_timestamp}','{DateTime.Now}','{ji.old_time_checkpoint}','{ji.new_time_checkpoint}',
+                                                '{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", j.executing_timestamp)}','{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now)}',
+                                                '{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", ji.old_time_checkpoint)}','{String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", ji.new_time_checkpoint)}',
                                                  {odc},{ndc},{ji.rows_inserted},{ji.rows_updated},{ji.rows_deleted},
                                                  '{j.executable_name}','system';                                                
                                         ";
