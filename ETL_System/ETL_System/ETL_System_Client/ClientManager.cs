@@ -269,10 +269,21 @@ namespace ETL_System {
                     //some performance optimisations:                    
                     parent.dgv_Catalogue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;                    
                     parent.dgv_Catalogue.EditMode = DataGridViewEditMode.EditProgrammatically;
-                    parent.dgv_Catalogue.EnableHeadersVisualStyles = false;
+                   // parent.dgv_Catalogue.EnableHeadersVisualStyles = false;
                     parent.dgv_Catalogue.DoubleBuffered(true);
 
                     parent.dgv_Catalogue.DataSource = t;
+                    parent.dgv_Catalogue.Columns["Job_Id"].Width = 60;
+                    parent.dgv_Catalogue.Columns["Name"].Width = 190;
+                    parent.dgv_Catalogue.Columns["Is Paused"].Width = 60;
+                    parent.dgv_Catalogue.Columns["Is Active"].Width = 60;
+                    parent.dgv_Catalogue.Columns["Next Execution"].Width =190 ;
+                    parent.dgv_Catalogue.Columns["Checkpoint"].Width = 190;
+                    parent.dgv_Catalogue.Columns["Is Failed"].Width = 60;
+                    parent.dgv_Catalogue.Columns["Last Executed"].Width = 190;
+                    parent.dgv_Catalogue.Columns["Last Duration"].Width = 80;
+                    parent.dgv_Catalogue.Columns["Max Try"].Width = 60;
+                    parent.dgv_Catalogue.Columns["Failed Count"].Width = 60;
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
                 else
