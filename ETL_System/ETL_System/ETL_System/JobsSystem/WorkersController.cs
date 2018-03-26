@@ -14,6 +14,8 @@ namespace ETL_System
 
         public WorkersController(int size,int run_frequency, JobsQueue queue, NotificationsManager mailer,CoreDB data_layer) {
             workers = new Dictionary<string, ETLWorker>();
+            SystemSharedData.no_of_workers = size;
+            SystemSharedData.worker_fetch_frequency = run_frequency;
             for(int i = 1;i<= size; i++) {
                 ETLWorker e = new ETLWorker(queue, mailer,data_layer,run_frequency);
                 e.name = $"Worker_no_{i}";

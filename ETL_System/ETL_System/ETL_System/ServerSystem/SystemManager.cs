@@ -256,7 +256,15 @@ namespace ETL_System {
             }
             output.header["admin_users"] = users;
 
-
+            output.header["app_db_conn_string"]     = SystemSharedData.app_db_connstring;
+            output.header["job_folder"]             = SystemSharedData.jobs_folder;
+            output.header["no_of_workers"]          = SystemSharedData.no_of_workers;
+            output.header["worker_fetch_frequency"] = SystemSharedData.worker_fetch_frequency;
+            output.header["queue_scan_frequency"]   = SystemSharedData.queue_scan_frequency;
+            output.header["mail_user_name"]         = SystemSharedData.mail_user_name;
+            output.header["mail_password"]          = SystemSharedData.mail_password;
+            output.header["mail_smtp"]              = SystemSharedData.mail_smtp;
+            output.header["mail_port"]              = SystemSharedData.mail_port;
 
             return output;
         }

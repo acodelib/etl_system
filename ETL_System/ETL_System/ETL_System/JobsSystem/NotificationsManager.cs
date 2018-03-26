@@ -25,7 +25,14 @@ namespace ETL_System
             smtp = "smtp.gmail.com";
             port = 587;
             msg_outcome = "success";
+
+
+            SystemSharedData.mail_user_name = user_name;
+            SystemSharedData.mail_password = password;
+            SystemSharedData.mail_smtp = smtp;
+            SystemSharedData.mail_port = port;
             
+
         }        
 
         //======================================  METHODS =================================================================

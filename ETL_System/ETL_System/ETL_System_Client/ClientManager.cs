@@ -150,7 +150,17 @@ namespace ETL_System {
                     
                     parent.lv_Users.Items.Clear();
                     this.adminPageRoutine(r);
+                    parent.tb_ConnectionString.Text = ((string)r.header["app_db_conn_string"]).ToString();
+                    parent.tb_JobsFolder.Text       = ((string)r.header["job_folder"]).ToString();
+                    parent.tb_NoOfWorkers.Text      = ((int)r.header["no_of_workers"]).ToString();
+                    parent.tb_WorkersFrequency.Text = ((int)r.header["worker_fetch_frequency"]).ToString();
+                    parent.tb_ScanFrequency.Text    = ((int)r.header["queue_scan_frequency"]).ToString();
+                    parent.tb_EmailUser.Text        = (string)r.header["mail_user_name"];
+                    parent.tb_EmailPass.Text        = (string)r.header["mail_password"];
+                    parent.tb_Smtp.Text             = (string)r.header["mail_smtp"];
+                    parent.tb_Port.Text             = ((int)r.header["mail_port"]).ToString();
                 }
+
                 else
                     MessageBox.Show(r.body);
             } catch (Exception e) {
@@ -307,12 +317,20 @@ namespace ETL_System {
                     t = c.data;
 
                     //some performance optimisations:                    
-                    parent.dgv_Queue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                    //parent.dgv_Queue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     parent.dgv_Queue.EditMode = DataGridViewEditMode.EditProgrammatically;
-                    parent.dgv_Queue.EnableHeadersVisualStyles = false;
+                    //parent.dgv_Queue.EnableHeadersVisualStyles = false;
                     parent.dgv_Queue.DoubleBuffered(true);
 
+                    //data fill
                     parent.dgv_Queue.DataSource = t;
+                    //sizing:                    
+                    parent.dgv_Queue.Columns["Job ID"].Width = 80;
+                    parent.dgv_Queue.Columns["Job Name"].Width = 190;
+                    parent.dgv_Queue.Columns["Queued @"].Width = 190;
+                    parent.dgv_Queue.Columns["Executing Since"].Width = 190;                    
+
+
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                 }
                 else

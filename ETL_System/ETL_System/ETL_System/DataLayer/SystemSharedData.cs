@@ -12,6 +12,16 @@ namespace ETL_System {
         public static string app_db_connstring;
         public static string jobs_folder;
 
+        public static int no_of_workers;
+        public static int worker_fetch_frequency;
+        public static int queue_scan_frequency;
+
+        public static string mail_user_name;
+        public static string mail_password;
+        public static string mail_smtp;
+        public static int mail_port;
+        
+
         public static Dictionary<int?, ScheduleType> schedule_types;
         public static Dictionary<int?, DependencyType> dependency_types;
         public static Dictionary<int, string> user_roles;
@@ -22,6 +32,7 @@ namespace ETL_System {
         private static int jobs_key_sequence;
         private static int changes_key_sequence;
         private static int job_instances_key_sequence;      
+              
 
 
         //================ METHODS

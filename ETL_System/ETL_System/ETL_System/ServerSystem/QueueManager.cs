@@ -20,6 +20,7 @@ namespace ETL_System{
             this.catalogue = cat;
             this.queue = queue;
             this.scan_frequencey_seconds = frequency;
+            SystemSharedData.queue_scan_frequency = frequency;
         }
 
         //=========================Methods

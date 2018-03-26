@@ -103,6 +103,10 @@ namespace ETL_System {
             this.btn_AddDependency = new System.Windows.Forms.Button();
             this.cb_DepTypes = new System.Windows.Forms.ComboBox();
             this.tp_Catalogue = new System.Windows.Forms.TabPage();
+            this.label36 = new System.Windows.Forms.Label();
+            this.cb_FilterCatalogue = new System.Windows.Forms.ComboBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.cb_SortCatalogue = new System.Windows.Forms.ComboBox();
             this.dgv_Catalogue = new System.Windows.Forms.DataGridView();
             this.tp_Queue = new System.Windows.Forms.TabPage();
             this.dgv_Queue = new System.Windows.Forms.DataGridView();
@@ -116,16 +120,14 @@ namespace ETL_System {
             this.tp_Admin = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.button3 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tb_ScanFrequency = new System.Windows.Forms.TextBox();
+            this.tb_WorkersFrequency = new System.Windows.Forms.TextBox();
+            this.tb_NoOfWorkers = new System.Windows.Forms.TextBox();
             this.label34 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label30 = new System.Windows.Forms.Label();
-            this.tb_ConnectionString = new System.Windows.Forms.TextBox();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.cb_SSL = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -170,6 +172,8 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
+            this.tb_ConnectionString = new System.Windows.Forms.TextBox();
+            this.tb_JobsFolder = new System.Windows.Forms.TextBox();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -716,7 +720,7 @@ namespace ETL_System {
             this.tp_JobInstances.Location = new System.Drawing.Point(4, 24);
             this.tp_JobInstances.Name = "tp_JobInstances";
             this.tp_JobInstances.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_JobInstances.Size = new System.Drawing.Size(1098, 601);
+            this.tp_JobInstances.Size = new System.Drawing.Size(1256, 627);
             this.tp_JobInstances.TabIndex = 3;
             this.tp_JobInstances.Text = "History";
             this.tp_JobInstances.UseVisualStyleBackColor = true;
@@ -728,7 +732,7 @@ namespace ETL_System {
             this.tp_Schedules.Location = new System.Drawing.Point(4, 24);
             this.tp_Schedules.Name = "tp_Schedules";
             this.tp_Schedules.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Schedules.Size = new System.Drawing.Size(1098, 601);
+            this.tp_Schedules.Size = new System.Drawing.Size(1256, 627);
             this.tp_Schedules.TabIndex = 1;
             this.tp_Schedules.Text = "Schedules";
             this.tp_Schedules.UseVisualStyleBackColor = true;
@@ -859,7 +863,7 @@ namespace ETL_System {
             this.tp_Dependencies.Location = new System.Drawing.Point(4, 24);
             this.tp_Dependencies.Name = "tp_Dependencies";
             this.tp_Dependencies.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Dependencies.Size = new System.Drawing.Size(1098, 601);
+            this.tp_Dependencies.Size = new System.Drawing.Size(1256, 627);
             this.tp_Dependencies.TabIndex = 2;
             this.tp_Dependencies.Text = "Dependencies";
             this.tp_Dependencies.UseVisualStyleBackColor = true;
@@ -984,15 +988,63 @@ namespace ETL_System {
             // 
             // tp_Catalogue
             // 
+            this.tp_Catalogue.Controls.Add(this.label36);
+            this.tp_Catalogue.Controls.Add(this.cb_FilterCatalogue);
+            this.tp_Catalogue.Controls.Add(this.label35);
+            this.tp_Catalogue.Controls.Add(this.cb_SortCatalogue);
             this.tp_Catalogue.Controls.Add(this.dgv_Catalogue);
             this.tp_Catalogue.Location = new System.Drawing.Point(4, 25);
             this.tp_Catalogue.Name = "tp_Catalogue";
             this.tp_Catalogue.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Catalogue.Size = new System.Drawing.Size(1112, 638);
+            this.tp_Catalogue.Size = new System.Drawing.Size(1270, 664);
             this.tp_Catalogue.TabIndex = 1;
             this.tp_Catalogue.Text = "Catalogue";
             this.tp_Catalogue.UseVisualStyleBackColor = true;
             this.tp_Catalogue.Click += new System.EventHandler(this.tp_Catalogue_Click);
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(409, 27);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(62, 17);
+            this.label36.TabIndex = 5;
+            this.label36.Text = "Filter by:";
+            // 
+            // cb_FilterCatalogue
+            // 
+            this.cb_FilterCatalogue.FormattingEnabled = true;
+            this.cb_FilterCatalogue.Items.AddRange(new object[] {
+            "NONE",
+            "Type = Schedule",
+            "Type = Dependency"});
+            this.cb_FilterCatalogue.Location = new System.Drawing.Point(472, 22);
+            this.cb_FilterCatalogue.Name = "cb_FilterCatalogue";
+            this.cb_FilterCatalogue.Size = new System.Drawing.Size(208, 24);
+            this.cb_FilterCatalogue.TabIndex = 4;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(72, 27);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(57, 17);
+            this.label35.TabIndex = 3;
+            this.label35.Text = "Sort by:";
+            // 
+            // cb_SortCatalogue
+            // 
+            this.cb_SortCatalogue.FormattingEnabled = true;
+            this.cb_SortCatalogue.Items.AddRange(new object[] {
+            "NONE",
+            "Job Id - asc",
+            "Job Id - desc",
+            "Job Name - asc",
+            "Job Name - desc"});
+            this.cb_SortCatalogue.Location = new System.Drawing.Point(145, 22);
+            this.cb_SortCatalogue.Name = "cb_SortCatalogue";
+            this.cb_SortCatalogue.Size = new System.Drawing.Size(208, 24);
+            this.cb_SortCatalogue.TabIndex = 1;
             // 
             // dgv_Catalogue
             // 
@@ -1002,12 +1054,12 @@ namespace ETL_System {
             this.dgv_Catalogue.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgv_Catalogue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Catalogue.GridColor = System.Drawing.SystemColors.Control;
-            this.dgv_Catalogue.Location = new System.Drawing.Point(22, 13);
+            this.dgv_Catalogue.Location = new System.Drawing.Point(22, 65);
             this.dgv_Catalogue.Name = "dgv_Catalogue";
             this.dgv_Catalogue.ReadOnly = true;
             this.dgv_Catalogue.RowHeadersVisible = false;
             this.dgv_Catalogue.ShowRowErrors = false;
-            this.dgv_Catalogue.Size = new System.Drawing.Size(1498, 699);
+            this.dgv_Catalogue.Size = new System.Drawing.Size(1233, 583);
             this.dgv_Catalogue.TabIndex = 0;
             // 
             // tp_Queue
@@ -1016,7 +1068,7 @@ namespace ETL_System {
             this.tp_Queue.Location = new System.Drawing.Point(4, 25);
             this.tp_Queue.Name = "tp_Queue";
             this.tp_Queue.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Queue.Size = new System.Drawing.Size(1112, 638);
+            this.tp_Queue.Size = new System.Drawing.Size(1270, 664);
             this.tp_Queue.TabIndex = 2;
             this.tp_Queue.Text = "Queue";
             this.tp_Queue.UseVisualStyleBackColor = true;
@@ -1032,7 +1084,7 @@ namespace ETL_System {
             this.dgv_Queue.Location = new System.Drawing.Point(22, 13);
             this.dgv_Queue.Name = "dgv_Queue";
             this.dgv_Queue.RowHeadersVisible = false;
-            this.dgv_Queue.Size = new System.Drawing.Size(852, 699);
+            this.dgv_Queue.Size = new System.Drawing.Size(852, 645);
             this.dgv_Queue.TabIndex = 0;
             // 
             // tp_Graph
@@ -1042,7 +1094,7 @@ namespace ETL_System {
             this.tp_Graph.Location = new System.Drawing.Point(4, 25);
             this.tp_Graph.Name = "tp_Graph";
             this.tp_Graph.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Graph.Size = new System.Drawing.Size(1112, 638);
+            this.tp_Graph.Size = new System.Drawing.Size(1270, 664);
             this.tp_Graph.TabIndex = 3;
             this.tp_Graph.Text = "Dependency Graph";
             this.tp_Graph.UseVisualStyleBackColor = true;
@@ -1152,7 +1204,7 @@ namespace ETL_System {
             this.gViewer.SaveButtonVisible = true;
             this.gViewer.SaveGraphButtonVisible = true;
             this.gViewer.SaveInVectorFormatEnabled = true;
-            this.gViewer.Size = new System.Drawing.Size(1420, 706);
+            this.gViewer.Size = new System.Drawing.Size(1152, 652);
             this.gViewer.TabIndex = 3;
             this.gViewer.TightOffsetForRouting = 0.125D;
             this.gViewer.ToolBarIsVisible = true;
@@ -1171,24 +1223,24 @@ namespace ETL_System {
             this.tp_Admin.Location = new System.Drawing.Point(4, 25);
             this.tp_Admin.Name = "tp_Admin";
             this.tp_Admin.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Admin.Size = new System.Drawing.Size(1112, 638);
+            this.tp_Admin.Size = new System.Drawing.Size(1270, 664);
             this.tp_Admin.TabIndex = 4;
             this.tp_Admin.Text = "Administer";
             this.tp_Admin.UseVisualStyleBackColor = true;
             // 
             // groupBox11
             // 
+            this.groupBox11.Controls.Add(this.tb_JobsFolder);
+            this.groupBox11.Controls.Add(this.tb_ConnectionString);
             this.groupBox11.Controls.Add(this.button3);
-            this.groupBox11.Controls.Add(this.textBox4);
-            this.groupBox11.Controls.Add(this.textBox3);
-            this.groupBox11.Controls.Add(this.textBox1);
+            this.groupBox11.Controls.Add(this.tb_ScanFrequency);
+            this.groupBox11.Controls.Add(this.tb_WorkersFrequency);
+            this.groupBox11.Controls.Add(this.tb_NoOfWorkers);
             this.groupBox11.Controls.Add(this.label34);
             this.groupBox11.Controls.Add(this.label33);
             this.groupBox11.Controls.Add(this.label32);
             this.groupBox11.Controls.Add(this.label31);
-            this.groupBox11.Controls.Add(this.textBox2);
             this.groupBox11.Controls.Add(this.label30);
-            this.groupBox11.Controls.Add(this.tb_ConnectionString);
             this.groupBox11.Location = new System.Drawing.Point(34, 39);
             this.groupBox11.Name = "groupBox11";
             this.groupBox11.Size = new System.Drawing.Size(650, 604);
@@ -1210,26 +1262,26 @@ namespace ETL_System {
             this.button3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.button3.UseVisualStyleBackColor = false;
             // 
-            // textBox4
+            // tb_ScanFrequency
             // 
-            this.textBox4.Location = new System.Drawing.Point(276, 485);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(83, 23);
-            this.textBox4.TabIndex = 9;
+            this.tb_ScanFrequency.Location = new System.Drawing.Point(276, 485);
+            this.tb_ScanFrequency.Name = "tb_ScanFrequency";
+            this.tb_ScanFrequency.Size = new System.Drawing.Size(83, 23);
+            this.tb_ScanFrequency.TabIndex = 9;
             // 
-            // textBox3
+            // tb_WorkersFrequency
             // 
-            this.textBox3.Location = new System.Drawing.Point(520, 425);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(83, 23);
-            this.textBox3.TabIndex = 8;
+            this.tb_WorkersFrequency.Location = new System.Drawing.Point(520, 425);
+            this.tb_WorkersFrequency.Name = "tb_WorkersFrequency";
+            this.tb_WorkersFrequency.Size = new System.Drawing.Size(83, 23);
+            this.tb_WorkersFrequency.TabIndex = 8;
             // 
-            // textBox1
+            // tb_NoOfWorkers
             // 
-            this.textBox1.Location = new System.Drawing.Point(153, 425);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(83, 23);
-            this.textBox1.TabIndex = 7;
+            this.tb_NoOfWorkers.Location = new System.Drawing.Point(153, 425);
+            this.tb_NoOfWorkers.Name = "tb_NoOfWorkers";
+            this.tb_NoOfWorkers.Size = new System.Drawing.Size(83, 23);
+            this.tb_NoOfWorkers.TabIndex = 7;
             // 
             // label34
             // 
@@ -1267,14 +1319,6 @@ namespace ETL_System {
             this.label31.TabIndex = 3;
             this.label31.Text = "Executables folder path:";
             // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(43, 274);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(560, 107);
-            this.textBox2.TabIndex = 2;
-            // 
             // label30
             // 
             this.label30.AutoSize = true;
@@ -1283,14 +1327,6 @@ namespace ETL_System {
             this.label30.Size = new System.Drawing.Size(176, 17);
             this.label30.TabIndex = 1;
             this.label30.Text = "App DB Connection String:";
-            // 
-            // tb_ConnectionString
-            // 
-            this.tb_ConnectionString.Location = new System.Drawing.Point(43, 70);
-            this.tb_ConnectionString.Multiline = true;
-            this.tb_ConnectionString.Name = "tb_ConnectionString";
-            this.tb_ConnectionString.Size = new System.Drawing.Size(560, 142);
-            this.tb_ConnectionString.TabIndex = 0;
             // 
             // groupBox10
             // 
@@ -1343,6 +1379,7 @@ namespace ETL_System {
             // 
             this.tb_EmailPass.Location = new System.Drawing.Point(526, 27);
             this.tb_EmailPass.Name = "tb_EmailPass";
+            this.tb_EmailPass.PasswordChar = '*';
             this.tb_EmailPass.Size = new System.Drawing.Size(193, 23);
             this.tb_EmailPass.TabIndex = 40;
             // 
@@ -1730,6 +1767,22 @@ namespace ETL_System {
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
             // 
+            // tb_ConnectionString
+            // 
+            this.tb_ConnectionString.Location = new System.Drawing.Point(43, 65);
+            this.tb_ConnectionString.Multiline = true;
+            this.tb_ConnectionString.Name = "tb_ConnectionString";
+            this.tb_ConnectionString.Size = new System.Drawing.Size(560, 131);
+            this.tb_ConnectionString.TabIndex = 43;
+            // 
+            // tb_JobsFolder
+            // 
+            this.tb_JobsFolder.Location = new System.Drawing.Point(43, 270);
+            this.tb_JobsFolder.Multiline = true;
+            this.tb_JobsFolder.Name = "tb_JobsFolder";
+            this.tb_JobsFolder.Size = new System.Drawing.Size(560, 102);
+            this.tb_JobsFolder.TabIndex = 44;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1766,6 +1819,7 @@ namespace ETL_System {
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.tp_Catalogue.ResumeLayout(false);
+            this.tp_Catalogue.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Catalogue)).EndInit();
             this.tp_Queue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Queue)).EndInit();
@@ -1917,16 +1971,14 @@ namespace ETL_System {
         public CheckBox cb_SSL;
         public GroupBox groupBox11;
         public Button button3;
-        public TextBox textBox4;
-        public TextBox textBox3;
-        public TextBox textBox1;
+        public TextBox tb_ScanFrequency;
+        public TextBox tb_WorkersFrequency;
+        public TextBox tb_NoOfWorkers;
         public Label label34;
         public Label label33;
         public Label label32;
         public Label label31;
-        public TextBox textBox2;
         public Label label30;
-        public TextBox tb_ConnectionString;
         public CheckBox cb_UserIsActive;
         public ListView lv_Users;
         public ColumnHeader columnHeader8;
@@ -1934,6 +1986,12 @@ namespace ETL_System {
         public ColumnHeader columnHeader10;
         private ColumnHeader columnHeader11;
         private ColumnHeader columnHeader12;
+        private Label label36;
+        private ComboBox cb_FilterCatalogue;
+        private Label label35;
+        private ComboBox cb_SortCatalogue;
+        public TextBox tb_JobsFolder;
+        public TextBox tb_ConnectionString;
     }
 }
 
