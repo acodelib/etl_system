@@ -263,6 +263,46 @@ namespace ETL_System {
             }
         }
 
+        public void adminUpdateConfigs() {
+            
+            Message m = new Message();
+            //1.first check if all items are filled in
+            foreach(Control c in parent.gb_Configs.Controls)
+            if (c.GetType() == typeof(TextBox) && c.Text == "")            {
+                MessageBox.Show("Please fill in all text boxes in the Configurations group");
+                return;
+            }
+            if (MessageBox.Show("Configurations will be updated on the server. Continue?", "", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+
+            //2.add header and prepare message
+            m.msg_type = MsgTypes.ADMIN_COMMAND;
+            m.body = "update_configurations";
+            m.header["app_db_conn_string"]      = parent.tb_ConnectionString.Text;
+            m.header["job_folder"]              = parent.tb_JobsFolder.Text;
+            m.header["no_of_workers"]           = parent.tb_NoOfWorkers.Text;
+            m.header["worker_fetch_frequency"]  = parent.tb_WorkersFrequency.Text;
+            m.header["queue_scan_frequency"]    = parent.tb_ScanFrequency.Text;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+
+            //4.Send message
+            try            {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS)
+                {
+                    parent.lv_Users.Items.Clear();
+                    this.adminPageRoutine(r);
+                }
+                else
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e)  {
+                MessageBox.Show($"Problems while loading the Catalogue.\nOriginal system error:{e.Message}");
+            }
+        }
+
         public void requestCatalogue() {            
             Message m = new Message();
             m.msg_type = MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY;

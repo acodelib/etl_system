@@ -280,5 +280,17 @@ namespace ETL_System
         private void btn_DelUser_Click(object sender, EventArgs e) {
             manager.adminDeleteUser();
         }
+
+        private void button3_Click(object sender, EventArgs e) {
+            manager.adminUpdateConfigs();
+        }
+
+        private void dgv_Catalogue_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+
+        }
     }
 }

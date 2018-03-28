@@ -118,8 +118,10 @@ namespace ETL_System {
             this.label21 = new System.Windows.Forms.Label();
             this.gViewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             this.tp_Admin = new System.Windows.Forms.TabPage();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.gb_Configs = new System.Windows.Forms.GroupBox();
+            this.tb_JobsFolder = new System.Windows.Forms.TextBox();
+            this.tb_ConnectionString = new System.Windows.Forms.TextBox();
+            this.btn_UpdateConfigs = new System.Windows.Forms.Button();
             this.tb_ScanFrequency = new System.Windows.Forms.TextBox();
             this.tb_WorkersFrequency = new System.Windows.Forms.TextBox();
             this.tb_NoOfWorkers = new System.Windows.Forms.TextBox();
@@ -172,8 +174,7 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
-            this.tb_ConnectionString = new System.Windows.Forms.TextBox();
-            this.tb_JobsFolder = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -183,6 +184,7 @@ namespace ETL_System {
             this.gb_General.SuspendLayout();
             this.gb_Status.SuspendLayout();
             this.gb_Changes.SuspendLayout();
+            this.tp_JobInstances.SuspendLayout();
             this.tp_Schedules.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -197,12 +199,13 @@ namespace ETL_System {
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_Depth)).BeginInit();
             this.tp_Admin.SuspendLayout();
-            this.groupBox11.SuspendLayout();
+            this.gb_Configs.SuspendLayout();
             this.groupBox10.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -717,6 +720,7 @@ namespace ETL_System {
             // 
             // tp_JobInstances
             // 
+            this.tp_JobInstances.Controls.Add(this.dataGridView1);
             this.tp_JobInstances.Location = new System.Drawing.Point(4, 24);
             this.tp_JobInstances.Name = "tp_JobInstances";
             this.tp_JobInstances.Padding = new System.Windows.Forms.Padding(3);
@@ -1058,9 +1062,11 @@ namespace ETL_System {
             this.dgv_Catalogue.Name = "dgv_Catalogue";
             this.dgv_Catalogue.ReadOnly = true;
             this.dgv_Catalogue.RowHeadersVisible = false;
+            this.dgv_Catalogue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_Catalogue.ShowRowErrors = false;
             this.dgv_Catalogue.Size = new System.Drawing.Size(1233, 583);
             this.dgv_Catalogue.TabIndex = 0;
+            this.dgv_Catalogue.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Catalogue_CellContentClick);
             // 
             // tp_Queue
             // 
@@ -1217,7 +1223,7 @@ namespace ETL_System {
             // tp_Admin
             // 
             this.tp_Admin.AutoScroll = true;
-            this.tp_Admin.Controls.Add(this.groupBox11);
+            this.tp_Admin.Controls.Add(this.gb_Configs);
             this.tp_Admin.Controls.Add(this.groupBox10);
             this.tp_Admin.Controls.Add(this.groupBox8);
             this.tp_Admin.Location = new System.Drawing.Point(4, 25);
@@ -1228,39 +1234,56 @@ namespace ETL_System {
             this.tp_Admin.Text = "Administer";
             this.tp_Admin.UseVisualStyleBackColor = true;
             // 
-            // groupBox11
+            // gb_Configs
             // 
-            this.groupBox11.Controls.Add(this.tb_JobsFolder);
-            this.groupBox11.Controls.Add(this.tb_ConnectionString);
-            this.groupBox11.Controls.Add(this.button3);
-            this.groupBox11.Controls.Add(this.tb_ScanFrequency);
-            this.groupBox11.Controls.Add(this.tb_WorkersFrequency);
-            this.groupBox11.Controls.Add(this.tb_NoOfWorkers);
-            this.groupBox11.Controls.Add(this.label34);
-            this.groupBox11.Controls.Add(this.label33);
-            this.groupBox11.Controls.Add(this.label32);
-            this.groupBox11.Controls.Add(this.label31);
-            this.groupBox11.Controls.Add(this.label30);
-            this.groupBox11.Location = new System.Drawing.Point(34, 39);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(650, 604);
-            this.groupBox11.TabIndex = 2;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Configurations";
+            this.gb_Configs.Controls.Add(this.tb_JobsFolder);
+            this.gb_Configs.Controls.Add(this.tb_ConnectionString);
+            this.gb_Configs.Controls.Add(this.btn_UpdateConfigs);
+            this.gb_Configs.Controls.Add(this.tb_ScanFrequency);
+            this.gb_Configs.Controls.Add(this.tb_WorkersFrequency);
+            this.gb_Configs.Controls.Add(this.tb_NoOfWorkers);
+            this.gb_Configs.Controls.Add(this.label34);
+            this.gb_Configs.Controls.Add(this.label33);
+            this.gb_Configs.Controls.Add(this.label32);
+            this.gb_Configs.Controls.Add(this.label31);
+            this.gb_Configs.Controls.Add(this.label30);
+            this.gb_Configs.Location = new System.Drawing.Point(34, 39);
+            this.gb_Configs.Name = "gb_Configs";
+            this.gb_Configs.Size = new System.Drawing.Size(650, 604);
+            this.gb_Configs.TabIndex = 2;
+            this.gb_Configs.TabStop = false;
+            this.gb_Configs.Text = "Configurations";
             // 
-            // button3
+            // tb_JobsFolder
             // 
-            this.button3.BackColor = System.Drawing.Color.Transparent;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button3.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
-            this.button3.Location = new System.Drawing.Point(529, 541);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(74, 39);
-            this.button3.TabIndex = 42;
-            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.button3.UseVisualStyleBackColor = false;
+            this.tb_JobsFolder.Location = new System.Drawing.Point(43, 270);
+            this.tb_JobsFolder.Multiline = true;
+            this.tb_JobsFolder.Name = "tb_JobsFolder";
+            this.tb_JobsFolder.Size = new System.Drawing.Size(560, 102);
+            this.tb_JobsFolder.TabIndex = 44;
+            // 
+            // tb_ConnectionString
+            // 
+            this.tb_ConnectionString.Location = new System.Drawing.Point(43, 65);
+            this.tb_ConnectionString.Multiline = true;
+            this.tb_ConnectionString.Name = "tb_ConnectionString";
+            this.tb_ConnectionString.Size = new System.Drawing.Size(560, 131);
+            this.tb_ConnectionString.TabIndex = 43;
+            // 
+            // btn_UpdateConfigs
+            // 
+            this.btn_UpdateConfigs.BackColor = System.Drawing.Color.Transparent;
+            this.btn_UpdateConfigs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_UpdateConfigs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_UpdateConfigs.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
+            this.btn_UpdateConfigs.Location = new System.Drawing.Point(529, 541);
+            this.btn_UpdateConfigs.Name = "btn_UpdateConfigs";
+            this.btn_UpdateConfigs.Size = new System.Drawing.Size(74, 39);
+            this.btn_UpdateConfigs.TabIndex = 42;
+            this.btn_UpdateConfigs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_UpdateConfigs.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_UpdateConfigs.UseVisualStyleBackColor = false;
+            this.btn_UpdateConfigs.Click += new System.EventHandler(this.button3_Click);
             // 
             // tb_ScanFrequency
             // 
@@ -1767,21 +1790,23 @@ namespace ETL_System {
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
             // 
-            // tb_ConnectionString
+            // dataGridView1
             // 
-            this.tb_ConnectionString.Location = new System.Drawing.Point(43, 65);
-            this.tb_ConnectionString.Multiline = true;
-            this.tb_ConnectionString.Name = "tb_ConnectionString";
-            this.tb_ConnectionString.Size = new System.Drawing.Size(560, 131);
-            this.tb_ConnectionString.TabIndex = 43;
-            // 
-            // tb_JobsFolder
-            // 
-            this.tb_JobsFolder.Location = new System.Drawing.Point(43, 270);
-            this.tb_JobsFolder.Multiline = true;
-            this.tb_JobsFolder.Name = "tb_JobsFolder";
-            this.tb_JobsFolder.Size = new System.Drawing.Size(560, 102);
-            this.tb_JobsFolder.TabIndex = 44;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.GridColor = System.Drawing.SystemColors.Control;
+            this.dataGridView1.Location = new System.Drawing.Point(6, 22);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.ShowRowErrors = false;
+            this.dataGridView1.Size = new System.Drawing.Size(1244, 599);
+            this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // MainWindow
             // 
@@ -1810,6 +1835,7 @@ namespace ETL_System {
             this.gb_Status.PerformLayout();
             this.gb_Changes.ResumeLayout(false);
             this.gb_Changes.PerformLayout();
+            this.tp_JobInstances.ResumeLayout(false);
             this.tp_Schedules.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -1828,8 +1854,8 @@ namespace ETL_System {
             this.groupBox7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_Depth)).EndInit();
             this.tp_Admin.ResumeLayout(false);
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox11.PerformLayout();
+            this.gb_Configs.ResumeLayout(false);
+            this.gb_Configs.PerformLayout();
             this.groupBox10.ResumeLayout(false);
             this.groupBox10.PerformLayout();
             this.groupBox8.ResumeLayout(false);
@@ -1839,6 +1865,7 @@ namespace ETL_System {
             this.groupBox1.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1969,8 +1996,8 @@ namespace ETL_System {
         public TextBox tb_EmailUser;
         public Button button2;
         public CheckBox cb_SSL;
-        public GroupBox groupBox11;
-        public Button button3;
+        public GroupBox gb_Configs;
+        public Button btn_UpdateConfigs;
         public TextBox tb_ScanFrequency;
         public TextBox tb_WorkersFrequency;
         public TextBox tb_NoOfWorkers;
@@ -1992,6 +2019,7 @@ namespace ETL_System {
         private ComboBox cb_SortCatalogue;
         public TextBox tb_JobsFolder;
         public TextBox tb_ConnectionString;
+        public DataGridView dataGridView1;
     }
 }
 

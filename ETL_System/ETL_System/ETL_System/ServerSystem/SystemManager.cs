@@ -277,6 +277,14 @@ namespace ETL_System {
                 case ("delete_user"):
                     this.data_layer.adminDeleteUser((List<int>)msg.header["user_delete_list"]);
                     break;
+                case ("update_configurations"):
+                    this.addOrChangeConfigToFile("ConnectionString", (string)msg.header["app_db_conn_string"], _path_to_config);
+                    this.addOrChangeConfigToFile("ExecutionPath", (string)msg.header["job_folder"], _path_to_config);
+                    this.addOrChangeConfigToFile("#EtlWorkersCount", (string)msg.header["no_of_workers"], _path_to_config);
+                    this.addOrChangeConfigToFile("WorkerFetchFrequency", (string)msg.header["worker_fetch_frequency"], _path_to_config);
+                    this.addOrChangeConfigToFile("QueueScanFrequency", (string)msg.header["queue_scan_frequency"], _path_to_config);
+                    break;
+                
             }
         }
 
