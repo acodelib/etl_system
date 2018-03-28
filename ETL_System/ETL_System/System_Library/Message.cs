@@ -43,11 +43,15 @@ namespace ETL_System
 
         //------------METHODS
         public byte[] encodeToBytes() {
+            
             MemoryStream m = new MemoryStream();
             BinaryFormatter b = new BinaryFormatter();
             b.Serialize(m, this);
             m.Position = 0;
-            return m.ToArray();
+            byte[] returner = m.ToArray();
+            m.Flush();
+
+            return returner;
         }
 
         public void addAttachement(MsgAttachment att) {
