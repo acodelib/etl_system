@@ -341,7 +341,82 @@ namespace ETL_System {
             } catch (Exception e) {
                 MessageBox.Show($"Problems while loading the Catalogue.\nOriginal system error:{e.Message}");
             }
-        }   
+        }
+
+        public void requestJobHistory() {
+            if (parent.lv_Jobs_selected_text == "" || parent.lv_Jobs_selected_text == null)
+                return;
+            parent.tb_InstanceOutput.Text = "";
+           Message m = new Message();
+            m.msg_type = MsgTypes.REQUEST_JOB_INSTANCES;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            m.body = parent.lv_Jobs_selected_text;
+            DataTable t;
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    t = (DataTable)r.header["instances"];
+                    parent.dgv_JobInstances.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    
+
+                    //some performance optimisations:                    
+                    parent.dgv_JobInstances.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                    parent.dgv_JobInstances.EditMode = DataGridViewEditMode.EditProgrammatically;
+                    // parent.dgv_Catalogue.EnableHeadersVisualStyles = false;
+                    parent.dgv_JobInstances.DoubleBuffered(true);
+
+                    parent.dgv_JobInstances.DataSource = t;
+                    parent.dgv_JobInstances.AllowUserToResizeRows = false;
+
+                    //cleanup the view                    
+                    parent.dgv_JobInstances.Columns["Instance ID"].Width = 80;
+                    parent.dgv_JobInstances.Columns["Result"].Width = 60;
+                    parent.dgv_JobInstances.Columns["Start@"].Width = 130;
+                    parent.dgv_JobInstances.Columns["End@"].Width = 130;
+                    parent.dgv_JobInstances.Columns["Duration Sec"].Width = 60;
+                    parent.dgv_JobInstances.Columns["From Time Checkpoint"].Width = 130;
+                    parent.dgv_JobInstances.Columns["To Time Checkpoint"].Width = 130;
+                    parent.dgv_JobInstances.Columns["From Data Checkpoint"].Width = 100;
+                    parent.dgv_JobInstances.Columns["To Data Checkpoint"].Width = 100;
+                    parent.dgv_JobInstances.Columns["Started by"].Width = 80;
+                    parent.dgv_JobInstances.Columns["Executable"].Width = 320;
+
+
+
+                    this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
+                }
+                else
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Problems while loading the History Catalogue.\nOriginal system error:{e.Message}");
+            }
+        }
+
+        public void requestInstanceOutput() {
+            if (parent.lv_Jobs_selected_text == "" || parent.lv_Jobs_selected_text == null)
+                return;
+            string instance_id = parent.dgv_JobInstances.Rows[parent.dgv_JobInstances.CurrentCell.RowIndex].Cells["Instance ID"].Value.ToString();
+            Message m = new Message();
+            m.msg_type = MsgTypes.REQUEST_JOB_INSTANCE_OUTPUT;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            m.body = instance_id;
+            
+            try {
+                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    parent.tb_InstanceOutput.Text = (string)r.header["output"];
+                    this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
+                }
+                else
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Problems while loading Instance Output.\nOriginal system error:{e.Message}");
+            }
+        }
 
         public void requestQueue() {
             Message m = new Message();

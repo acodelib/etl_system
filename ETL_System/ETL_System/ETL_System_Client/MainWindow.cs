@@ -87,7 +87,12 @@ namespace ETL_System
             }
             if (tc_Main.SelectedTab == tabPage1) {
                 //ETL details tabl
+                if (tc_Job.SelectedTab == tp_JobInstances) {
+                    manager.requestJobHistory();
+                    return;
+                }
                 manager.initETLJobDefinitionTab();
+               
             }
 
             if(tc_Main.SelectedTab == tp_Admin) {
@@ -109,6 +114,9 @@ namespace ETL_System
                 foreach (DependencyType s in ClientManager.dependency_types.Values)
                     cb_DepTypes.Items.Add(s.name);                
             }
+            if (tc_Job.SelectedTab == tp_JobInstances) {
+                manager.requestJobHistory();
+            }
         }
 
         private void label2_Click(object sender, EventArgs e) {
@@ -121,6 +129,10 @@ namespace ETL_System
 
         private void lv_JobsList_SelectedIndexChanged(object sender, EventArgs e) {
             if(tc_Main.SelectedTab == tabPage1) {
+                if (tc_Job.SelectedTab == tp_JobInstances) {
+                    manager.requestJobHistory();
+                    return;
+                }
                 manager.initETLJobDefinitionTab();
             }
         }
@@ -224,8 +236,12 @@ namespace ETL_System
 
             
             //4.React
-            if (tc_Main.SelectedTab == tabPage1) {           
+            if (tc_Main.SelectedTab == tabPage1) {
                 //ETL details tabl
+                if (tc_Job.SelectedTab == tp_JobInstances) {
+                    manager.requestJobHistory();
+                    return;
+                }
                 manager.initETLJobDefinitionTab();                               
             }
             
@@ -291,6 +307,10 @@ namespace ETL_System
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 
+        }
+
+        private void rowSelectionChange(object sender, EventArgs e) {
+            manager.requestInstanceOutput();
         }
     }
 }

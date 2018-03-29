@@ -25,7 +25,7 @@ CREATE TABLE dbo.Jobs (
 
  CREATE TABLE dbo.JobInstances ( 
 	job_instance_id      int NOT NULL,
-	job_id               int    ,
+	job_id               int NOT NULL,
 	result               varchar(128)    ,
 	worker               varchar(128)    ,
 	start_timestamp      datetime    ,
@@ -39,7 +39,7 @@ CREATE TABLE dbo.Jobs (
 	rows_deleted         int    ,
 	job_execution_path   varchar(2048)    ,
 	started_by           varchar(128)   ,
-	CONSTRAINT Pk_JobInstances_job_instance_id PRIMARY KEY  ( job_instance_id )
+	CONSTRAINT Pk_JobInstances_job_instance_id PRIMARY KEY  ( job_id,job_instance_id)
  );
 
  CREATE TABLE dbo.JobInstanceOutput ( 

@@ -306,6 +306,10 @@ namespace ETL_System {
                 result = this.resolveAdminMessage(msg, (User)msg.header["user"]);
                 return result;
             }
+            if(msg.msg_type >= (MsgTypes)24 && msg.msg_type <= (MsgTypes)25) {
+                result = this.resolveInstanceRequest(msg, (User)msg.header["user"]);
+                return result;
+            }
             return null;            
         }
 
@@ -348,7 +352,42 @@ namespace ETL_System {
 
             }
         }
-
+        public Message resolveInstanceRequest(Message msg, User user_context) {
+            Message outcome = new Message();
+            MsgTypes msgtype = msg.msg_type;
+            switch (msgtype) {
+                case MsgTypes.REQUEST_JOB_INSTANCES:
+                    try {
+                        outcome.header["instances"] = this.jobs_catalogue.produceInstancesHistory(msg.body);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to retrieve job instances. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.REQUEST_JOB_INSTANCE_OUTPUT:
+                    try {
+                        outcome.header["output"] = this.jobs_catalogue.getInstanceOutput(Int32.Parse(msg.body));
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to retrieve instance output. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                default:
+                    outcome.msg_type = MsgTypes.REPLY_FAIL;
+                    outcome.body = $"Unknown COMMAND TYPE";
+                    return outcome;
+            }
+        }
         public Message executeMgmtCommand(Message msg, User user_context) {
             Message outcome = new Message();
             MsgTypes msgtype = msg.msg_type;   

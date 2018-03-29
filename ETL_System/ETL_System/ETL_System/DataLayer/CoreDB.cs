@@ -632,6 +632,35 @@ namespace ETL_System {
             runCustomSQLCommand(clean_insert_statement, SystemSharedData.app_db_connstring);
         }
 
+        public DataTable getInstanceHistory(int job_id) {
+            DataTable instances;
+            DataSet local_ds;
+            string fill_query = $@"SELECT TOP (100)  [job_instance_id] as [Instance ID] ,[result] as Result,[rows_inserted] [Rows Inserted],[rows_updated] [Rows Updated],[rows_deleted] [Rows Deleted]
+                                            ,convert(varchar(25),[start_timestamp],120) [Start@]
+                                            ,convert(varchar(25),[end_timestamp],120) [End@]
+                                            ,DATEDIFF(second,[start_timestamp],[end_timestamp]) [Duration Sec]
+                                            ,convert(varchar(25),[from_time_checkpoint],120) [From Time Checkpoint]
+                                            ,convert(varchar(25),[to_time_checkpoint],120) [To Time Checkpoint],[from_data_checkpoint] [From Data Checkpoint]
+                                            ,[to_data_chcekpoint] [To Data Checkpoint]                                           
+                                            ,[started_by] [Started by], [job_execution_path] as [Executable]                                            
+                                            FROM[ETL_System].[dbo].[JobInstances] WHERE [job_id] = {job_id}
+                                            ORDER BY[start_timestamp] DESC";
+
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
+                db_adapter.Fill(local_ds = new DataSet(), "Instances");
+                instances = local_ds.Tables["Instances"];
+            }
+            return instances;
+        }
+
+        public string getInstanceOutput(int instance_id) {
+            string output = "";
+            string query = $@"SELECT output + CHAR(13)+CHAR(10) + error FROM [ETL_System].[dbo].[JobInstanceOutput] WHERE job_instance_id = {instance_id} ";
+            output = runStringCustomScalarSQLCommand(query, SystemSharedData.app_db_connstring);
+            return output;
+        }
+         
+
         //===================== HELPER METHODS
         public static string checkDBConnStringIsValid(string conn_string) {
             //method to validate that the connection string is good

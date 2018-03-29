@@ -26,6 +26,7 @@ namespace ETL_System {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tslb_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -76,6 +77,10 @@ namespace ETL_System {
             this.label9 = new System.Windows.Forms.Label();
             this.tb_Who = new System.Windows.Forms.TextBox();
             this.tp_JobInstances = new System.Windows.Forms.TabPage();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.tb_InstanceOutput = new System.Windows.Forms.TextBox();
+            this.dgv_JobInstances = new System.Windows.Forms.DataGridView();
             this.tp_Schedules = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -174,7 +179,6 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -185,6 +189,7 @@ namespace ETL_System {
             this.gb_Status.SuspendLayout();
             this.gb_Changes.SuspendLayout();
             this.tp_JobInstances.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_JobInstances)).BeginInit();
             this.tp_Schedules.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -205,7 +210,6 @@ namespace ETL_System {
             this.groupBox9.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -720,7 +724,11 @@ namespace ETL_System {
             // 
             // tp_JobInstances
             // 
-            this.tp_JobInstances.Controls.Add(this.dataGridView1);
+            this.tp_JobInstances.Controls.Add(this.label38);
+            this.tp_JobInstances.Controls.Add(this.label37);
+            this.tp_JobInstances.Controls.Add(this.tb_InstanceOutput);
+            this.tp_JobInstances.Controls.Add(this.dgv_JobInstances);
+            this.tp_JobInstances.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.tp_JobInstances.Location = new System.Drawing.Point(4, 24);
             this.tp_JobInstances.Name = "tp_JobInstances";
             this.tp_JobInstances.Padding = new System.Windows.Forms.Padding(3);
@@ -728,6 +736,58 @@ namespace ETL_System {
             this.tp_JobInstances.TabIndex = 3;
             this.tp_JobInstances.Text = "History";
             this.tp_JobInstances.UseVisualStyleBackColor = true;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label38.Location = new System.Drawing.Point(6, 3);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(219, 16);
+            this.label38.TabIndex = 4;
+            this.label38.Text = "*Select Instance Row to view Output";
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label37.Location = new System.Drawing.Point(6, 580);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(102, 16);
+            this.label37.TabIndex = 3;
+            this.label37.Text = "Instance Output:";
+            // 
+            // tb_InstanceOutput
+            // 
+            this.tb_InstanceOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_InstanceOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tb_InstanceOutput.Location = new System.Drawing.Point(6, 599);
+            this.tb_InstanceOutput.Multiline = true;
+            this.tb_InstanceOutput.Name = "tb_InstanceOutput";
+            this.tb_InstanceOutput.Size = new System.Drawing.Size(1244, 20);
+            this.tb_InstanceOutput.TabIndex = 2;
+            // 
+            // dgv_JobInstances
+            // 
+            this.dgv_JobInstances.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgv_JobInstances.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dgv_JobInstances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_JobInstances.GridColor = System.Drawing.SystemColors.Control;
+            this.dgv_JobInstances.Location = new System.Drawing.Point(6, 22);
+            this.dgv_JobInstances.Name = "dgv_JobInstances";
+            this.dgv_JobInstances.ReadOnly = true;
+            this.dgv_JobInstances.RowHeadersVisible = false;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgv_JobInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_JobInstances.ShowRowErrors = false;
+            this.dgv_JobInstances.Size = new System.Drawing.Size(1244, 541);
+            this.dgv_JobInstances.TabIndex = 1;
+            this.dgv_JobInstances.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dgv_JobInstances.SelectionChanged += new System.EventHandler(this.rowSelectionChange);
             // 
             // tp_Schedules
             // 
@@ -1790,24 +1850,6 @@ namespace ETL_System {
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.GridColor = System.Drawing.SystemColors.Control;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 22);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.ShowRowErrors = false;
-            this.dataGridView1.Size = new System.Drawing.Size(1244, 599);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1836,6 +1878,8 @@ namespace ETL_System {
             this.gb_Changes.ResumeLayout(false);
             this.gb_Changes.PerformLayout();
             this.tp_JobInstances.ResumeLayout(false);
+            this.tp_JobInstances.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_JobInstances)).EndInit();
             this.tp_Schedules.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -1865,7 +1909,6 @@ namespace ETL_System {
             this.groupBox1.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2011,15 +2054,18 @@ namespace ETL_System {
         public ColumnHeader columnHeader8;
         public ColumnHeader columnHeader9;
         public ColumnHeader columnHeader10;
-        private ColumnHeader columnHeader11;
-        private ColumnHeader columnHeader12;
-        private Label label36;
-        private ComboBox cb_FilterCatalogue;
-        private Label label35;
-        private ComboBox cb_SortCatalogue;
+        public ColumnHeader columnHeader11;
+        public ColumnHeader columnHeader12;
+        public Label label36;
+        public ComboBox cb_FilterCatalogue;
+        public Label label35;
+        public ComboBox cb_SortCatalogue;
         public TextBox tb_JobsFolder;
         public TextBox tb_ConnectionString;
-        public DataGridView dataGridView1;
+        public DataGridView dgv_JobInstances;
+        public Label label37;
+        public TextBox tb_InstanceOutput;
+        public Label label38;
     }
 }
 

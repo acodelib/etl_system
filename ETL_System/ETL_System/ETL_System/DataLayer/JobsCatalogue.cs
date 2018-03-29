@@ -240,5 +240,12 @@ namespace ETL_System {
         public DataTable produceDependencyIndex() {
             return this.data_layer.getDependencyIndex();
         }
+        public DataTable produceInstancesHistory(string job_name) {
+            int job_id = this.jobs_collection[job_name].job_id;
+            return this.data_layer.getInstanceHistory(job_id);
+        }
+        public string getInstanceOutput(int instance_id) {
+            return this.data_layer.getInstanceOutput(instance_id);
+        }
     }
 }

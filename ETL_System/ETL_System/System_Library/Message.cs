@@ -96,7 +96,9 @@ namespace ETL_System
         SERVER_WARNING = 20,
         TRY_DISCONECT = 21,
         ADMIN_REQUEST = 22,
-        ADMIN_COMMAND = 23
+        ADMIN_COMMAND = 23,
+        REQUEST_JOB_INSTANCES = 24,
+        REQUEST_JOB_INSTANCE_OUTPUT = 25
     }
       
 
