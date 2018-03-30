@@ -16,6 +16,8 @@ namespace ETL_System
         public ClientManager manager;
         public string lv_Jobs_selection_cycle;
         public string lv_Jobs_selected_text;
+        private int auto_refresh_interval;
+        private int auto_refresh_step;
 
         public MainWindow() {
             InitializeComponent();
@@ -24,12 +26,14 @@ namespace ETL_System
             
             //some hose keeping                         
             tc_Job.Controls.Remove(tp_Schedules);
-            tc_Job.Controls.Remove(tp_Dependencies);
-            
+            tc_Job.Controls.Remove(tp_Dependencies);            
             cb_CheckppointType.SelectedIndex = 1;
 
+            //auto refresh
+            cb_AutoRefresh.SelectedIndex = 0;
+
             //fire up the manager
-            manager = new ClientManager(this);
+            manager = new ClientManager(this);                       
         }
 
         /*
@@ -40,6 +44,36 @@ namespace ETL_System
             Sender = null;
         }
         */
+
+        private void screenRefreshRoutine() {
+            if (ClientManager.login_active == false)
+                return;
+
+            if (tc_Main.SelectedTab == tp_Catalogue) {
+                if (ClientManager.login_active) {
+                    manager.requestCatalogue();
+                }
+            }
+            if (tc_Main.SelectedTab == tp_Graph) {
+                this.cb_RenderType.SelectedIndex = 0;
+            }
+            if (tc_Main.SelectedTab == tp_Queue) {
+                manager.requestQueue();
+            }
+            if (tc_Main.SelectedTab == tabPage1) {
+                //ETL details tabl
+                if (tc_Job.SelectedTab == tp_JobInstances) {
+                    manager.requestJobHistory();
+                    return;
+                }
+                manager.initETLJobDefinitionTab();
+
+            }
+
+            if (tc_Main.SelectedTab == tp_Admin) {
+                manager.requestAdminData();
+            }
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e) {
 
@@ -71,33 +105,7 @@ namespace ETL_System
 
         
         private void tc_Main_Selected(object sender,EventArgs e) {
-            if (ClientManager.login_active == false)
-                return;
-
-            if (tc_Main.SelectedTab == tp_Catalogue) {
-                if (ClientManager.login_active) {
-                    manager.requestCatalogue();
-                }            
-            }
-            if(tc_Main.SelectedTab == tp_Graph) {
-                this.cb_RenderType.SelectedIndex = 0;
-            }
-            if(tc_Main.SelectedTab == tp_Queue) {
-                manager.requestQueue();
-            }
-            if (tc_Main.SelectedTab == tabPage1) {
-                //ETL details tabl
-                if (tc_Job.SelectedTab == tp_JobInstances) {
-                    manager.requestJobHistory();
-                    return;
-                }
-                manager.initETLJobDefinitionTab();
-               
-            }
-
-            if(tc_Main.SelectedTab == tp_Admin) {
-                manager.requestAdminData();
-            }
+            this.screenRefreshRoutine();
         }
 
         private void tc_Job_Selected(object sender, EventArgs e) {
@@ -311,6 +319,60 @@ namespace ETL_System
 
         private void rowSelectionChange(object sender, EventArgs e) {
             manager.requestInstanceOutput();
+        }
+
+        private void btn_Refresh_Click(object sender, EventArgs e) {
+            this.screenRefreshRoutine();
+        }
+
+        private void cb_AutoRefresh_SelectedIndexChanged(object sender, EventArgs e) {
+            tm_Ticker.Stop();
+            switch (cb_AutoRefresh.Text) {
+                case ("No"):
+                    this.pb_AutoRefresh.Visible = false;                    
+                    break;
+                case ("2 Seconds"):
+                    this.pb_AutoRefresh.Visible = true;
+                    this.auto_refresh_step = 0;
+                    pb_AutoRefresh.Value = 0;
+                    pb_AutoRefresh.Maximum = 2;
+                    pb_AutoRefresh.Step = 1;
+                    this.auto_refresh_interval = 2;
+                    tm_Ticker.Enabled = true;
+                    tm_Ticker.Interval = 1000;
+                    tm_Ticker.Start();
+                    break;
+                case ("5 Seconds"):
+                    this.pb_AutoRefresh.Visible = true;
+                    this.auto_refresh_step = 0;
+                    pb_AutoRefresh.Value = 1;
+                    pb_AutoRefresh.Maximum = 5;
+                    this.auto_refresh_interval = 5;
+                    tm_Ticker.Enabled = true;
+                    tm_Ticker.Interval = 1000;
+                    tm_Ticker.Start();
+                    break;
+                case ("9 Seconds"):
+                    this.pb_AutoRefresh.Visible = true;
+                    this.auto_refresh_step = 0;
+                    pb_AutoRefresh.Value = 0;
+                    pb_AutoRefresh.Maximum = 9;
+                    this.auto_refresh_interval = 9;
+                    tm_Ticker.Enabled = true;
+                    tm_Ticker.Interval = 1000;
+                    tm_Ticker.Start();
+                    break;
+            }
+        }
+
+        private void tm_Ticker_Tick(object sender, EventArgs e) {
+            this.auto_refresh_step++;
+            pb_AutoRefresh.PerformStep();
+            if(this.auto_refresh_step > this.auto_refresh_interval) {
+                this.screenRefreshRoutine();
+                this.pb_AutoRefresh.Value = 1;
+                this.auto_refresh_step = 0;
+            }
         }
     }
 }

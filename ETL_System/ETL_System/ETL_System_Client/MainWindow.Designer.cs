@@ -26,7 +26,8 @@ namespace ETL_System {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tslb_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -179,6 +180,11 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_Refresh = new System.Windows.Forms.Button();
+            this.cb_AutoRefresh = new System.Windows.Forms.ComboBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.pb_AutoRefresh = new System.Windows.Forms.ProgressBar();
+            this.tm_Ticker = new System.Windows.Forms.Timer(this.components);
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -780,8 +786,8 @@ namespace ETL_System {
             this.dgv_JobInstances.Name = "dgv_JobInstances";
             this.dgv_JobInstances.ReadOnly = true;
             this.dgv_JobInstances.RowHeadersVisible = false;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgv_JobInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_JobInstances.ShowRowErrors = false;
             this.dgv_JobInstances.Size = new System.Drawing.Size(1244, 541);
@@ -1850,12 +1856,69 @@ namespace ETL_System {
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
             // 
+            // btn_Refresh
+            // 
+            this.btn_Refresh.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btn_Refresh.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btn_Refresh.Location = new System.Drawing.Point(559, 8);
+            this.btn_Refresh.Name = "btn_Refresh";
+            this.btn_Refresh.Size = new System.Drawing.Size(75, 23);
+            this.btn_Refresh.TabIndex = 30;
+            this.btn_Refresh.Text = "REFRESH";
+            this.btn_Refresh.UseVisualStyleBackColor = false;
+            this.btn_Refresh.Click += new System.EventHandler(this.btn_Refresh_Click);
+            // 
+            // cb_AutoRefresh
+            // 
+            this.cb_AutoRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_AutoRefresh.FormattingEnabled = true;
+            this.cb_AutoRefresh.Items.AddRange(new object[] {
+            "No",
+            "2 Seconds",
+            "5 Seconds",
+            "9 Seconds"});
+            this.cb_AutoRefresh.Location = new System.Drawing.Point(1409, 8);
+            this.cb_AutoRefresh.Name = "cb_AutoRefresh";
+            this.cb_AutoRefresh.Size = new System.Drawing.Size(99, 21);
+            this.cb_AutoRefresh.TabIndex = 31;
+            this.cb_AutoRefresh.SelectedIndexChanged += new System.EventHandler(this.cb_AutoRefresh_SelectedIndexChanged);
+            // 
+            // label39
+            // 
+            this.label39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label39.AutoSize = true;
+            this.label39.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label39.Location = new System.Drawing.Point(1336, 13);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(72, 13);
+            this.label39.TabIndex = 32;
+            this.label39.Text = "Auto Refresh:";
+            // 
+            // pb_AutoRefresh
+            // 
+            this.pb_AutoRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pb_AutoRefresh.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.pb_AutoRefresh.Location = new System.Drawing.Point(1195, 10);
+            this.pb_AutoRefresh.Name = "pb_AutoRefresh";
+            this.pb_AutoRefresh.Size = new System.Drawing.Size(135, 21);
+            this.pb_AutoRefresh.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pb_AutoRefresh.TabIndex = 33;
+            this.pb_AutoRefresh.Visible = false;
+            // 
+            // tm_Ticker
+            // 
+            this.tm_Ticker.Tick += new System.EventHandler(this.tm_Ticker_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1528, 778);
+            this.Controls.Add(this.pb_AutoRefresh);
+            this.Controls.Add(this.label39);
+            this.Controls.Add(this.cb_AutoRefresh);
+            this.Controls.Add(this.btn_Refresh);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tc_Main);
             this.Controls.Add(this.statusStrip);
@@ -2066,6 +2129,11 @@ namespace ETL_System {
         public Label label37;
         public TextBox tb_InstanceOutput;
         public Label label38;
+        private Button btn_Refresh;
+        private ComboBox cb_AutoRefresh;
+        private Label label39;
+        private ProgressBar pb_AutoRefresh;
+        private Timer tm_Ticker;
     }
 }
 
