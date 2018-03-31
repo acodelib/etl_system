@@ -374,5 +374,9 @@ namespace ETL_System
                 this.auto_refresh_step = 0;
             }
         }
+
+        private void refreshDataToolStripMenuItem_Click(object sender, EventArgs e) {
+            this.screenRefreshRoutine();
+        }
     }
 }
