@@ -558,6 +558,8 @@ namespace ETL_System {
         }
 
         public void refreshTasksListRoutine(Dictionary<int, string> jobs) {
+            if (parent.lv_Jobs_searched_flag == true)
+                return;
             if (jobs != null) {
                 if (parent.lv_JobsList.SelectedItems.Count > 0) {                
                     parent.lv_Jobs_selection_cycle = parent.lv_JobsList.SelectedItems[0].Text;
@@ -1064,7 +1066,36 @@ namespace ETL_System {
 
         }
 
+        public void searchActionForJobsList() {
+            string search_arg = parent.tb_Search.Text;
 
+            //1.make sure the text box is not empty
+            if (string.IsNullOrEmpty(search_arg)) {
+                MessageBox.Show("The search text box is empty. Type in a search text then press again the Search button.");
+                return;
+            }            
+
+            //2.instantiate this only if method can continue
+            List<ListViewItem> new_view = new List<ListViewItem>();
+
+            //3.search through
+            foreach (ListViewItem vi in parent.lv_JobsList.Items) {
+                if (vi.Text.Contains(search_arg)) {
+                    new_view.Add(vi);
+                    
+                }
+            }
+
+            //4.do the filtering
+            if(new_view.Count > 0) {
+                parent.lv_Jobs_searched_flag = true;
+                parent.lv_JobsList.Items.Clear();
+                foreach (ListViewItem i in new_view)
+                    parent.lv_JobsList.Items.Add(i);
+            }
+
+
+        }
      
 
         //---------------------------------------Static------------------------------------------------

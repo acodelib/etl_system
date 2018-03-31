@@ -16,18 +16,20 @@ namespace ETL_System
         public ClientManager manager;
         public string lv_Jobs_selection_cycle;
         public string lv_Jobs_selected_text;
+        public bool lv_Jobs_searched_flag;
         private int auto_refresh_interval;
         private int auto_refresh_step;
+        
 
         public MainWindow() {
             InitializeComponent();
             this.lv_Jobs_selection_cycle = "Xstarted";
             this.lv_Jobs_selected_text = "";
-            
+            this.lv_Jobs_searched_flag = false;
             //some hose keeping                         
             tc_Job.Controls.Remove(tp_Schedules);
             tc_Job.Controls.Remove(tp_Dependencies);            
-            cb_CheckppointType.SelectedIndex = 1;
+            cb_CheckppointType.SelectedIndex = 1;           
 
             //auto refresh
             cb_AutoRefresh.SelectedIndex = 0;
@@ -376,6 +378,16 @@ namespace ETL_System
         }
 
         private void refreshDataToolStripMenuItem_Click(object sender, EventArgs e) {
+            this.screenRefreshRoutine();
+        }
+
+        private void btn_searchjob_Click(object sender, EventArgs e) {
+            manager.searchActionForJobsList();
+        }
+
+        private void btn_clear_Click(object sender, EventArgs e) {
+            this.lv_Jobs_searched_flag = false;
+            this.tb_Search.Text = "";
             this.screenRefreshRoutine();
         }
     }

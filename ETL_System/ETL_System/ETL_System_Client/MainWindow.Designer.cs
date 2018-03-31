@@ -27,7 +27,7 @@ namespace ETL_System {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tslb_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -786,8 +786,8 @@ namespace ETL_System {
             this.dgv_JobInstances.Name = "dgv_JobInstances";
             this.dgv_JobInstances.ReadOnly = true;
             this.dgv_JobInstances.RowHeadersVisible = false;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle7;
             this.dgv_JobInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_JobInstances.ShowRowErrors = false;
             this.dgv_JobInstances.Size = new System.Drawing.Size(1244, 541);
@@ -1751,6 +1751,7 @@ namespace ETL_System {
             this.btn_clear.TabIndex = 8;
             this.btn_clear.Text = "clear";
             this.btn_clear.UseVisualStyleBackColor = true;
+            this.btn_clear.Click += new System.EventHandler(this.btn_clear_Click);
             // 
             // btn_searchjob
             // 
@@ -1763,6 +1764,7 @@ namespace ETL_System {
             this.btn_searchjob.Text = "search";
             this.btn_searchjob.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btn_searchjob.UseVisualStyleBackColor = true;
+            this.btn_searchjob.Click += new System.EventHandler(this.btn_searchjob_Click);
             // 
             // tb_Search
             // 
