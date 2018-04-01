@@ -35,7 +35,8 @@ namespace ETL_System
             cb_AutoRefresh.SelectedIndex = 0;
 
             //fire up the manager
-            manager = new ClientManager(this);                       
+            manager = new ClientManager(this);
+            this.gViewer.ObjectUnderMouseCursorChanged += manager.gviewerObjectUnderCursorChanged;
         }
 
         /*
@@ -58,6 +59,7 @@ namespace ETL_System
             }
             if (tc_Main.SelectedTab == tp_Graph) {
                 this.cb_RenderType.SelectedIndex = 0;
+                manager.rederDependencyGraphView(this.lv_Jobs_selected_text);
             }
             if (tc_Main.SelectedTab == tp_Queue) {
                 manager.requestQueue();

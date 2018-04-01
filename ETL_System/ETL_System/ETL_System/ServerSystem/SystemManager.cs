@@ -534,7 +534,9 @@ namespace ETL_System {
                 case MsgTypes.REQUEST_DEPENDENCY_CATALOGUE:
                     try {
                         //>>>>>>>> HERE TO ADD SYS_CHANGE_ID comparison <<<<<
-                        MsgAttachment att = new DependencyCatalogueDisplay(this.jobs_catalogue.sys_change_id, this.jobs_catalogue.produceDependencyDisplay());
+                        Dictionary<string, DataTable> temp = this.jobs_catalogue.produceDependencyDisplay();
+                        MsgAttachment att = new DependencyCatalogueDisplay(this.jobs_catalogue.sys_change_id, temp["DependencyCatalogue"]);
+                        outcome.header["CheckpointIndex"] = temp["CheckpointIndex"];
                         outcome.attachement = att;
                         outcome.msg_type = MsgTypes.REPLY_SUCCESS;
                         outcome.header["jobs_list"] = pipeTasksRawList();

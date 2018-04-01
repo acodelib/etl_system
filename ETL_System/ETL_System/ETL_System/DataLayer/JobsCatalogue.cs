@@ -233,9 +233,9 @@ namespace ETL_System {
                 jobs_list.Add(j.job_id,j.name);
             return jobs_list;
         }
-        public DataTable produceDependencyDisplay() {
-            DataTable view = this.data_layer.getDependencyDisplay();
-            return view;
+        public Dictionary<string,DataTable> produceDependencyDisplay() {             
+            Dictionary<string, DataTable> ret = this.data_layer.getDependencyDisplay();
+            return ret;
         }
         public DataTable produceDependencyIndex() {
             return this.data_layer.getDependencyIndex();

@@ -508,14 +508,22 @@ namespace ETL_System {
 
         }
 
-        public DataTable getDependencyDisplay() {
+        public Dictionary<string,DataTable> getDependencyDisplay() {
             string fill_query;
-            fill_query = "SELECT jd.*,j.data_chceckpoint,j.time_checkpoint,j.is_active,j.is_failed,j.is_paused FROM ETL_System.dbo.JobDependency jd JOIN ETL_System.dbo.Jobs j on j.job_id = jd.depending_job_id";
+            Dictionary<string, DataTable> ret = new Dictionary<string, DataTable>();
+            fill_query = "SELECT jd.*,j.name,j.data_chceckpoint,j.time_checkpoint,j.is_active,j.is_failed,j.is_paused FROM ETL_System.dbo.JobDependency jd JOIN ETL_System.dbo.Jobs j on j.job_id = jd.depending_job_id";
             using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
                 DataSet ds = new DataSet();
                 db_adapter.Fill(ds = new DataSet(), "DependencyCatalogue");
-                return ds.Tables["DependencyCatalogue"];
+                ret.Add("DependencyCatalogue", ds.Tables["DependencyCatalogue"]);                
             }
+            fill_query = "SELECT j.name ,j.data_chceckpoint,j.time_checkpoint,j.is_active,j.is_failed,j.is_paused FROM ETL_System.dbo.Jobs j";
+            using (SqlDataAdapter db_adapter = new SqlDataAdapter(fill_query, this.connection_string)) {
+                DataSet ds = new DataSet();
+                db_adapter.Fill(ds = new DataSet(), "CheckpointIndex");
+                ret.Add("CheckpointIndex", ds.Tables["CheckpointIndex"]);                
+            }
+            return ret;
         }
 
         public DataRow validateUserLineExists(string user, string pass) {

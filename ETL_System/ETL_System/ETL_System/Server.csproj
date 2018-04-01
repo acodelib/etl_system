@@ -51,7 +51,6 @@
     <Compile Include="DataLayer\SystemJob.cs" />
     <Compile Include="DataLayer\SystemSharedData.cs" />
     <Compile Include="JobsSystem\ETLWorker.cs" />
-    <Compile Include="JobsSystem\QueueController.cs" />
     <Compile Include="JobsSystem\WorkersController.cs" />
     <Compile Include="ServerSystem\CommsManager.cs" />
     <Compile Include="JobsSystem\NotificationsManager.cs" />

@@ -27,7 +27,7 @@ namespace ETL_System {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tslb_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -180,11 +180,14 @@ namespace ETL_System {
             this.ts_PauseW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_ResumeW = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_NewJob = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cb_AutoRefresh = new System.Windows.Forms.ComboBox();
             this.label39 = new System.Windows.Forms.Label();
             this.pb_AutoRefresh = new System.Windows.Forms.ProgressBar();
             this.tm_Ticker = new System.Windows.Forms.Timer(this.components);
-            this.refreshDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tt_Info = new System.Windows.Forms.ToolTip(this.components);
+            this.lbl_WarningQueue = new System.Windows.Forms.Label();
+            this.lbl_WarningWorkers = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -786,8 +789,8 @@ namespace ETL_System {
             this.dgv_JobInstances.Name = "dgv_JobInstances";
             this.dgv_JobInstances.ReadOnly = true;
             this.dgv_JobInstances.RowHeadersVisible = false;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv_JobInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_JobInstances.ShowRowErrors = false;
             this.dgv_JobInstances.Size = new System.Drawing.Size(1244, 541);
@@ -1859,6 +1862,14 @@ namespace ETL_System {
             this.ts_NewJob.Text = "New Job";
             this.ts_NewJob.Click += new System.EventHandler(this.ts_NewJob_Click);
             // 
+            // refreshDataToolStripMenuItem
+            // 
+            this.refreshDataToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.refreshDataToolStripMenuItem.Name = "refreshDataToolStripMenuItem";
+            this.refreshDataToolStripMenuItem.Size = new System.Drawing.Size(106, 34);
+            this.refreshDataToolStripMenuItem.Text = "Refresh Data";
+            this.refreshDataToolStripMenuItem.Click += new System.EventHandler(this.refreshDataToolStripMenuItem_Click);
+            // 
             // cb_AutoRefresh
             // 
             this.cb_AutoRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1902,13 +1913,38 @@ namespace ETL_System {
             // 
             this.tm_Ticker.Tick += new System.EventHandler(this.tm_Ticker_Tick);
             // 
-            // refreshDataToolStripMenuItem
+            // tt_Info
             // 
-            this.refreshDataToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.refreshDataToolStripMenuItem.Name = "refreshDataToolStripMenuItem";
-            this.refreshDataToolStripMenuItem.Size = new System.Drawing.Size(106, 34);
-            this.refreshDataToolStripMenuItem.Text = "Refresh Data";
-            this.refreshDataToolStripMenuItem.Click += new System.EventHandler(this.refreshDataToolStripMenuItem_Click);
+            this.tt_Info.AutomaticDelay = 100;
+            this.tt_Info.AutoPopDelay = 5000;
+            this.tt_Info.InitialDelay = 100;
+            this.tt_Info.ReshowDelay = 20;
+            // 
+            // lbl_WarningQueue
+            // 
+            this.lbl_WarningQueue.AutoSize = true;
+            this.lbl_WarningQueue.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbl_WarningQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_WarningQueue.ForeColor = System.Drawing.Color.Red;
+            this.lbl_WarningQueue.Location = new System.Drawing.Point(553, 13);
+            this.lbl_WarningQueue.Name = "lbl_WarningQueue";
+            this.lbl_WarningQueue.Size = new System.Drawing.Size(199, 16);
+            this.lbl_WarningQueue.TabIndex = 34;
+            this.lbl_WarningQueue.Text = "!! WARNING: Queue is paused !!";
+            this.lbl_WarningQueue.Visible = false;
+            // 
+            // lbl_WarningWorkers
+            // 
+            this.lbl_WarningWorkers.AutoSize = true;
+            this.lbl_WarningWorkers.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbl_WarningWorkers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_WarningWorkers.ForeColor = System.Drawing.Color.Red;
+            this.lbl_WarningWorkers.Location = new System.Drawing.Point(758, 13);
+            this.lbl_WarningWorkers.Name = "lbl_WarningWorkers";
+            this.lbl_WarningWorkers.Size = new System.Drawing.Size(220, 16);
+            this.lbl_WarningWorkers.TabIndex = 35;
+            this.lbl_WarningWorkers.Text = "!! WARNING: Workers are paused !!";
+            this.lbl_WarningWorkers.Visible = false;
             // 
             // MainWindow
             // 
@@ -1916,6 +1952,8 @@ namespace ETL_System {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1528, 778);
+            this.Controls.Add(this.lbl_WarningWorkers);
+            this.Controls.Add(this.lbl_WarningQueue);
             this.Controls.Add(this.pb_AutoRefresh);
             this.Controls.Add(this.label39);
             this.Controls.Add(this.cb_AutoRefresh);
@@ -2129,11 +2167,14 @@ namespace ETL_System {
         public Label label37;
         public TextBox tb_InstanceOutput;
         public Label label38;
-        private ComboBox cb_AutoRefresh;
-        private Label label39;
-        private ProgressBar pb_AutoRefresh;
-        private Timer tm_Ticker;
-        private ToolStripMenuItem refreshDataToolStripMenuItem;
+        public ComboBox cb_AutoRefresh;
+        public Label label39;
+        public ProgressBar pb_AutoRefresh;
+        public Timer tm_Ticker;
+        public ToolStripMenuItem refreshDataToolStripMenuItem;
+        public ToolTip tt_Info;
+        private Label lbl_WarningQueue;
+        private Label lbl_WarningWorkers;
     }
 }
 

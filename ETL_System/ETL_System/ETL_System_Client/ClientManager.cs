@@ -30,6 +30,9 @@ namespace ETL_System {
         public static bool login_active;
         public static User this_user;
 
+        private Object selectedObject;
+        private AttributeBase selectedObjectAttr;
+
         public static Dictionary<int?, ScheduleType> schedulte_types;
         public static Dictionary<int?, DependencyType> dependency_types;
         public static Dictionary<int, string> user_roles;
@@ -39,7 +42,7 @@ namespace ETL_System {
         public MsgEngine message_engine;
         private MainWindow parent;
         DataTable t;
-
+        DataTable checkpoint_index;
         //======================================= CONSTRUCTORS =======================================
         public ClientManager(MainWindow parent) {
             this.message_engine = new MsgEngine();
@@ -49,6 +52,11 @@ namespace ETL_System {
 
 
         //======================================= METHODS =============================================
+
+        private Message commonMessageProcessor(Message m) {
+            Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+            return r;
+        }
 
         public void loginProcedure(String user, String pass, string Ip, int port) {
             this.message_engine.initialiseMsgEngine(Ip, port);
@@ -321,6 +329,7 @@ namespace ETL_System {
                     parent.dgv_Catalogue.EditMode = DataGridViewEditMode.EditProgrammatically;
                    // parent.dgv_Catalogue.EnableHeadersVisualStyles = false;
                     parent.dgv_Catalogue.DoubleBuffered(true);
+                    parent.dgv_Catalogue.AllowUserToResizeRows = false;
 
                     parent.dgv_Catalogue.DataSource = t;
                     parent.dgv_Catalogue.Columns["Job_Id"].Width = 60;
@@ -436,7 +445,7 @@ namespace ETL_System {
                     parent.dgv_Queue.EditMode = DataGridViewEditMode.EditProgrammatically;
                     //parent.dgv_Queue.EnableHeadersVisualStyles = false;
                     parent.dgv_Queue.DoubleBuffered(true);
-
+                    parent.dgv_Queue.AllowUserToResizeRows = false;
                     //data fill
                     parent.dgv_Queue.DataSource = t;
                     //sizing:                    
@@ -465,7 +474,8 @@ namespace ETL_System {
             try {
                 Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
-                    c = (DependencyCatalogueDisplay)r.attachement;                                        
+                    c = (DependencyCatalogueDisplay)r.attachement;
+                    this.checkpoint_index = (DataTable)r.header["CheckpointIndex"];
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                     return c.data;
                 }else {
@@ -479,7 +489,7 @@ namespace ETL_System {
         }
 
         public void rederDependencyGraphView(string selected_item) {
-            DataTable local_table = this.requestDependencyCatalogue();
+            DataTable local_table = this.requestDependencyCatalogue();            
             Graph graph = new Graph("graph");
             graph.Directed = true;
             graph.Attr.LayerDirection = LayerDirection.LR;
@@ -510,6 +520,16 @@ namespace ETL_System {
                 }
 
                 parent.gViewer.Graph = graph;
+                foreach (Microsoft.Msagl.Drawing.Node n in graph.Nodes) {
+                    if ((bool)checkpoint_index.Select($"name = '{n.Id}'")[0]["is_paused"])
+                        n.Attr.Color = Color.Orange;
+                    if ((bool)checkpoint_index.Select($"name = '{n.Id}'")[0]["is_failed"])
+                        n.Attr.Color = Color.Red;
+                    if (!(bool)checkpoint_index.Select($"name = '{n.Id}'")[0]["is_active"]) {                        
+                        //n.Attr.Color = Color.DimGray;
+                        n.Attr.FillColor = Color.Gray;                        
+                    }
+                }
             }catch(Exception e) {
                 MessageBox.Show($"The system encoutered a problem. Original system error:{e.Message}");
             }
@@ -530,7 +550,9 @@ namespace ETL_System {
 
             for (int i = 0;i< rows.Length; i++) {
                 left_name = jobs[(int)rows[i]["depending_job_id"]];
-                graph.AddEdge(left_name,right_name);                
+                Microsoft.Msagl.Drawing.Edge e = graph.AddEdge(left_name,right_name);                
+                if ((int)rows[i]["dependency_type_id"] == 2)
+                    e.LabelText = "E";               
                 leftRecursiveScanAndRender(tbl, (int)rows[i]["depending_job_id"], this_depth, max_depth, gViewer, graph);
             }
         }
@@ -552,8 +574,63 @@ namespace ETL_System {
             for (int i = 0; i < rows.Length; i++) {
                 target_job_id = (int)rows[i]["job_id"];
                 right_name = jobs[target_job_id];
-                graph.AddEdge( left_name,right_name);                
+                Microsoft.Msagl.Drawing.Edge e = graph.AddEdge( left_name,right_name);                
+                if ((int)rows[i]["dependency_type_id"] == 2)
+                    e.LabelText = "E";                
                 rightRecursiveScanAndRender(tbl, target_job_id, this_depth, max_depth, gViewer, graph);
+            }
+        }
+
+        public void gviewerObjectUnderCursorChanged(object sender, ObjectUnderMouseCursorChangedEventArgs e) {
+            selectedObject = e.OldObject != null ? e.OldObject.DrawingObject : null; // need a base system object as it doesn't know what's under the cursor yet
+            
+            if (selectedObject != null) {
+                this.restoreSelectedObjAttr();
+                parent.gViewer.Invalidate(e.OldObject);
+                selectedObject = null;
+            }
+
+            if (parent.gViewer.ObjectUnderMouseCursor == null) {                
+                parent.gViewer.SetToolTip(parent.tt_Info, "");
+            }
+            else {
+                selectedObject = parent.gViewer.ObjectUnderMouseCursor.DrawingObject;
+                var edge = selectedObject as Microsoft.Msagl.Drawing.Edge;
+                if (edge != null) {
+                    selectedObjectAttr = edge.Attr.Clone();
+                    edge.Attr.Color = Color.Blue;
+                    parent.gViewer.Invalidate(e.NewObject);
+
+                    //  
+                    parent.gViewer.SetToolTip(parent.tt_Info, $"{edge.Source} to {edge.Target}");
+                }
+                else if (selectedObject is Microsoft.Msagl.Drawing.Node) {
+                    selectedObjectAttr = (parent.gViewer.SelectedObject as Microsoft.Msagl.Drawing.Node).Attr.Clone();
+                    (selectedObject as Microsoft.Msagl.Drawing.Node).Attr.Color = Color.Blue;
+                    //
+                    string search = $"{(selectedObject as Microsoft.Msagl.Drawing.Node).Attr.Id.ToString()}";                    
+                    var label  = checkpoint_index.Select($@"name = '{search}'")[0]["data_chceckpoint"];
+                    var failed = checkpoint_index.Select($@"name = '{search}'")[0]["is_failed"];
+                    var paused = checkpoint_index.Select($@"name = '{search}'")[0]["is_paused"];
+                    var active = !(bool)checkpoint_index.Select($@"name = '{search}'")[0]["is_active"];
+                    string txt = ((active ? " INACTIVE " : "") + ((bool)failed ? " FAILED " : "") + ((bool)paused ? " PAUSED " : "")) == "" ? "READY" : ((active ? " INACTIVE " : "") + ((bool)failed ? " FAILED " : "") + ((bool)paused ? " PAUSED " : ""));
+                    parent.gViewer.SetToolTip(parent.tt_Info, $"Checkpoint {label}" + System.Environment.NewLine + txt);
+                    parent.gViewer.Invalidate(e.NewObject);
+                }
+             
+            }
+
+        }
+
+        private void restoreSelectedObjAttr() {
+            var edge = selectedObject as Microsoft.Msagl.Drawing.Edge;
+            if (edge != null) {
+                edge.Attr = (EdgeAttr)selectedObjectAttr;
+            }
+            else {
+                var node = selectedObject as Microsoft.Msagl.Drawing.Node;
+                if (node != null)
+                    node.Attr = (NodeAttr)selectedObjectAttr;
             }
         }
 

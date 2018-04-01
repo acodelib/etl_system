@@ -90,15 +90,17 @@ namespace ETL_System{
                                             break;                         
                                         if (d.dependency_type_id >= 1) {
                                             if (j.data_chceckpoint != null) {
-                                                //value dependencies:                                            
-                                                if (target_job.data_chceckpoint < j.data_chceckpoint) {
+                                                //value dependencies:                                                                                     
+                                                
+                                                if (target_job.data_chceckpoint <= j.data_chceckpoint) {
                                                     pass = false;
                                                     break;
                                                 }
+                                                
                                             }
                                             else {
                                                 //timestamp dependencies:                                            
-                                                if (target_job.time_checkpoint < j.time_checkpoint) {
+                                                if (target_job.time_checkpoint <= j.time_checkpoint) {
                                                     pass = false;
                                                     break;
                                                 }
@@ -106,7 +108,7 @@ namespace ETL_System{
                                         }                                                                                                      
                                     }
                           //SECOND: execution Dependencies
-                                   if( index.Select($"depending_job_id = {j.job_id} and dependency_type_id = 2").Count() > 0) {
+                                   if( index.Select($"depending_job_id = {j.job_id} and dependency_type_id = 2").Count() > 0 && pass) {
                                         foreach(DataRow r in index.Select($"depending_job_id = {j.job_id} and dependency_type_id = 2")) {                                            
                                             target_job = this.catalogue.jobs_collection[bookmark_search[(int)r["job_id"]]];
                                             if (!target_job.is_active)
