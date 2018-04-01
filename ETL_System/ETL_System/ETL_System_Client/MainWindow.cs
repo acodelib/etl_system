@@ -85,11 +85,7 @@ namespace ETL_System
 
         private void rtbDisplay_TextChanged(object sender, EventArgs e) {
 
-        }
-
-        private void stopServerToolStripMenuItem_Click(object sender, EventArgs e) {
-
-        }
+        }       
 
         private void tabPage6_Click(object sender, EventArgs e) {
 
@@ -391,6 +387,21 @@ namespace ETL_System
             this.lv_Jobs_searched_flag = false;
             this.tb_Search.Text = "";
             this.screenRefreshRoutine();
+        }
+
+        private void ts_PauseQ_Click(object sender, EventArgs e) {
+            manager.voidQueuePauseResume(true);
+        }
+
+        private void ts_ResumeQ_Click(object sender, EventArgs e) {
+            manager.voidQueuePauseResume(false);
+        }
+        private void stopServerToolStripMenuItem_Click(object sender, EventArgs e) {
+            manager.voidWorkersPauseResume(true);
+        }
+
+        private void ts_ResumeW_Click(object sender, EventArgs e) {
+            manager.voidWorkersPauseResume(false);
         }
     }
 }

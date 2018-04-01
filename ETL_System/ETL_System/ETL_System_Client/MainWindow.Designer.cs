@@ -27,7 +27,7 @@ namespace ETL_System {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tslb_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -789,8 +789,8 @@ namespace ETL_System {
             this.dgv_JobInstances.Name = "dgv_JobInstances";
             this.dgv_JobInstances.ReadOnly = true;
             this.dgv_JobInstances.RowHeadersVisible = false;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgv_JobInstances.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgv_JobInstances.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_JobInstances.ShowRowErrors = false;
             this.dgv_JobInstances.Size = new System.Drawing.Size(1244, 541);
@@ -1833,12 +1833,14 @@ namespace ETL_System {
             this.ts_PauseQ.Name = "ts_PauseQ";
             this.ts_PauseQ.Size = new System.Drawing.Size(214, 24);
             this.ts_PauseQ.Text = "Pause Queue";
+            this.ts_PauseQ.Click += new System.EventHandler(this.ts_PauseQ_Click);
             // 
             // ts_ResumeQ
             // 
             this.ts_ResumeQ.Name = "ts_ResumeQ";
             this.ts_ResumeQ.Size = new System.Drawing.Size(214, 24);
             this.ts_ResumeQ.Text = "Resume Queue";
+            this.ts_ResumeQ.Click += new System.EventHandler(this.ts_ResumeQ_Click);
             // 
             // ts_PauseW
             // 
@@ -1852,6 +1854,7 @@ namespace ETL_System {
             this.ts_ResumeW.Name = "ts_ResumeW";
             this.ts_ResumeW.Size = new System.Drawing.Size(214, 24);
             this.ts_ResumeW.Text = "Resume ETL Workers";
+            this.ts_ResumeW.Click += new System.EventHandler(this.ts_ResumeW_Click);
             // 
             // ts_NewJob
             // 
@@ -2173,8 +2176,8 @@ namespace ETL_System {
         public Timer tm_Ticker;
         public ToolStripMenuItem refreshDataToolStripMenuItem;
         public ToolTip tt_Info;
-        private Label lbl_WarningQueue;
-        private Label lbl_WarningWorkers;
+        public Label lbl_WarningQueue;
+        public Label lbl_WarningWorkers;
     }
 }
 

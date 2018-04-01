@@ -53,39 +53,41 @@ namespace ETL_System {
             this.error = null;
             this.exit_code = 0;
             while (1 == 1) {
-                //fetch job
-                this.target_job = this.jobs_queue.provideJobToRun();
-                if (this.target_job != null) {
-                    try {
-                        //record start
-                        recordStart(this.target_job);
-                        //set execution path
-                        exec_path = SystemSharedData.jobs_folder + @"\" + this.target_job.executable_name;                        
-                        //execute job file and read outputs async
-                        this.asyncExecuteJobFile(exec_path);
-                        //throw new Exception("testing error output catch");
-                        
+                if (SystemSharedData.workers_start_flag) {
+                    //fetch job
+                    this.target_job = this.jobs_queue.provideJobToRun();
+                    if (this.target_job != null) {
+                        try {
+                            //record start
+                            recordStart(this.target_job);
+                            //set execution path
+                            exec_path = SystemSharedData.jobs_folder + @"\" + this.target_job.executable_name;
+                            //execute job file and read outputs async
+                            this.asyncExecuteJobFile(exec_path);
+                            //throw new Exception("testing error output catch");
+
+                        }
+                        catch (Exception e) {
+                            this.error = e.Message;
+                        }
+                        Thread.Sleep(5000); //dev simulate some work;
+                        Console.WriteLine("OUTPUT: " + this.output);
+                        Console.WriteLine("ERROR: " + this.error);
+                        Console.WriteLine(this.exit_code.ToString());
+
+                        //check the outcome of the job and record Job Instance
+                        if (this.exit_code != 0)
+                            this.recordEnd(false);
+                        else
+                            this.recordEnd(true);
+
+                        // this.recordEnd();
+
+                        //send notification if case;
                     }
-                    catch (Exception e) {
-                        this.error = e.Message;
-                    }                    
-                    Thread.Sleep(5000); //dev simulate some work;
-                    Console.WriteLine("OUTPUT: "+ this.output);
-                    Console.WriteLine("ERROR: " + this.error);
-                    Console.WriteLine(this.exit_code.ToString());
-
-                    //check the outcome of the job and record Job Instance
-                    if (this.exit_code != 0)
-                        this.recordEnd(false);
-                    else
-                        this.recordEnd(true);
-                    
-                    // this.recordEnd();
-
-                    //send notification if case;
+                    Console.WriteLine($"{this.name} did some work, going for more...");
+                    Thread.Sleep(this.work_frequency * 1000);
                 }
-                Console.WriteLine($"{this.name} did some work, going for more...");
-                Thread.Sleep(this.work_frequency * 1000);
             }
             
         }               

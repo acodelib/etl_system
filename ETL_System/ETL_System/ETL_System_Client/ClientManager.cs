@@ -55,6 +55,16 @@ namespace ETL_System {
 
         private Message commonMessageProcessor(Message m) {
             Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+            if ((bool)r.header["catalogue_scan_flag"])
+                parent.lbl_WarningQueue.Visible = false;
+            else
+                parent.lbl_WarningQueue.Visible = true;
+            return r;
+
+            if ((bool)r.header["workers_start_flag"])
+                parent.lbl_WarningWorkers.Visible = false;
+            else
+                parent.lbl_WarningWorkers.Visible = true;
             return r;
         }
 
@@ -65,7 +75,7 @@ namespace ETL_System {
             m.msg_type = MsgTypes.TRY_CONNECT;
             m.body = $"User:{user};Pass:{hash_pass}";
             try {
-                Message r = Message.getMessageFromBytes(this.message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m); 
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     ClientManager.login_active = true;
                     //ClientManager.session_id = r.session_channel;
@@ -95,8 +105,8 @@ namespace ETL_System {
             m.header["user"] = this_user;
             m.session_channel = this_user.this_sessions_id;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
-                if(r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                Message r = this.commonMessageProcessor(m);
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     ClientManager.login_active = false;
 
                     // and now some cleanup:
@@ -130,6 +140,36 @@ namespace ETL_System {
             }
         }
 
+        public void voidQueuePauseResume(bool pause) {
+            Message m = new Message();
+            m.msg_type = pause ? MsgTypes.COMMAND_PAUSE_QUEUE : MsgTypes.COMMAND_RESUME_QUEUE;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            try {
+                Message r = this.commonMessageProcessor(m);
+                if (!(r.msg_type == MsgTypes.REPLY_SUCCESS))
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Problems with sending the command to the server.\nOriginal system error:{e.Message}");
+            }
+        }
+
+        public void voidWorkersPauseResume(bool pause) {
+            Message m = new Message();
+            m.msg_type = pause?MsgTypes.COMMAND_PAUSE_WORKERS:MsgTypes.COMMAND_RESUME_WORKERS;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            try {
+                Message r = this.commonMessageProcessor(m);
+                if (!(r.msg_type == MsgTypes.REPLY_SUCCESS))
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Problems with sending the command to the server.\nOriginal system error:{e.Message}");
+            }
+        }
+
         private void adminPageRoutine(Message r) {
             DataTable au;
             //populate users list view
@@ -144,7 +184,6 @@ namespace ETL_System {
             }
         }
 
-
         public void requestAdminData() {
             
             Message m = new Message();
@@ -153,8 +192,8 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
 
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
-                if(r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                Message r = this.commonMessageProcessor(m); ;
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     
                     parent.lv_Users.Items.Clear();
                     this.adminPageRoutine(r);
@@ -212,7 +251,7 @@ namespace ETL_System {
 
             //4.Send message
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m); 
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     parent.lv_Users.Items.Clear();
                     this.adminPageRoutine(r);
@@ -258,7 +297,7 @@ namespace ETL_System {
 
             //4.Send message
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m); 
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     parent.lv_Users.Items.Clear();
                     this.adminPageRoutine(r);
@@ -297,7 +336,7 @@ namespace ETL_System {
 
             //4.Send message
             try            {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m); 
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS)
                 {
                     parent.lv_Users.Items.Clear();
@@ -318,7 +357,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             JobsCatalogueDisplay c;            
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     c = (JobsCatalogueDisplay)r.attachement;
                     parent.dgv_Catalogue.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
@@ -363,7 +402,7 @@ namespace ETL_System {
             m.body = parent.lv_Jobs_selected_text;
             DataTable t;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m); ;
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     t = (DataTable)r.header["instances"];
                     parent.dgv_JobInstances.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
@@ -414,7 +453,7 @@ namespace ETL_System {
             m.body = instance_id;
             
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m); 
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     parent.tb_InstanceOutput.Text = (string)r.header["output"];
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
@@ -434,7 +473,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             JobsQueueDisplay c;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     c = (JobsQueueDisplay)r.attachement;
                     parent.dgv_Queue.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
@@ -472,7 +511,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             DependencyCatalogueDisplay c;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     c = (DependencyCatalogueDisplay)r.attachement;
                     this.checkpoint_index = (DataTable)r.header["CheckpointIndex"];
@@ -680,7 +719,7 @@ namespace ETL_System {
             Message r;
             Job j;
             try {
-                r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
                     this.cleanSchedules();
@@ -788,7 +827,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             //m.session_channel = ClientManager.session_id;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     //5.refresh list view
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
@@ -855,7 +894,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             //m.session_channel = ClientManager.session_id;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     //5.refresh list view
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
@@ -898,7 +937,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             //m.session_channel = ClientManager.session_id;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     //5.refresh list view
                     this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
@@ -939,7 +978,7 @@ namespace ETL_System {
             m.header["user"] = this_user;
             m.session_channel = this_user.this_sessions_id;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     this.cleanSchedules();
                     j = (Job)r.attachement;
@@ -1003,7 +1042,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             m.attachement = j;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     this.cleanSchedules();
                     j = (Job)r.attachement;
@@ -1056,7 +1095,7 @@ namespace ETL_System {
             m.header["user"] = this_user;
             m.session_channel = this_user.this_sessions_id;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     this.cleanDependencies();
                     j = (Job)r.attachement;
@@ -1119,7 +1158,7 @@ namespace ETL_System {
             m.session_channel = this_user.this_sessions_id;
             m.attachement = j;
             try {
-                Message r = Message.getMessageFromBytes(message_engine.sendMessageAndListenForReply(m.encodeToBytes()));
+                Message r = this.commonMessageProcessor(m);
                 if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
                     this.cleanDependencies();
                     j = (Job)r.attachement;

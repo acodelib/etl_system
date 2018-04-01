@@ -295,7 +295,7 @@ namespace ETL_System {
         public Message handleClientMessage(Message msg) {
             Message result;
             if (msg.msg_type >= (MsgTypes)1 && msg.msg_type <= (MsgTypes)4) {
-                result = this.executeDataRequest(msg);
+                result = this.executeDataRequest(msg);                
                 return result;
             }
             if (msg.msg_type >= (MsgTypes)5 && msg.msg_type <= (MsgTypes)11) {
@@ -308,6 +308,10 @@ namespace ETL_System {
             }
             if(msg.msg_type >= (MsgTypes)24 && msg.msg_type <= (MsgTypes)25) {
                 result = this.resolveInstanceRequest(msg, (User)msg.header["user"]);
+                return result;
+            }
+            if ((msg.msg_type >= (MsgTypes)12 && msg.msg_type <= (MsgTypes)16) ||((msg.msg_type >= (MsgTypes)26 && msg.msg_type <= (MsgTypes)29)) ) {
+                result = this.executeServerCommand(msg, (User)msg.header["user"]);
                 return result;
             }
             return null;            
@@ -343,6 +347,70 @@ namespace ETL_System {
                         Console.WriteLine(e.Message);
                         outcome.msg_type = MsgTypes.REPLY_FAIL;
                         outcome.body = $"Failed to retrieve admin dashboard. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                default:
+                    outcome.msg_type = MsgTypes.REPLY_FAIL;
+                    outcome.body = $"Unknown COMMAND TYPE";
+                    return outcome;
+
+            }
+        }
+        public Message executeServerCommand(Message msg,User user_context) {
+            Message outcome = new Message();
+            MsgTypes msgtype = msg.msg_type;
+
+            switch (msgtype) {
+                case MsgTypes.COMMAND_PAUSE_QUEUE:
+                    try {
+                        SystemSharedData.catalogue_scan_flag = false;                        
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to pause the Queye. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.COMMAND_RESUME_QUEUE:
+                    try {
+                        SystemSharedData.catalogue_scan_flag = true;                        
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to restart the Queye. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.COMMAND_PAUSE_WORKERS:
+                    try {
+                        SystemSharedData.workers_start_flag = false;
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to pause the ETL Workers. Original system message: {e.Message}";
+                        return outcome;
+                    }
+                case MsgTypes.COMMAND_RESUME_WORKERS:
+                    try {
+                        SystemSharedData.workers_start_flag = true;
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to resume the ETL Workers. Original system message: {e.Message}";
                         return outcome;
                     }
                 default:

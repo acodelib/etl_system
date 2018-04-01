@@ -75,6 +75,8 @@ namespace ETL_System
                             reply.header["schedule_types"]      = SystemSharedData.schedule_types;
                             reply.header["dependency_types"]    = SystemSharedData.dependency_types;
                             reply.header["user_roles"]          = SystemSharedData.user_roles;
+                            reply.header["catalogue_scan_flag"] = SystemSharedData.catalogue_scan_flag;
+                            reply.header["workers_start_flag"] = SystemSharedData.workers_start_flag;
 
                             client_socket.Send(reply.encodeToBytes());
                         }
@@ -88,6 +90,8 @@ namespace ETL_System
                         else {
                             if (session_manager.validateSession(message.session_channel)) {
                                 reply = this.system_manager.handleClientMessage(message);
+                                reply.header["catalogue_scan_flag"] = SystemSharedData.catalogue_scan_flag;
+                                reply.header["workers_start_flag"] = SystemSharedData.workers_start_flag;
                                 client_socket.Send(reply.encodeToBytes());
                             }
                         }
