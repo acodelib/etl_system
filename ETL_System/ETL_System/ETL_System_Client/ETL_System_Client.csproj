@@ -149,6 +149,7 @@
     <None Include="icons\if_trash-can-delete_44014.png" />
     <None Include="icons\if_Loadsave.png" />
     <None Include="icons\create.png" />
+    <None Include="icons\if_314Arrow_film_movie_play_player_start_video_1886030.png" />
     <Content Include="icon_Kh7_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

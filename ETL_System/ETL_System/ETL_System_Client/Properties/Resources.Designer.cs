@@ -83,6 +83,16 @@ namespace ETL_System_Client.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap if_314Arrow_film_movie_play_player_start_video_1886030 {
+            get {
+                object obj = ResourceManager.GetObject("if_314Arrow_film_movie_play_player_start_video_1886030", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap if_Load_10586 {
             get {
                 object obj = ResourceManager.GetObject("if_Load_10586", resourceCulture);

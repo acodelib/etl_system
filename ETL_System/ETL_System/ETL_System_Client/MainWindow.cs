@@ -403,5 +403,9 @@ namespace ETL_System
         private void ts_ResumeW_Click(object sender, EventArgs e) {
             manager.voidWorkersPauseResume(false);
         }
+
+        private void btn_AddToQueue_Click(object sender, EventArgs e) {
+            manager.forceEnqueuJob();
+        }
     }
 }

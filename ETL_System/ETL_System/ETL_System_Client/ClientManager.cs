@@ -709,6 +709,51 @@ namespace ETL_System {
             parent.lv_Dependencies.Items.Clear();
         }
 
+        public void forceEnqueuJob() {
+            string ln = parent.tb_Name.Text;
+            string checker = "";
+            //make sure a jobs is selected
+            if (ln == "") {
+                MessageBox.Show("Please select a valid job.");
+                return;
+            }
+
+            //make sure the job is already saved
+            foreach (ListViewItem i in parent.lv_JobsList.Items) {
+                if (i.SubItems[0].Text == ln) {
+                    checker = i.SubItems[0].Text;                                        
+                }
+            }
+            if (checker == "") {
+                MessageBox.Show("Please save job before trying to run it.");
+                return;
+            }
+
+            //warn user about action
+            if (MessageBox.Show($"Job will be started (force-queued). Continue?", "", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            Message m = new Message();
+            m.msg_type = MsgTypes.COMMAND_RESTART_JOB;
+            m.header["user"] = this_user;
+            m.session_channel = this_user.this_sessions_id;
+            m.body = parent.tb_Name.Text;
+            //m.session_channel = ClientManager.session_id;
+            try {
+                Message r = this.commonMessageProcessor(m);
+                if (r.msg_type == MsgTypes.REPLY_SUCCESS) {
+                    //5.refresh list view
+                    this.refreshTasksListRoutine((Dictionary<int, string>)r.header["jobs_list"]);
+                }
+                else
+                    MessageBox.Show(r.body);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"There was a communications problem.\nOriginal system error:{e.Message}");
+            }
+
+        }
+
         public void initETLJobDefinitionTab() {
             //1.Request Data From server
             Message m = new Message();

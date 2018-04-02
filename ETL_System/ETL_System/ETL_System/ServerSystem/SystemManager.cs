@@ -361,6 +361,20 @@ namespace ETL_System {
             MsgTypes msgtype = msg.msg_type;
 
             switch (msgtype) {
+                case MsgTypes.COMMAND_RESTART_JOB:
+                    try {
+                        Job j = this.jobs_catalogue.jobs_collection[msg.body];
+                        this.jobs_queue.enqueueJob(j);
+                        outcome.msg_type = MsgTypes.REPLY_SUCCESS;
+                        outcome.header["jobs_list"] = pipeTasksRawList();
+                        return outcome;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+                        outcome.msg_type = MsgTypes.REPLY_FAIL;
+                        outcome.body = $"Failed to pause the Queye. Original system message: {e.Message}";
+                        return outcome;
+                    }
                 case MsgTypes.COMMAND_PAUSE_QUEUE:
                     try {
                         SystemSharedData.catalogue_scan_flag = false;                        

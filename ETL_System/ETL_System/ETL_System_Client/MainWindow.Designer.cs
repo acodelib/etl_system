@@ -37,7 +37,6 @@ namespace ETL_System {
             this.tc_Job = new System.Windows.Forms.TabControl();
             this.tp_Definition = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btn_Create = new System.Windows.Forms.Button();
             this.gb_General = new System.Windows.Forms.GroupBox();
             this.cb_CheckppointType = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
@@ -70,8 +69,6 @@ namespace ETL_System {
             this.label12 = new System.Windows.Forms.Label();
             this.tb_FailedAttempts = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.btn_Delete = new System.Windows.Forms.Button();
-            this.btn_Save = new System.Windows.Forms.Button();
             this.gb_Changes = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.tb_When = new System.Windows.Forms.TextBox();
@@ -84,7 +81,6 @@ namespace ETL_System {
             this.dgv_JobInstances = new System.Windows.Forms.DataGridView();
             this.tp_Schedules = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.lv_Schedules = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -92,12 +88,10 @@ namespace ETL_System {
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.btn_AddSchedule = new System.Windows.Forms.Button();
             this.dtp_Schedule = new System.Windows.Forms.DateTimePicker();
             this.cb_ScheduleType = new System.Windows.Forms.ComboBox();
             this.tp_Dependencies = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.btn_DelDependency = new System.Windows.Forms.Button();
             this.lv_Dependencies = new System.Windows.Forms.ListView();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -106,7 +100,6 @@ namespace ETL_System {
             this.cb_DepJobs = new System.Windows.Forms.ComboBox();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.btn_AddDependency = new System.Windows.Forms.Button();
             this.cb_DepTypes = new System.Windows.Forms.ComboBox();
             this.tp_Catalogue = new System.Windows.Forms.TabPage();
             this.label36 = new System.Windows.Forms.Label();
@@ -127,7 +120,6 @@ namespace ETL_System {
             this.gb_Configs = new System.Windows.Forms.GroupBox();
             this.tb_JobsFolder = new System.Windows.Forms.TextBox();
             this.tb_ConnectionString = new System.Windows.Forms.TextBox();
-            this.btn_UpdateConfigs = new System.Windows.Forms.Button();
             this.tb_ScanFrequency = new System.Windows.Forms.TextBox();
             this.tb_WorkersFrequency = new System.Windows.Forms.TextBox();
             this.tb_NoOfWorkers = new System.Windows.Forms.TextBox();
@@ -138,7 +130,6 @@ namespace ETL_System {
             this.label30 = new System.Windows.Forms.Label();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.cb_SSL = new System.Windows.Forms.CheckBox();
-            this.button2 = new System.Windows.Forms.Button();
             this.tb_EmailPass = new System.Windows.Forms.TextBox();
             this.tb_Smtp = new System.Windows.Forms.TextBox();
             this.tb_Port = new System.Windows.Forms.TextBox();
@@ -159,11 +150,9 @@ namespace ETL_System {
             this.label25 = new System.Windows.Forms.Label();
             this.tb_NewUserPass = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
-            this.btn_NewUser = new System.Windows.Forms.Button();
             this.label23 = new System.Windows.Forms.Label();
             this.cb_NewUserRole = new System.Windows.Forms.ComboBox();
             this.tb_NewUserName = new System.Windows.Forms.TextBox();
-            this.btn_DelUser = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lv_JobsList = new System.Windows.Forms.ListView();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -188,6 +177,18 @@ namespace ETL_System {
             this.tt_Info = new System.Windows.Forms.ToolTip(this.components);
             this.lbl_WarningQueue = new System.Windows.Forms.Label();
             this.lbl_WarningWorkers = new System.Windows.Forms.Label();
+            this.btn_AddToQueue = new System.Windows.Forms.Button();
+            this.btn_Create = new System.Windows.Forms.Button();
+            this.btn_Delete = new System.Windows.Forms.Button();
+            this.btn_Save = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btn_AddSchedule = new System.Windows.Forms.Button();
+            this.btn_DelDependency = new System.Windows.Forms.Button();
+            this.btn_AddDependency = new System.Windows.Forms.Button();
+            this.btn_UpdateConfigs = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btn_NewUser = new System.Windows.Forms.Button();
+            this.btn_DelUser = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.tc_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -311,31 +312,17 @@ namespace ETL_System {
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.btn_Create);
+            this.groupBox4.Controls.Add(this.btn_AddToQueue);
             this.groupBox4.Controls.Add(this.gb_General);
-            this.groupBox4.Controls.Add(this.gb_Status);
+            this.groupBox4.Controls.Add(this.btn_Create);
             this.groupBox4.Controls.Add(this.btn_Delete);
+            this.groupBox4.Controls.Add(this.gb_Status);
             this.groupBox4.Controls.Add(this.btn_Save);
             this.groupBox4.Location = new System.Drawing.Point(18, 21);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(779, 571);
             this.groupBox4.TabIndex = 29;
             this.groupBox4.TabStop = false;
-            // 
-            // btn_Create
-            // 
-            this.btn_Create.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Create.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_Create.Image = global::ETL_System_Client.Properties.Resources.create;
-            this.btn_Create.Location = new System.Drawing.Point(154, 510);
-            this.btn_Create.Name = "btn_Create";
-            this.btn_Create.Size = new System.Drawing.Size(135, 39);
-            this.btn_Create.TabIndex = 29;
-            this.btn_Create.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_Create.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btn_Create.UseVisualStyleBackColor = false;
-            this.btn_Create.Click += new System.EventHandler(this.button1_Click);
             // 
             // gb_General
             // 
@@ -656,33 +643,6 @@ namespace ETL_System {
             this.label5.TabIndex = 9;
             this.label5.Text = "#Failed Attempts:";
             // 
-            // btn_Delete
-            // 
-            this.btn_Delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Delete.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_Delete.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
-            this.btn_Delete.Location = new System.Drawing.Point(496, 510);
-            this.btn_Delete.Name = "btn_Delete";
-            this.btn_Delete.Size = new System.Drawing.Size(135, 39);
-            this.btn_Delete.TabIndex = 18;
-            this.btn_Delete.UseVisualStyleBackColor = true;
-            this.btn_Delete.Click += new System.EventHandler(this.btn_Delete_Click);
-            // 
-            // btn_Save
-            // 
-            this.btn_Save.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Save.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_Save.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
-            this.btn_Save.Location = new System.Drawing.Point(331, 510);
-            this.btn_Save.Name = "btn_Save";
-            this.btn_Save.Size = new System.Drawing.Size(135, 39);
-            this.btn_Save.TabIndex = 11;
-            this.btn_Save.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_Save.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btn_Save.UseVisualStyleBackColor = false;
-            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
-            // 
             // gb_Changes
             // 
             this.gb_Changes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -821,18 +781,6 @@ namespace ETL_System {
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Saved Schedules";
             // 
-            // button1
-            // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button1.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
-            this.button1.Location = new System.Drawing.Point(292, 525);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(135, 39);
-            this.button1.TabIndex = 19;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
             // lv_Schedules
             // 
             this.lv_Schedules.CheckBoxes = true;
@@ -897,21 +845,6 @@ namespace ETL_System {
             this.label15.TabIndex = 31;
             this.label15.Text = "Type:";
             // 
-            // btn_AddSchedule
-            // 
-            this.btn_AddSchedule.BackColor = System.Drawing.Color.Transparent;
-            this.btn_AddSchedule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_AddSchedule.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_AddSchedule.Image = global::ETL_System_Client.Properties.Resources.create;
-            this.btn_AddSchedule.Location = new System.Drawing.Point(216, 140);
-            this.btn_AddSchedule.Name = "btn_AddSchedule";
-            this.btn_AddSchedule.Size = new System.Drawing.Size(135, 39);
-            this.btn_AddSchedule.TabIndex = 30;
-            this.btn_AddSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_AddSchedule.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btn_AddSchedule.UseVisualStyleBackColor = false;
-            this.btn_AddSchedule.Click += new System.EventHandler(this.btn_AddSchedule_Click);
-            // 
             // dtp_Schedule
             // 
             this.dtp_Schedule.CustomFormat = "yyyy-MM-dd HH:mm:ss";
@@ -951,18 +884,6 @@ namespace ETL_System {
             this.groupBox5.TabIndex = 7;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Saved Dependencies";
-            // 
-            // btn_DelDependency
-            // 
-            this.btn_DelDependency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_DelDependency.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_DelDependency.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
-            this.btn_DelDependency.Location = new System.Drawing.Point(292, 525);
-            this.btn_DelDependency.Name = "btn_DelDependency";
-            this.btn_DelDependency.Size = new System.Drawing.Size(135, 39);
-            this.btn_DelDependency.TabIndex = 19;
-            this.btn_DelDependency.UseVisualStyleBackColor = true;
-            this.btn_DelDependency.Click += new System.EventHandler(this.btn_DelDependency_Click);
             // 
             // lv_Dependencies
             // 
@@ -1035,21 +956,6 @@ namespace ETL_System {
             this.label19.Size = new System.Drawing.Size(36, 15);
             this.label19.TabIndex = 31;
             this.label19.Text = "Type:";
-            // 
-            // btn_AddDependency
-            // 
-            this.btn_AddDependency.BackColor = System.Drawing.Color.Transparent;
-            this.btn_AddDependency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_AddDependency.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_AddDependency.Image = global::ETL_System_Client.Properties.Resources.create;
-            this.btn_AddDependency.Location = new System.Drawing.Point(216, 140);
-            this.btn_AddDependency.Name = "btn_AddDependency";
-            this.btn_AddDependency.Size = new System.Drawing.Size(135, 39);
-            this.btn_AddDependency.TabIndex = 30;
-            this.btn_AddDependency.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_AddDependency.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btn_AddDependency.UseVisualStyleBackColor = false;
-            this.btn_AddDependency.Click += new System.EventHandler(this.btn_AddDependency_Click);
             // 
             // cb_DepTypes
             // 
@@ -1339,21 +1245,6 @@ namespace ETL_System {
             this.tb_ConnectionString.Size = new System.Drawing.Size(560, 131);
             this.tb_ConnectionString.TabIndex = 43;
             // 
-            // btn_UpdateConfigs
-            // 
-            this.btn_UpdateConfigs.BackColor = System.Drawing.Color.Transparent;
-            this.btn_UpdateConfigs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_UpdateConfigs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_UpdateConfigs.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
-            this.btn_UpdateConfigs.Location = new System.Drawing.Point(529, 541);
-            this.btn_UpdateConfigs.Name = "btn_UpdateConfigs";
-            this.btn_UpdateConfigs.Size = new System.Drawing.Size(74, 39);
-            this.btn_UpdateConfigs.TabIndex = 42;
-            this.btn_UpdateConfigs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_UpdateConfigs.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btn_UpdateConfigs.UseVisualStyleBackColor = false;
-            this.btn_UpdateConfigs.Click += new System.EventHandler(this.button3_Click);
-            // 
             // tb_ScanFrequency
             // 
             this.tb_ScanFrequency.Location = new System.Drawing.Point(276, 485);
@@ -1452,20 +1343,6 @@ namespace ETL_System {
             this.cb_SSL.TabIndex = 42;
             this.cb_SSL.Text = "SSL Enabled";
             this.cb_SSL.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.Transparent;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button2.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
-            this.button2.Location = new System.Drawing.Point(645, 126);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(74, 39);
-            this.button2.TabIndex = 41;
-            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.button2.UseVisualStyleBackColor = false;
             // 
             // tb_EmailPass
             // 
@@ -1649,21 +1526,6 @@ namespace ETL_System {
             this.label24.Text = "Role:";
             this.label24.Click += new System.EventHandler(this.label24_Click);
             // 
-            // btn_NewUser
-            // 
-            this.btn_NewUser.BackColor = System.Drawing.Color.Transparent;
-            this.btn_NewUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_NewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_NewUser.Image = global::ETL_System_Client.Properties.Resources.create;
-            this.btn_NewUser.Location = new System.Drawing.Point(136, 300);
-            this.btn_NewUser.Name = "btn_NewUser";
-            this.btn_NewUser.Size = new System.Drawing.Size(74, 39);
-            this.btn_NewUser.TabIndex = 31;
-            this.btn_NewUser.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_NewUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btn_NewUser.UseVisualStyleBackColor = false;
-            this.btn_NewUser.Click += new System.EventHandler(this.btn_NewUser_Click);
-            // 
             // label23
             // 
             this.label23.AutoSize = true;
@@ -1690,18 +1552,6 @@ namespace ETL_System {
             this.tb_NewUserName.Name = "tb_NewUserName";
             this.tb_NewUserName.Size = new System.Drawing.Size(204, 23);
             this.tb_NewUserName.TabIndex = 32;
-            // 
-            // btn_DelUser
-            // 
-            this.btn_DelUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_DelUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_DelUser.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
-            this.btn_DelUser.Location = new System.Drawing.Point(399, 319);
-            this.btn_DelUser.Name = "btn_DelUser";
-            this.btn_DelUser.Size = new System.Drawing.Size(74, 39);
-            this.btn_DelUser.TabIndex = 30;
-            this.btn_DelUser.UseVisualStyleBackColor = true;
-            this.btn_DelUser.Click += new System.EventHandler(this.btn_DelUser_Click);
             // 
             // groupBox1
             // 
@@ -1949,6 +1799,170 @@ namespace ETL_System {
             this.lbl_WarningWorkers.Text = "!! WARNING: Workers are paused !!";
             this.lbl_WarningWorkers.Visible = false;
             // 
+            // btn_AddToQueue
+            // 
+            this.btn_AddToQueue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_AddToQueue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_AddToQueue.Image = global::ETL_System_Client.Properties.Resources.if_314Arrow_film_movie_play_player_start_video_1886030;
+            this.btn_AddToQueue.Location = new System.Drawing.Point(535, 507);
+            this.btn_AddToQueue.Name = "btn_AddToQueue";
+            this.btn_AddToQueue.Size = new System.Drawing.Size(96, 39);
+            this.btn_AddToQueue.TabIndex = 30;
+            this.btn_AddToQueue.UseVisualStyleBackColor = true;
+            this.btn_AddToQueue.Click += new System.EventHandler(this.btn_AddToQueue_Click);
+            // 
+            // btn_Create
+            // 
+            this.btn_Create.BackColor = System.Drawing.Color.Transparent;
+            this.btn_Create.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Create.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_Create.Image = global::ETL_System_Client.Properties.Resources.create;
+            this.btn_Create.Location = new System.Drawing.Point(148, 507);
+            this.btn_Create.Name = "btn_Create";
+            this.btn_Create.Size = new System.Drawing.Size(96, 39);
+            this.btn_Create.TabIndex = 29;
+            this.btn_Create.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_Create.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_Create.UseVisualStyleBackColor = false;
+            this.btn_Create.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btn_Delete
+            // 
+            this.btn_Delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Delete.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_Delete.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
+            this.btn_Delete.Location = new System.Drawing.Point(408, 507);
+            this.btn_Delete.Name = "btn_Delete";
+            this.btn_Delete.Size = new System.Drawing.Size(96, 39);
+            this.btn_Delete.TabIndex = 18;
+            this.btn_Delete.UseVisualStyleBackColor = true;
+            this.btn_Delete.Click += new System.EventHandler(this.btn_Delete_Click);
+            // 
+            // btn_Save
+            // 
+            this.btn_Save.BackColor = System.Drawing.Color.Transparent;
+            this.btn_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Save.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_Save.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
+            this.btn_Save.Location = new System.Drawing.Point(279, 507);
+            this.btn_Save.Name = "btn_Save";
+            this.btn_Save.Size = new System.Drawing.Size(96, 39);
+            this.btn_Save.TabIndex = 11;
+            this.btn_Save.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_Save.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_Save.UseVisualStyleBackColor = false;
+            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
+            // 
+            // button1
+            // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.button1.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
+            this.button1.Location = new System.Drawing.Point(292, 525);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(135, 39);
+            this.button1.TabIndex = 19;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // btn_AddSchedule
+            // 
+            this.btn_AddSchedule.BackColor = System.Drawing.Color.Transparent;
+            this.btn_AddSchedule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_AddSchedule.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_AddSchedule.Image = global::ETL_System_Client.Properties.Resources.create;
+            this.btn_AddSchedule.Location = new System.Drawing.Point(216, 140);
+            this.btn_AddSchedule.Name = "btn_AddSchedule";
+            this.btn_AddSchedule.Size = new System.Drawing.Size(135, 39);
+            this.btn_AddSchedule.TabIndex = 30;
+            this.btn_AddSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_AddSchedule.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_AddSchedule.UseVisualStyleBackColor = false;
+            this.btn_AddSchedule.Click += new System.EventHandler(this.btn_AddSchedule_Click);
+            // 
+            // btn_DelDependency
+            // 
+            this.btn_DelDependency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_DelDependency.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_DelDependency.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
+            this.btn_DelDependency.Location = new System.Drawing.Point(292, 525);
+            this.btn_DelDependency.Name = "btn_DelDependency";
+            this.btn_DelDependency.Size = new System.Drawing.Size(135, 39);
+            this.btn_DelDependency.TabIndex = 19;
+            this.btn_DelDependency.UseVisualStyleBackColor = true;
+            this.btn_DelDependency.Click += new System.EventHandler(this.btn_DelDependency_Click);
+            // 
+            // btn_AddDependency
+            // 
+            this.btn_AddDependency.BackColor = System.Drawing.Color.Transparent;
+            this.btn_AddDependency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_AddDependency.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_AddDependency.Image = global::ETL_System_Client.Properties.Resources.create;
+            this.btn_AddDependency.Location = new System.Drawing.Point(216, 140);
+            this.btn_AddDependency.Name = "btn_AddDependency";
+            this.btn_AddDependency.Size = new System.Drawing.Size(135, 39);
+            this.btn_AddDependency.TabIndex = 30;
+            this.btn_AddDependency.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_AddDependency.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_AddDependency.UseVisualStyleBackColor = false;
+            this.btn_AddDependency.Click += new System.EventHandler(this.btn_AddDependency_Click);
+            // 
+            // btn_UpdateConfigs
+            // 
+            this.btn_UpdateConfigs.BackColor = System.Drawing.Color.Transparent;
+            this.btn_UpdateConfigs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_UpdateConfigs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_UpdateConfigs.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
+            this.btn_UpdateConfigs.Location = new System.Drawing.Point(529, 541);
+            this.btn_UpdateConfigs.Name = "btn_UpdateConfigs";
+            this.btn_UpdateConfigs.Size = new System.Drawing.Size(74, 39);
+            this.btn_UpdateConfigs.TabIndex = 42;
+            this.btn_UpdateConfigs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_UpdateConfigs.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_UpdateConfigs.UseVisualStyleBackColor = false;
+            this.btn_UpdateConfigs.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.Transparent;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.button2.Image = global::ETL_System_Client.Properties.Resources.if_Loadsave;
+            this.button2.Location = new System.Drawing.Point(645, 126);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(74, 39);
+            this.button2.TabIndex = 41;
+            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.button2.UseVisualStyleBackColor = false;
+            // 
+            // btn_NewUser
+            // 
+            this.btn_NewUser.BackColor = System.Drawing.Color.Transparent;
+            this.btn_NewUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_NewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_NewUser.Image = global::ETL_System_Client.Properties.Resources.create;
+            this.btn_NewUser.Location = new System.Drawing.Point(136, 300);
+            this.btn_NewUser.Name = "btn_NewUser";
+            this.btn_NewUser.Size = new System.Drawing.Size(74, 39);
+            this.btn_NewUser.TabIndex = 31;
+            this.btn_NewUser.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btn_NewUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btn_NewUser.UseVisualStyleBackColor = false;
+            this.btn_NewUser.Click += new System.EventHandler(this.btn_NewUser_Click);
+            // 
+            // btn_DelUser
+            // 
+            this.btn_DelUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_DelUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_DelUser.Image = global::ETL_System_Client.Properties.Resources.if_trash_can_delete_44014;
+            this.btn_DelUser.Location = new System.Drawing.Point(399, 319);
+            this.btn_DelUser.Name = "btn_DelUser";
+            this.btn_DelUser.Size = new System.Drawing.Size(74, 39);
+            this.btn_DelUser.TabIndex = 30;
+            this.btn_DelUser.UseVisualStyleBackColor = true;
+            this.btn_DelUser.Click += new System.EventHandler(this.btn_DelUser_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2178,6 +2192,7 @@ namespace ETL_System {
         public ToolTip tt_Info;
         public Label lbl_WarningQueue;
         public Label lbl_WarningWorkers;
+        public Button btn_AddToQueue;
     }
 }
 
