@@ -20,12 +20,12 @@ namespace ETL_System
 
         //======================================  CONSTRUCTOR =============================================================
         public NotificationsManager() {
-            user_name = "andrei.gurguta.system@gmail.com";
-            password = "Dublin22";
-            smtp = "smtp.gmail.com";
-            port = 587;
+            
+            user_name = "etl.data.science@veeam.com";// "andrei.gurguta.system@gmail.com";
+            password = ""; //"Dublin22";
+            smtp = "mx1.veeam.com";
+            port = 25;
             msg_outcome = "success";
-
 
             SystemSharedData.mail_user_name = user_name;
             SystemSharedData.mail_password = password;
@@ -72,7 +72,7 @@ namespace ETL_System
             email_login.UserName = user_name;
             email_login.Password = password;
 
-            mail_message.From = new MailAddress(user_name, "ETL Management System", Encoding.UTF8);
+            mail_message.From = new MailAddress(user_name, "ETL Management System", Encoding.UTF8);            
             mail_message.Subject = $"ALERT: job {job_about} has failed!";
             mail_message.IsBodyHtml = true;
             mail_message.Body = $"<p>This is an automated email from the ETL Management System, please do not reply.<br/> <br/> Job {job_about} has failed at {DateTime.Now} with the following error message:<br/> <br/> {error} </p>";                     
