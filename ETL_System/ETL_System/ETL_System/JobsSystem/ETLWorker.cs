@@ -45,7 +45,7 @@ namespace ETL_System {
      
 
         private void fetchAndExecuteCycle() {
-            Thread.Sleep(2357);
+            Thread.Sleep(357);
             Console.WriteLine($"Worker {this.name} started.");
             this.job_instance = new JobInstance();
             string exec_path;
@@ -60,33 +60,46 @@ namespace ETL_System {
                         try {
                             //record start
                             recordStart(this.target_job);
+                            
                             //set execution path
                             exec_path = SystemSharedData.jobs_folder + @"\" + this.target_job.executable_name;
-                            //execute job file and read outputs async
-                            this.asyncExecuteJobFile(exec_path);
-                            //throw new Exception("testing error output catch");
 
+                            //execute job file and read outputs async
+                            this.asyncExecuteJobFile(exec_path);                                                        
                         }
                         catch (Exception e) {
                             this.error = e.Message;
                         }
-                        Thread.Sleep(5000); //dev simulate some work;
-                        Console.WriteLine("OUTPUT: " + this.output);
-                        Console.WriteLine("ERROR: " + this.error);
-                        Console.WriteLine(this.exit_code.ToString());
+                        try {
+                            //Thread.Sleep(5000); //dev simulate some work;
+                            Console.WriteLine("OUTPUT: " + this.output);
+                            Console.WriteLine("ERROR: " + this.error);
+                            Console.WriteLine(this.exit_code.ToString());
 
-                        //check the outcome of the job and record Job Instance
-                        if (this.exit_code != 0)
-                            this.recordEnd(false);
-                        else
-                            this.recordEnd(true);
+                            //check the outcome of the job and record Job Instance
+                            if (this.exit_code != 0)
+                                this.recordEnd(false);
+                            else
+                                this.recordEnd(true);
 
-                        // this.recordEnd();
+                        }catch(Exception e) {
 
-                        //send notification if case;
+                            LogManager.writeErrorToLog("Fatal Error! Worker failure: " + e.Message, AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl");
+                            notifier.sendErrorEmailMessage(target_job.notifiactions_list, target_job.name,$"ETL Worker failed to complete its task !!!! Error:{e.Message}");
+                            lock (_locker) {
+                                this.target_job.is_executing = false;
+                                this.jobs_queue.dequeueJob(this.target_job.job_id);
+                                this.target_job.executing_timestamp = null;
+                                this.target_job.executor = null;
+                                this.target_job = null;
+                            }
+                            Console.WriteLine("Fatal Error! System shuts down with the message: " + e.Message);
+                            Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl");
+
+                        }
                     }
                     Console.WriteLine($"{this.name} did some work, going for more...");
-                    Thread.Sleep(this.work_frequency * 1000);
+                    Thread.Sleep(this.work_frequency * 1000);  // just determines the rest period for each worker.
                 }
             }
             

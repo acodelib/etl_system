@@ -22,77 +22,22 @@ namespace ETL_System
         static void Main() {
 
 #if DEBUG
-            
+
             //WinService ETLSystemService = new WinService();
             //ETLSystemService.runInDebug(); 
-            
-            
-            SystemManager etl_system_manager = new SystemManager();           
-            etl_system_manager.startSystem();
-            string pass = "padmin";
-            string enc = SystemSharedData.GetSHA1HashData(pass);
-            Message m = new Message() {
-                body = $"User:admin;Pass:{enc}"
-            };
 
-            //User u = etl_system_manager.session_manager.validateLogin(m);
-            string p = "fff";
-            etl_system_manager.startQueueing();
-            etl_system_manager.startETLWorkers();    
-            //etl_system_manager.emailer.sendErrorEmailMessage("andrei_gurguta@yahoo.com", "dim_user", "Hello!");
-            /*
-            User u = new User { user_id = 1, login = "admin" };
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "the_bobo", u);
-            
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_DELETE_JOB, "jpipicaca", u);
-           // etl_system_manager.jobs_catalogue.deleteJob("jpipicaca",u);
-            Job j = new Job() {
-                last_instance_id = 11,
-                job_type_id = 1,
-                sys_change_id = null,
-                last_instance_timestamp = null, //new DateTime(2018, 01, 12),
-                name = "the_bobo",
-                executable_name = "bob.bat",
-                max_try_count = 2,
-                current_failed_count = 1,
-                is_failed = false,
-                delay_seconds = 12,
-                latency_alert_seconds = 3,
-                data_chceckpoint = 31231,
-                time_checkpoint = new DateTime(2018, 01, 22),
-                notifiactions_list = "andrei.gurguta@veeam.com",
-                type_name = "Schedule"
-            };            
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_CREATE_JOB, j, u);
-            //Simulate message with job to change:
-            MemoryStream m = new MemoryStream();
-            BinaryFormatter b = new BinaryFormatter();
-            b.Serialize(m, j);
-            m.Position = 0;
-            j = (Job)b.Deserialize(m);
-            j.is_failed = true;
-            j.name = "jpipicaca";            
-            etl_system_manager.executeMgmtCommand(MsgTypes.MGMT_UPDATE_JOB, j, u);
-            MsgAttachment js = new MsgAttachment();
-            etl_system_manager.executeDataRequest(MsgTypes.REQUEST_JOB_CATALOGUE_DISPLAY, "", u,ref js);
-            etl_system_manager.executeDataRequest(MsgTypes.REQUEST_JOB, "dummy job", u, ref js);
-            
-            string tl = null;
-            */
-              //etl_system_manager.deployDBScript();
-            //string conn_str = $"Data Source = BUH0522\\SQLEXPRESS; Initial Catalog = master; User = sa; Password = Dublin22; MultipleActiveResultSets = true";            
-            //etl_system_manager.deployDBScript(cp + "Scripts\\DB_Creation.sql");
-            //etl_system_manager.registerExecutionFolderToConfig("C:\\thefolder", null);
-            //etl_system_manager.addOrChangeConfigToFile("ExecutionPath", "C:\\awwk\\Pers\\pers_dev\\p_ETL\\TestJobs", null);
-            //etl_system_manager.deployDBScript(cp);            
-            //Console.WriteLine(etl_system_manager.jobs_catalogue.sys_change_id.ToString());
+            try {
+                SystemManager etl_system_manager = new SystemManager();
+                etl_system_manager.startSystem();
 
-            //Console.WriteLine(etl_system_manager.readDBConnStringFromFile(etl_system_manager.path_to_config));
+               
+                etl_system_manager.startQueueing();
+                etl_system_manager.startETLWorkers();
 
-
-
-
-            //Console.WriteLine(CoreDB.checkDBConnStringIsValid(SystemSharedData.app_db_connstring));
+            }catch(Exception e) {
+                LogManager.writeErrorToLog("Fatal Error! System shuts down with the message: "+ e.Message, AppDomain.CurrentDomain.BaseDirectory + "ETLSystemLog.etl");
+            }
+           
 
 
 

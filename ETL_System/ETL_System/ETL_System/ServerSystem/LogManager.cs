@@ -12,7 +12,11 @@ namespace ETL_System {
 
 
         public static void writeErrorToLog(string message, string log_path) {
-
+            string timestamp = String.Format("{0:yyyy-MM-dd HH:mm:ss.fff}", DateTime.Now);
+            string stamp = $"[{timestamp}]:[SERVER_ERROR_EVENT]:{message}{Environment.NewLine}";
+            if (File.Exists(log_path)) {
+                File.AppendAllText(log_path, stamp);
+            }
         }
 
         public static void writeStartEvent(string message,string log_path) {
